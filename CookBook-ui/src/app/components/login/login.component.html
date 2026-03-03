@@ -1,0 +1,113 @@
+<div class="min-h-screen bg-background flex">
+  <!-- Left Panel - Form -->
+  <div class="flex-1 flex items-center justify-center p-8">
+    <div class="w-full max-w-md">
+      <!-- Logo -->
+      <a [routerLink]="['/']" class="flex items-center gap-2 mb-8">
+        <app-cookbook-logo [size]="40" className="h-10 w-10"></app-cookbook-logo>
+        <span class="font-display text-2xl font-bold">
+          Cook<span class="text-primary">Book</span>
+        </span>
+      </a>
+
+      <h1 class="font-display text-3xl font-bold text-foreground mb-2">
+        Willkommen zurück
+      </h1>
+      <p class="text-muted-foreground mb-8">
+        Melde dich an, um deine Rezepte zu verwalten
+      </p>
+
+      <form (ngSubmit)="onSubmit($event)" class="space-y-6">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>E-Mail</mat-label>
+          <mat-icon matPrefix>email</mat-icon>
+          <input
+            matInput
+            type="email"
+            placeholder="deine@email.de"
+            [(ngModel)]="email"
+            name="email"
+          />
+          <mat-error *ngIf="errors.email">{{ errors.email }}</mat-error>
+        </mat-form-field>
+
+        <div class="space-y-2">
+          <label for="password" class="label">Passwort</label>
+          <div class="relative">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" 
+                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <input
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="••••••••"
+              [(ngModel)]="password"
+              name="password"
+              [class.border-destructive]="errors.password"
+              class="input pl-10 pr-10"
+            />
+            <button
+              type="button"
+              (click)="togglePasswordVisibility()"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <svg *ngIf="!showPassword" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <svg *ngIf="showPassword" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+              </svg>
+            </button>
+          </div>
+          <p *ngIf="errors.password" class="text-sm text-destructive">{{ errors.password }}</p>
+        </div>
+
+        <div class="flex items-center justify-between text-sm">
+          <mat-checkbox>Angemeldet bleiben</mat-checkbox>
+          <a [routerLink]="['/']" class="text-primary hover:underline">
+            Passwort vergessen?
+          </a>
+        </div>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="isLoading"
+          class="w-full"
+        >
+          <span *ngIf="!isLoading">Anmelden</span>
+          <span *ngIf="isLoading">Wird geladen...</span>
+        </button>
+
+        <div class="text-center text-sm text-muted-foreground">
+          Noch kein Konto?
+          <a [routerLink]="['/register']" class="text-primary font-medium hover:underline ml-1">
+            Jetzt registrieren
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Right Panel - Visual -->
+  <div class="hidden lg:flex flex-1 hero-gradient items-center justify-center p-12">
+    <div class="text-center text-primary-foreground max-w-md">
+      <div class="w-24 h-24 mx-auto mb-8 bg-card/20 rounded-full flex items-center justify-center">
+        <app-cookbook-logo [size]="56" className="h-14 w-14 text-primary-foreground"></app-cookbook-logo>
+      </div>
+      <h2 class="font-display text-3xl font-bold mb-4">
+        Willkommen zurück bei CookBook
+      </h2>
+      <p class="text-primary-foreground/80">
+        Greife auf deine gespeicherten Rezepte zu und entdecke neue kulinarische Inspirationen.
+      </p>
+    </div>
+  </div>
+</div>

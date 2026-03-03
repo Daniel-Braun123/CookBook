@@ -1,0 +1,20 @@
+<div class="min-h-screen bg-background flex items-center justify-center px-4">
+  <div class="text-center">
+    <h1 class="font-display text-9xl font-bold text-primary mb-4">404</h1>
+    <h2 class="font-display text-3xl font-bold text-foreground mb-4">
+      Seite nicht gefunden
+    </h2>
+    <p class="text-lg text-muted-foreground mb-8 max-w-md mx-auto">
+      Die von dir gesuchte Seite existiert leider nicht. 
+      Vielleicht findest du stattdessen ein leckeres Rezept?
+    </p>
+    <a [routerLink]="['/']">
+      <button class="btn btn-cookbook px-6 py-3 text-lg">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Zurück zur Startseite
+      </button>
+    </a>
+  </div>
+</div>

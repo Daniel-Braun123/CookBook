@@ -1,0 +1,35 @@
+########################
+# ANGULAR
+########################
+CookBook-ui/node_modules/
+CookBook-ui/dist/
+CookBook-ui/.angular/
+CookBook-ui/.idea/
+CookBook-ui/.angular/cache/
+
+########################
+# SPRING BOOT / GRADLE
+########################
+CookBook-be/build/
+CookBook-be/.gradle/
+CookBook-be/*.class      # kompiliertes Java
+CookBook-be/*.jar        # falls JARs erzeugt werden
+CookBook-be/*.war        # falls WARs erzeugt werden
+
+########################
+# IDE
+########################
+.idea/
+.vscode/
+*.iml
+
+########################
+# Logs
+########################
+*.log
+
+########################
+# OS
+########################
+.DS_Store            # Mac
+Thumbs.db            # Windows

@@ -1,0 +1,18 @@
+<button
+  (click)="handleClick()"
+  [ngClass]="{
+    'category-pill flex items-center gap-2 whitespace-nowrap': true,
+    'bg-primary text-primary-foreground shadow-button': isActive,
+    'bg-secondary text-secondary-foreground hover:bg-primary/10': !isActive
+  }"
+>
+  <span class="text-lg">{{ category.icon }}</span>
+  <span>{{ category.name }}</span>
+  <span [ngClass]="{
+    'text-xs px-1.5 py-0.5 rounded-full': true,
+    'bg-primary-foreground/20': isActive,
+    'bg-muted': !isActive
+  }">
+    {{ category.count }}
+  </span>
+</button>

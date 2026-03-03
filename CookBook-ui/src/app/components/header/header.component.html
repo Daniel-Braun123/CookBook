@@ -1,0 +1,109 @@
+<header class="sticky top-0 z-50 bg-card/95 backdrop-blur-md border-b border-border">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-between h-16 md:h-20">
+      <!-- Logo -->
+      <a [routerLink]="['/']" class="flex items-center gap-2 group">
+        <app-cookbook-logo 
+          [size]="40" 
+          className="h-8 w-8 md:h-10 md:w-10 transition-transform group-hover:scale-110">
+        </app-cookbook-logo>
+        <span class="font-display text-xl md:text-2xl font-bold text-foreground">
+          Cook<span class="text-primary">Book</span>
+        </span>
+      </a>
+
+      <!-- Search Bar - Desktop -->
+      <div class="hidden md:flex flex-1 max-w-xl mx-8">
+        <div 
+          class="relative w-full transition-all duration-300"
+          [class.scale-105]="isSearchFocused"
+        >
+          <mat-icon class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">search</mat-icon>
+          <input
+            type="text"
+            placeholder="Rezepte suchen..."
+            class="search-input pl-12"
+            (focus)="isSearchFocused = true"
+            (blur)="isSearchFocused = false"
+          />
+        </div>
+      </div>
+
+      <!-- Navigation - Desktop -->
+      <nav class="hidden md:flex items-center gap-6">
+        <a [routerLink]="['/']" class="nav-link font-medium">Rezepte</a>
+        <a [routerLink]="['/categories']" class="nav-link font-medium">Kategorien</a>
+        <a [routerLink]="['/']" class="relative p-2 rounded-full hover:bg-secondary transition-colors">
+          <mat-icon>favorite_border</mat-icon>
+        </a>
+        <!-- Theme Toggle -->
+        <button 
+          (click)="toggleTheme()"
+          class="p-2 rounded-full hover:bg-secondary transition-colors"
+          [attr.aria-label]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+          title="Theme umschalten"
+        >
+          <mat-icon>{{ themeService.isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        </button>
+        <a [routerLink]="['/login']">
+          <button class="btn btn-cookbook px-4 py-2 text-sm flex items-center gap-2">
+            <mat-icon class="text-base">person</mat-icon>
+            Anmelden
+          </button>
+        </a>
+      </nav>
+
+      <!-- Mobile Menu Button -->
+      <button
+        (click)="isMenuOpen = !isMenuOpen"
+        class="md:hidden p-2 rounded-lg hover:bg-secondary transition-colors"
+      >
+        <mat-icon *ngIf="!isMenuOpen">menu</mat-icon>
+        <mat-icon *ngIf="isMenuOpen">close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Mobile Search -->
+    <div class="md:hidden pb-4">
+      <div class="relative">
+        <mat-icon class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">search</mat-icon>
+        <input
+          type="text"
+          placeholder="Rezepte suchen..."
+          class="search-input pl-12 text-sm"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div *ngIf="isMenuOpen" class="md:hidden bg-card border-t border-border animate-fade-in">
+    <nav class="container mx-auto px-4 py-4 flex flex-col gap-4">
+      <a [routerLink]="['/']" class="py-2 font-medium text-foreground hover:text-primary transition-colors">
+        Rezepte
+      </a>
+      <a [routerLink]="['/categories']" class="py-2 font-medium text-foreground hover:text-primary transition-colors">
+        Kategorien
+      </a>
+      <a [routerLink]="['/']" class="py-2 font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2">
+        <mat-icon>favorite_border</mat-icon>
+        Gespeichert
+      </a>
+      <!-- Mobile Theme Toggle -->
+      <button 
+        (click)="toggleTheme()"
+        class="py-2 font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2 text-left"
+        [attr.aria-label]="themeService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+      >
+        <mat-icon>{{ themeService.isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        {{ themeService.isDarkMode() ? 'Light Mode' : 'Dark Mode' }}
+      </button>
+      <a [routerLink]="['/login']">
+        <button class="btn btn-cookbook w-full flex items-center justify-center gap-2">
+          <mat-icon class="text-base">person</mat-icon>
+          Anmelden
+        </button>
+      </a>
+    </nav>
+  </div>
+</header>

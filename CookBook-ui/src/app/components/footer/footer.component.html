@@ -1,0 +1,53 @@
+<footer class="bg-secondary/50 border-t border-border mt-16">
+  <div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- Brand -->
+      <div class="md:col-span-1">
+        <a [routerLink]="['/']" class="flex items-center gap-2 mb-4">
+          <app-cookbook-logo [size]="32" className="h-8 w-8"></app-cookbook-logo>
+          <span class="font-display text-xl font-bold">
+            Cook<span class="text-primary">Book</span>
+          </span>
+        </a>
+        <p class="text-sm text-muted-foreground">
+          Entdecke tausende Rezepte von der Community und teile deine eigenen Kreationen.
+        </p>
+      </div>
+
+      <!-- Links -->
+      <div>
+        <h4 class="font-semibold text-foreground mb-4">Rezepte</h4>
+        <ul class="space-y-2 text-sm text-muted-foreground">
+          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors">Alle Rezepte</a></li>
+          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors">Neue Rezepte</a></li>
+          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors">Beliebte Rezepte</a></li>
+          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors">Saisonal</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-semibold text-foreground mb-4">Kategorien</h4>
+        <ul class="space-y-2 text-sm text-muted-foreground">
+          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors">Frühstück</a></li>
+          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors">Mittagessen</a></li>
+          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors">Abendessen</a></li>
+          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors">Desserts</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-semibold text-foreground mb-4">Über uns</h4>
+        <ul class="space-y-2 text-sm text-muted-foreground">
+          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors">Über CookBook</a></li>
+          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors">Kontakt</a></li>
+          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors">Impressum</a></li>
+          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors">Datenschutz</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-border text-center text-sm text-muted-foreground">
+      <p>© {{ currentYear }} CookBook. Alle Rechte vorbehalten.</p>
+    </div>
+  </div>
+</footer>

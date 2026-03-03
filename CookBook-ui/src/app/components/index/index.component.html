@@ -1,0 +1,169 @@
+<div class="min-h-screen bg-background">
+  <app-header></app-header>
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0">
+      <img
+        src="assets/hero-image.jpg"
+        alt="Köstliche Gerichte"
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-foreground/80 via-foreground/60 to-transparent"></div>
+    </div>
+    
+    <div class="relative container mx-auto px-4 py-20 md:py-32">
+      <div class="max-w-2xl">
+        <h1 class="font-display text-4xl md:text-6xl font-bold text-card mb-6 animate-fade-in">
+          Entdecke die Welt des <span class="text-primary">Geschmacks</span>
+        </h1>
+        <p class="text-lg md:text-xl text-card/90 mb-8 animate-fade-in" style="animation-delay: 0.1s">
+          Finde Inspiration für jeden Tag. Tausende Rezepte von der Community – 
+          einfach, lecker und für jeden Anlass.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 animate-fade-in" style="animation-delay: 0.2s">
+          <button class="btn btn-cookbook px-6 py-3 text-base">
+            Rezepte entdecken
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+          <button class="btn border-2 border-card/30 text-card hover:bg-card hover:text-foreground px-6 py-3 text-base bg-card/10">
+            Rezept erstellen
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="relative bg-card/95 backdrop-blur-sm border-t border-border">
+      <div class="container mx-auto px-4 py-6">
+        <div class="grid grid-cols-3 gap-4 md:gap-8">
+          <div class="text-center">
+            <div class="flex items-center justify-center gap-2 text-primary mb-1">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+              <span class="font-display text-2xl md:text-3xl font-bold">15k+</span>
+            </div>
+            <p class="text-xs md:text-sm text-muted-foreground">Rezepte</p>
+          </div>
+          <div class="text-center">
+            <div class="flex items-center justify-center gap-2 text-primary mb-1">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+              <span class="font-display text-2xl md:text-3xl font-bold">50k+</span>
+            </div>
+            <p class="text-xs md:text-sm text-muted-foreground">Köche</p>
+          </div>
+          <div class="text-center">
+            <div class="flex items-center justify-center gap-2 text-primary mb-1">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="font-display text-2xl md:text-3xl font-bold">30 Min</span>
+            </div>
+            <p class="text-xs md:text-sm text-muted-foreground">Ø Zubereitungszeit</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section id="categories" class="py-8 md:py-12 border-b border-border">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center gap-4 overflow-x-auto pb-2 scrollbar-hide">
+        <span class="text-sm font-medium text-muted-foreground whitespace-nowrap">
+          Kategorien:
+        </span>
+        <app-category-pill
+          *ngFor="let category of categories"
+          [category]="category"
+          [isActive]="activeCategory === category.id"
+          (clicked)="handleCategoryClick(category.id)"
+        ></app-category-pill>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recipes Grid -->
+  <section id="recipes" class="py-12 md:py-16">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="font-display text-2xl md:text-3xl font-bold text-foreground">
+            Beliebte Rezepte
+          </h2>
+          <p class="text-muted-foreground mt-1">
+            Die Favoriten unserer Community
+          </p>
+        </div>
+        <a [routerLink]="['/']" class="hidden md:flex items-center gap-2 text-primary font-medium hover:underline">
+          Alle anzeigen
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+
+      <div *ngIf="isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngFor="let i of [1,2,3,4,5,6]" class="recipe-card animate-pulse">
+          <div class="aspect-[4/3] bg-muted"></div>
+          <div class="p-4 space-y-3">
+            <div class="h-4 bg-muted rounded w-1/3"></div>
+            <div class="h-6 bg-muted rounded w-3/4"></div>
+            <div class="h-4 bg-muted rounded w-full"></div>
+            <div class="h-4 bg-muted rounded w-2/3"></div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div 
+          *ngFor="let recipe of recipes; let i = index" 
+          class="animate-fade-in" 
+          [style.animation-delay]="getAnimationDelay(i)"
+        >
+          <app-recipe-card [recipe]="recipe"></app-recipe-card>
+        </div>
+      </div>
+
+      <div class="mt-8 text-center md:hidden">
+        <button class="btn btn-cookbook-outline w-full">
+          Alle Rezepte anzeigen
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-secondary/50">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+        Teile deine Lieblingsrezepte
+      </h2>
+      <p class="text-muted-foreground max-w-2xl mx-auto mb-8">
+        Werde Teil unserer Community und teile deine kulinarischen Kreationen mit 
+        tausenden anderen Hobbyköchen.
+      </p>
+      <a [routerLink]="['/register']">
+        <button class="btn btn-cookbook px-6 py-3 text-lg">
+          Jetzt kostenlos registrieren
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </a>
+    </div>
+  </section>
+
+  <app-footer></app-footer>
+</div>

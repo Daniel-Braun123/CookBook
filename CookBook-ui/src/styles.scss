@@ -1,0 +1,237 @@
+// Angular Material Theme
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$cookbook-primary: mat.define-palette(mat.$orange-palette, 600);
+$cookbook-accent: mat.define-palette(mat.$amber-palette, 300);
+$cookbook-warn: mat.define-palette(mat.$red-palette);
+
+// Light Theme
+$cookbook-light-theme: mat.define-light-theme((
+  color: (
+    primary: $cookbook-primary,
+    accent: $cookbook-accent,
+    warn: $cookbook-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+// Dark Theme
+$cookbook-dark-theme: mat.define-dark-theme((
+  color: (
+    primary: $cookbook-primary,
+    accent: $cookbook-accent,
+    warn: $cookbook-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+// Apply light theme by default
+@include mat.all-component-themes($cookbook-light-theme);
+
+// Apply dark theme when .dark class is present
+.dark {
+  @include mat.all-component-colors($cookbook-dark-theme);
+}
+
+// Tailwind CSS
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    /* CookBook Design System - Warm Food-Inspired Colors (Light Mode) */
+    --background: 30 50% 98%;
+    --foreground: 20 20% 15%;
+
+    --card: 30 40% 99%;
+    --card-foreground: 20 20% 15%;
+
+    --popover: 30 40% 99%;
+    --popover-foreground: 20 20% 15%;
+
+    /* Warm Orange - Primary Brand Color */
+    --primary: 20 80% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Creamy Beige - Secondary */
+    --secondary: 35 30% 94%;
+    --secondary-foreground: 20 20% 25%;
+
+    /* Muted Warm Tones */
+    --muted: 30 20% 92%;
+    --muted-foreground: 20 10% 45%;
+
+    /* Accent - Fresh Green for Vegan/Healthy */
+    --accent: 140 45% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 20% 88%;
+    --input: 30 20% 88%;
+    --ring: 20 80% 55%;
+
+    --radius: 0.75rem;
+
+    /* Custom CookBook tokens */
+    --cookbook-orange: 20 80% 55%;
+    --cookbook-orange-light: 25 70% 65%;
+    --cookbook-orange-dark: 15 85% 45%;
+    --cookbook-cream: 35 40% 96%;
+    --cookbook-brown: 25 30% 25%;
+    --cookbook-green: 140 45% 45%;
+    --cookbook-gold: 45 90% 55%;
+  }
+
+  /* Dark Mode Theme */
+  .dark {
+    /* Dark backgrounds with warm undertones */
+    --background: 20 15% 12%;
+    --foreground: 30 20% 95%;
+
+    --card: 20 20% 15%;
+    --card-foreground: 30 20% 95%;
+
+    --popover: 20 20% 15%;
+    --popover-foreground: 30 20% 95%;
+
+    /* Primary stays vibrant but slightly adjusted for dark */
+    --primary: 20 80% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Dark secondary with subtle warmth */
+    --secondary: 20 15% 20%;
+    --secondary-foreground: 30 20% 90%;
+
+    /* Muted tones for dark mode */
+    --muted: 20 15% 22%;
+    --muted-foreground: 30 10% 65%;
+
+    /* Accent stays green but adjusted */
+    --accent: 140 45% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 20 15% 25%;
+    --input: 20 15% 25%;
+    --ring: 20 80% 55%;
+
+    /* Custom tokens for dark mode */
+    --cookbook-orange: 20 80% 55%;
+    --cookbook-orange-light: 25 75% 60%;
+    --cookbook-orange-dark: 15 85% 50%;
+    --cookbook-cream: 20 15% 18%;
+    --cookbook-brown: 30 20% 85%;
+    --cookbook-green: 140 45% 50%;
+    --cookbook-gold: 45 85% 60%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .font-display {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer components {
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-cookbook {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg;
+  }
+
+  .btn-cookbook-outline {
+    @apply border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground;
+  }
+
+  /* Recipe Card */
+  .recipe-card {
+    @apply bg-card rounded-xl overflow-hidden border border-border transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  /* Category Pill */
+  .category-pill {
+    @apply px-4 py-2 rounded-full text-sm font-medium transition-all duration-200;
+  }
+
+  /* Search Input */
+  .search-input {
+    @apply w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200;
+  }
+
+  /* Nav Link */
+  .nav-link {
+    @apply text-foreground hover:text-primary transition-colors duration-200;
+  }
+
+  /* Rating Star */
+  .rating-star {
+    @apply text-cookbook-gold;
+  }
+
+  /* Hero Gradient */
+  .hero-gradient {
+    background: linear-gradient(135deg, hsl(20 80% 55%) 0%, hsl(35 70% 60%) 100%);
+  }
+
+  /* Image Overlay */
+  .image-overlay {
+    background: linear-gradient(180deg, transparent 0%, hsl(20 20% 10% / 0.7) 100%);
+  }
+
+  /* Animations */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+  }
+
+  /* Scrollbar Hide */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Input Styles */
+  .input {
+    @apply flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  /* Label Styles */
+  .label {
+    @apply text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
+  }
+}
