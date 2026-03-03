@@ -82,7 +82,7 @@
           Kategorien:
         </span>
         <app-category-pill
-          *ngFor="let category of categories"
+          *ngFor="let category of categories; trackBy: trackByCategoryId"
           [category]="category"
           [isActive]="activeCategory === category.id"
           (clicked)="handleCategoryClick(category.id)"
@@ -125,7 +125,7 @@
 
       <div *ngIf="!isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div 
-          *ngFor="let recipe of recipes; let i = index" 
+          *ngFor="let recipe of recipes; let i = index; trackBy: trackByRecipeId" 
           class="animate-fade-in" 
           [style.animation-delay]="getAnimationDelay(i)"
         >

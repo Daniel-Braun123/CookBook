@@ -57,6 +57,8 @@
       <button
         (click)="isMenuOpen = !isMenuOpen"
         class="md:hidden p-2 rounded-lg hover:bg-secondary transition-colors"
+        aria-label="Menü"
+        [attr.aria-expanded]="isMenuOpen"
       >
         <mat-icon *ngIf="!isMenuOpen">menu</mat-icon>
         <mat-icon *ngIf="isMenuOpen">close</mat-icon>
@@ -79,13 +81,13 @@
   <!-- Mobile Menu -->
   <div *ngIf="isMenuOpen" class="md:hidden bg-card border-t border-border animate-fade-in">
     <nav class="container mx-auto px-4 py-4 flex flex-col gap-4">
-      <a [routerLink]="['/']" class="py-2 font-medium text-foreground hover:text-primary transition-colors">
+      <a [routerLink]="['/']" (click)="isMenuOpen = false" class="py-2 font-medium text-foreground hover:text-primary transition-colors">
         Rezepte
       </a>
-      <a [routerLink]="['/categories']" class="py-2 font-medium text-foreground hover:text-primary transition-colors">
+      <a [routerLink]="['/categories']" (click)="isMenuOpen = false" class="py-2 font-medium text-foreground hover:text-primary transition-colors">
         Kategorien
       </a>
-      <a [routerLink]="['/']" class="py-2 font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2">
+      <a [routerLink]="['/']" (click)="isMenuOpen = false" class="py-2 font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2">
         <mat-icon>favorite_border</mat-icon>
         Gespeichert
       </a>
@@ -98,7 +100,7 @@
         <mat-icon>{{ themeService.isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
         {{ themeService.isDarkMode() ? 'Light Mode' : 'Dark Mode' }}
       </button>
-      <a [routerLink]="['/login']">
+      <a [routerLink]="['/login']" (click)="isMenuOpen = false">
         <button class="btn btn-cookbook w-full flex items-center justify-center gap-2">
           <mat-icon class="text-base">person</mat-icon>
           Anmelden

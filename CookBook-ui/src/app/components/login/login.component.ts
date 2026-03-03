@@ -40,8 +40,8 @@ export class LoginComponent {
     
     if (!this.password) {
       newErrors.password = 'Passwort ist erforderlich';
-    } else if (this.password.length < 6) {
-      newErrors.password = 'Passwort muss mindestens 6 Zeichen haben';
+    } else if (this.password.length < 8) {
+      newErrors.password = 'Passwort muss mindestens 8 Zeichen haben';
     }
     
     this.errors = newErrors;

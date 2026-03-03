@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="CookBookERD" name="CookBook Database Schema">
-        <mxGraphModel dx="854" dy="537" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+        <mxGraphModel dx="680" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -29,7 +29,7 @@
                     <mxGeometry y="210" width="240" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="recipes-table" value="&lt;b&gt;recipes&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
-                    <mxGeometry x="500" y="100" width="280" height="420" as="geometry"/>
+                    <mxGeometry x="500" y="100" width="280" height="450" as="geometry"/>
                 </mxCell>
                 <mxCell id="recipes-id" value="🔑 id: VARCHAR(36) PRIMARY KEY" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontStyle=1" parent="recipes-table" vertex="1">
                     <mxGeometry y="30" width="280" height="30" as="geometry"/>
@@ -67,8 +67,11 @@
                 <mxCell id="recipes-author" value="🔗 author_id: VARCHAR(36) FK → users.id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontColor=#0066CC;" parent="recipes-table" vertex="1">
                     <mxGeometry y="360" width="280" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="recipes-created" value="created_at: TIMESTAMP DEFAULT NOW()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="recipes-table" vertex="1">
+                <mxCell id="recipes-category" value="🔗 category_id: VARCHAR(36) FK → categories.id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontColor=#0066CC;" parent="recipes-table" vertex="1">
                     <mxGeometry y="390" width="280" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="recipes-created" value="created_at: TIMESTAMP DEFAULT NOW()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="recipes-table" vertex="1">
+                    <mxGeometry y="420" width="280" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="categories-table" value="&lt;b&gt;categories&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
                     <mxGeometry x="760" y="730" width="240" height="150" as="geometry"/>
@@ -104,7 +107,7 @@
                     <mxGeometry y="150" width="280" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="steps-table" value="&lt;b&gt;cooking_steps&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
-                    <mxGeometry x="1030" y="310" width="280" height="210" as="geometry"/>
+                    <mxGeometry x="1000" y="370" width="280" height="210" as="geometry"/>
                 </mxCell>
                 <mxCell id="steps-id" value="🔑 id: VARCHAR(36) PRIMARY KEY" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontStyle=1" parent="steps-table" vertex="1">
                     <mxGeometry y="30" width="280" height="30" as="geometry"/>
@@ -125,7 +128,7 @@
                     <mxGeometry y="180" width="280" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="nutrition-table" value="&lt;b&gt;nutrition_info&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
-                    <mxGeometry x="940" y="80" width="280" height="210" as="geometry"/>
+                    <mxGeometry x="940" y="80" width="280" height="240" as="geometry"/>
                 </mxCell>
                 <mxCell id="nutrition-id" value="🔑 id: VARCHAR(36) PRIMARY KEY" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontStyle=1" parent="nutrition-table" vertex="1">
                     <mxGeometry y="30" width="280" height="30" as="geometry"/>
@@ -145,6 +148,9 @@
                 <mxCell id="nutrition-fat" value="fat: INT NOT NULL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="nutrition-table" vertex="1">
                     <mxGeometry y="180" width="280" height="30" as="geometry"/>
                 </mxCell>
+                <mxCell id="nutrition-fiber" value="fiber: INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="nutrition-table" vertex="1">
+                    <mxGeometry y="210" width="280" height="30" as="geometry"/>
+                </mxCell>
                 <mxCell id="saved-table" value="&lt;b&gt;saved_recipes&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
                     <mxGeometry x="80" y="450" width="280" height="120" as="geometry"/>
                 </mxCell>
@@ -155,18 +161,6 @@
                     <mxGeometry y="60" width="280" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="saved-recipe" value="🔗 recipe_id: VARCHAR(36) FK → recipes.id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontColor=#0066CC;" parent="saved-table" vertex="1">
-                    <mxGeometry y="90" width="280" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="recipe-cat-table" value="&lt;b&gt;recipe_categories&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
-                    <mxGeometry x="940" y="560" width="280" height="120" as="geometry"/>
-                </mxCell>
-                <mxCell id="recipe-cat-id" value="🔑 id: VARCHAR(36) PRIMARY KEY" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontStyle=1" parent="recipe-cat-table" vertex="1">
-                    <mxGeometry y="30" width="280" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="recipe-cat-recipe" value="🔗 recipe_id: VARCHAR(36) FK → recipes.id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontColor=#0066CC;" parent="recipe-cat-table" vertex="1">
-                    <mxGeometry y="60" width="280" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="recipe-cat-category" value="🔗 category_id: VARCHAR(36) FK → categories.id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fontColor=#0066CC;" parent="recipe-cat-table" vertex="1">
                     <mxGeometry y="90" width="280" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="rel-user-recipe" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;" parent="1" source="users-id" target="recipes-author" edge="1">
@@ -229,29 +223,21 @@
                         <mxPoint x="-11" y="-111" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="rel-recipe-reccat" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;" parent="1" source="recipes-created" target="recipe-cat-recipe" edge="1">
+                <mxCell id="rel-recipe-category" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;" parent="1" source="recipes-category" target="categories-id" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
-                            <mxPoint x="860" y="505"/>
-                            <mxPoint x="860" y="580"/>
-                            <mxPoint x="940" y="580"/>
+                            <mxPoint x="800" y="590"/>
+                            <mxPoint x="720" y="590"/>
+                            <mxPoint x="720" y="775"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="4" value="has" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-recipe-reccat">
-                    <mxGeometry x="-0.1633" y="-3" relative="1" as="geometry">
-                        <mxPoint as="offset"/>
+                <mxCell id="rel-recipe-category-label" value="gehört zu" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontStyle=1;fontSize=11;" parent="rel-recipe-category" vertex="1" connectable="0">
+                    <mxGeometry x="-0.1" y="1" relative="1" as="geometry">
+                        <mxPoint x="10" y="-11" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="rel-category-reccat" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=2;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;" parent="1" source="categories-table" target="recipe-cat-table" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="5" value="besteht aus" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="rel-category-reccat">
-                    <mxGeometry x="0.3838" y="-4" relative="1" as="geometry">
-                        <mxPoint as="offset"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="title" value="&lt;h1&gt;CookBook Database Schema (ER-Diagramm)&lt;/h1&gt;&lt;p&gt;&lt;b&gt;Legende:&lt;/b&gt; 🔑 = Primary Key | 🔗 = Foreign Key&lt;br&gt;&lt;b&gt;Relationen:&lt;/b&gt; 1:N (one-to-many), M:N (many-to-many via Junction Tables), 1:1 (one-to-one)&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;fontStyle=0;fontSize=14;" parent="1" vertex="1">
+                <mxCell id="title" value="&lt;h1&gt;CookBook Database Schema (ER-Diagramm)&lt;/h1&gt;&lt;p&gt;&lt;b&gt;Legende:&lt;/b&gt; 🔑 = Primary Key | 🔗 = Foreign Key&lt;br&gt;&lt;b&gt;Relationen:&lt;/b&gt; 1:N (one-to-many), 1:1 (one-to-one)&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;fontStyle=0;fontSize=14;" parent="1" vertex="1">
                     <mxGeometry x="100" y="20" width="1060" height="60" as="geometry"/>
                 </mxCell>
             </root>

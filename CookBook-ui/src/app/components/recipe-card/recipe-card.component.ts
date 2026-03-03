@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +13,7 @@ import { RecipeService } from '../../services/recipe.service';
   templateUrl: './recipe-card.component.html',
   styleUrls: ['./recipe-card.component.scss']
 })
-export class RecipeCardComponent {
+export class RecipeCardComponent implements OnInit {
   @Input() recipe!: Recipe;
   @Input() className: string = '';
 
@@ -23,7 +23,7 @@ export class RecipeCardComponent {
 
   constructor(private recipeService: RecipeService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.isSaved = this.recipe.isSaved || false;
   }
 
@@ -41,15 +41,6 @@ export class RecipeCardComponent {
   }
 
   getImageUrl(): string {
-    // Image mapping for local images
-    const imageMap: Record<string, string> = {
-      '/recipes/tomato-soup.jpg': 'assets/recipes/tomato-soup.jpg',
-      '/recipes/carbonara.jpg': 'assets/recipes/carbonara.jpg',
-      '/recipes/buddha-bowl.jpg': 'assets/recipes/buddha-bowl.jpg',
-      '/recipes/pancakes.jpg': 'assets/recipes/pancakes.jpg',
-      '/recipes/salmon.jpg': 'assets/recipes/salmon.jpg',
-      '/recipes/tiramisu.jpg': 'assets/recipes/tiramisu.jpg',
-    };
-    return imageMap[this.recipe.image] || this.recipe.image;
+    return this.recipeService.getImageUrl(this.recipe.image);
   }
 }

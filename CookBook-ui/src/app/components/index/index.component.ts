@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, ActivatedRoute } from '@angular/router';
+import { Subject, takeUntil, forkJoin, switchMap, of } from 'rxjs';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { RecipeCardComponent } from '../../components/recipe-card/recipe-card.component';
@@ -23,11 +24,15 @@ import { Category } from '../../models/category';
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss']
 })
-export class IndexComponent implements OnInit {
+export class IndexComponent implements OnInit, OnDestroy {
   recipes: Recipe[] = [];
   categories: Category[] = [];
   activeCategory: string | null = null;
   isLoading = true;
+
+  private destroy$ = new Subject<void>();
+
+  @ViewChild('recipesSection') recipesSection?: ElementRef<HTMLElement>;
 
   constructor(
     private recipeService: RecipeService,
@@ -35,60 +40,57 @@ export class IndexComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Load data first
-    this.loadData().then(() => {
-      // Then check for query parameters (from categories page)
-      this.route.queryParams.subscribe(params => {
+    this.loadData();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private loadData(): void {
+    this.isLoading = true;
+
+    forkJoin({
+      recipes: this.recipeService.getPopularRecipes(),
+      categories: this.recipeService.getCategories()
+    }).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(({ recipes, categories }) => {
+      this.recipes = recipes;
+      this.categories = categories;
+      this.isLoading = false;
+
+      // Check for category query param after data is loaded
+      this.route.queryParams.pipe(
+        takeUntil(this.destroy$)
+      ).subscribe(params => {
         const categoryName = params['category'];
         if (categoryName && this.categories.length > 0) {
-          // Find category by name and set it as active
           const category = this.categories.find(c => c.name === categoryName);
           if (category) {
             this.activeCategory = category.id;
             this.filterByCategory(categoryName);
-            
-            // Scroll to recipes section after a short delay
-            setTimeout(() => {
-              this.scrollToRecipes();
-            }, 500);
+            setTimeout(() => this.scrollToRecipes(), 500);
           }
         }
       });
     });
   }
 
-  loadData(): Promise<void> {
-    this.isLoading = true;
-    
-    return Promise.all([
-      this.recipeService.getPopularRecipes().toPromise(),
-      this.recipeService.getCategories().toPromise()
-    ]).then(([recipes, categories]) => {
-      this.recipes = recipes || [];
-      this.categories = categories || [];
-      this.isLoading = false;
-    });
-  }
-
   handleCategoryClick(categoryId: string): void {
     if (this.activeCategory === categoryId) {
       this.activeCategory = null;
-      this.recipeService.getPopularRecipes().subscribe(recipes => {
+      this.recipeService.getPopularRecipes().pipe(
+        takeUntil(this.destroy$)
+      ).subscribe(recipes => {
         this.recipes = recipes;
       });
     } else {
       this.activeCategory = categoryId;
       const category = this.categories.find(c => c.id === categoryId);
       if (category) {
-        this.recipeService.getRecipes(undefined, category.name).subscribe(filteredRecipes => {
-          if (filteredRecipes.length > 0) {
-            this.recipes = filteredRecipes;
-          } else {
-            this.recipeService.getPopularRecipes().subscribe(recipes => {
-              this.recipes = recipes;
-            });
-          }
-        });
+        this.filterByCategory(category.name);
       }
     }
   }
@@ -97,22 +99,32 @@ export class IndexComponent implements OnInit {
     return `${index * 0.1}s`;
   }
 
+  trackByRecipeId(_index: number, recipe: Recipe): string {
+    return recipe.id;
+  }
+
+  trackByCategoryId(_index: number, category: Category): string {
+    return category.id;
+  }
+
   private filterByCategory(categoryName: string): void {
-    this.recipeService.getRecipes(undefined, categoryName).subscribe(filteredRecipes => {
-      if (filteredRecipes.length > 0) {
-        this.recipes = filteredRecipes;
-      } else {
-        this.recipeService.getPopularRecipes().subscribe(recipes => {
-          this.recipes = recipes;
-        });
-      }
+    this.recipeService.getRecipes(undefined, categoryName).pipe(
+      switchMap(filtered => filtered.length > 0 
+        ? of(filtered) 
+        : this.recipeService.getPopularRecipes()
+      ),
+      takeUntil(this.destroy$)
+    ).subscribe(recipes => {
+      this.recipes = recipes;
     });
   }
 
   private scrollToRecipes(): void {
-    const recipesSection = document.getElementById('recipes');
-    if (recipesSection) {
-      recipesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (this.recipesSection) {
+      this.recipesSection.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      const el = document.getElementById('recipes');
+      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 }

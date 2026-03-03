@@ -43,6 +43,10 @@ export class RegisterComponent {
       newErrors['password'] = 'Passwort ist erforderlich';
     } else if (this.password.length < 8) {
       newErrors['password'] = 'Passwort muss mindestens 8 Zeichen haben';
+    } else if (!/[A-Z]/.test(this.password)) {
+      newErrors['password'] = 'Passwort muss einen Großbuchstaben enthalten';
+    } else if (!/[0-9]/.test(this.password)) {
+      newErrors['password'] = 'Passwort muss eine Zahl enthalten';
     }
     
     if (this.password !== this.confirmPassword) {

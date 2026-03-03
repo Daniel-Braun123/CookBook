@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Subject, switchMap, takeUntil, filter, map } from 'rxjs';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { RecipeService } from '../../services/recipe.service';
@@ -13,7 +14,7 @@ import { Recipe } from '../../models/recipe';
   templateUrl: './recipe-detail.component.html',
   styleUrls: ['./recipe-detail.component.scss']
 })
-export class RecipeDetailComponent implements OnInit {
+export class RecipeDetailComponent implements OnInit, OnDestroy {
   recipe: Recipe | null = null;
   isLoading = true;
   isSaved = false;
@@ -22,28 +23,37 @@ export class RecipeDetailComponent implements OnInit {
 
   Math = Math;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private route: ActivatedRoute,
     private recipeService: RecipeService
   ) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.loadRecipe(id);
-    }
-  }
-
-  loadRecipe(id: string): void {
-    this.isLoading = true;
-    this.recipeService.getRecipeById(id).subscribe(recipe => {
+    // Use reactive params so navigating between recipes works
+    this.route.paramMap.pipe(
+      map(params => params.get('id')),
+      filter((id): id is string => id !== null),
+      switchMap(id => {
+        this.isLoading = true;
+        return this.recipeService.getRecipeById(id);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(recipe => {
       if (recipe) {
         this.recipe = recipe;
         this.isSaved = recipe.isSaved || false;
         this.servings = recipe.servings;
+        this.completedSteps.clear();
       }
       this.isLoading = false;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   toggleStep(stepId: string): void {
@@ -61,15 +71,7 @@ export class RecipeDetailComponent implements OnInit {
 
   getImageUrl(): string {
     if (!this.recipe) return '';
-    const imageMap: Record<string, string> = {
-      '/recipes/tomato-soup.jpg': 'assets/recipes/tomato-soup.jpg',
-      '/recipes/carbonara.jpg': 'assets/recipes/carbonara.jpg',
-      '/recipes/buddha-bowl.jpg': 'assets/recipes/buddha-bowl.jpg',
-      '/recipes/pancakes.jpg': 'assets/recipes/pancakes.jpg',
-      '/recipes/salmon.jpg': 'assets/recipes/salmon.jpg',
-      '/recipes/tiramisu.jpg': 'assets/recipes/tiramisu.jpg',
-    };
-    return imageMap[this.recipe.image] || this.recipe.image;
+    return this.recipeService.getImageUrl(this.recipe.image);
   }
 
   getTotalTime(): number {
@@ -88,6 +90,9 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   toggleSaved(): void {
-    this.isSaved = !this.isSaved;
+    if (!this.recipe) return;
+    this.recipeService.toggleSaveRecipe(this.recipe.id).subscribe(saved => {
+      this.isSaved = saved;
+    });
   }
 }

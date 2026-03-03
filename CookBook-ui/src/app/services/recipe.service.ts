@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { delay } from 'rxjs/operators';
 import { Recipe } from '../models/recipe';
 import { Category } from '../models/category';
 
@@ -369,5 +369,20 @@ export class RecipeService {
   getUserRecipes(userId: string): Observable<Recipe[]> {
     const userRecipes = mockRecipes.filter(r => r.author.id === userId);
     return of(userRecipes).pipe(delay(300));
+  }
+
+  /**
+   * Resolve image path from mock data path to actual asset path
+   */
+  getImageUrl(imagePath: string): string {
+    const imageMap: Record<string, string> = {
+      '/recipes/tomato-soup.jpg': 'assets/recipes/tomato-soup.jpg',
+      '/recipes/carbonara.jpg': 'assets/recipes/carbonara.jpg',
+      '/recipes/buddha-bowl.jpg': 'assets/recipes/buddha-bowl.jpg',
+      '/recipes/pancakes.jpg': 'assets/recipes/pancakes.jpg',
+      '/recipes/salmon.jpg': 'assets/recipes/salmon.jpg',
+      '/recipes/tiramisu.jpg': 'assets/recipes/tiramisu.jpg',
+    };
+    return imageMap[imagePath] || imagePath;
   }
 }

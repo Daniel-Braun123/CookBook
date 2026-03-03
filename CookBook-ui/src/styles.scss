@@ -42,8 +42,6 @@ $cookbook-dark-theme: mat.define-dark-theme((
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
-
 @layer base {
   :root {
     /* CookBook Design System - Warm Food-Inspired Colors (Light Mode) */
