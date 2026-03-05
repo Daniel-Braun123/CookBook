@@ -9,7 +9,7 @@
 -- 1. users
 -- =============================================
 CREATE TABLE users (
-    id          VARCHAR(36)     PRIMARY KEY,
+    id          BIGSERIAL       PRIMARY KEY,
     name        VARCHAR(100)    NOT NULL,
     email       VARCHAR(255)    NOT NULL UNIQUE,
     avatar      VARCHAR(500),
@@ -22,7 +22,7 @@ CREATE TABLE users (
 -- 2. categories
 -- =============================================
 CREATE TABLE categories (
-    id      VARCHAR(36)     PRIMARY KEY,
+    id      BIGSERIAL       PRIMARY KEY,
     name    VARCHAR(100)    NOT NULL UNIQUE,
     icon    VARCHAR(100),
     count   INT             NOT NULL DEFAULT 0
@@ -32,7 +32,7 @@ CREATE TABLE categories (
 -- 3. recipes
 -- =============================================
 CREATE TABLE recipes (
-    id              VARCHAR(36)     PRIMARY KEY,
+    id              BIGSERIAL       PRIMARY KEY,
     title           VARCHAR(200)    NOT NULL,
     description     TEXT            NOT NULL,
     image           VARCHAR(500),
@@ -43,8 +43,8 @@ CREATE TABLE recipes (
     difficulty      VARCHAR(20)     NOT NULL,
     servings        INT             NOT NULL,
     tags            JSON,
-    author_id       VARCHAR(36)     NOT NULL,
-    category_id     VARCHAR(36),
+    author_id       BIGINT          NOT NULL,
+    category_id     BIGINT,
     created_at      TIMESTAMP       NOT NULL DEFAULT NOW(),
 
     CONSTRAINT fk_recipes_author
@@ -57,8 +57,8 @@ CREATE TABLE recipes (
 -- 4. ingredients
 -- =============================================
 CREATE TABLE ingredients (
-    id          VARCHAR(36)     PRIMARY KEY,
-    recipe_id   VARCHAR(36)     NOT NULL,
+    id          BIGSERIAL       PRIMARY KEY,
+    recipe_id   BIGINT          NOT NULL,
     name        VARCHAR(150)    NOT NULL,
     amount      DECIMAL(10,2)   NOT NULL,
     unit        VARCHAR(50)     NOT NULL,
@@ -71,8 +71,8 @@ CREATE TABLE ingredients (
 -- 5. cooking_steps
 -- =============================================
 CREATE TABLE cooking_steps (
-    id              VARCHAR(36)     PRIMARY KEY,
-    recipe_id       VARCHAR(36)     NOT NULL,
+    id              BIGSERIAL       PRIMARY KEY,
+    recipe_id       BIGINT          NOT NULL,
     step_number     INT             NOT NULL,
     instruction     TEXT            NOT NULL,
     image           VARCHAR(500),
@@ -86,8 +86,8 @@ CREATE TABLE cooking_steps (
 -- 6. nutrition_info
 -- =============================================
 CREATE TABLE nutrition_info (
-    id          VARCHAR(36)     PRIMARY KEY,
-    recipe_id   VARCHAR(36)     NOT NULL UNIQUE,
+    id          BIGSERIAL       PRIMARY KEY,
+    recipe_id   BIGINT          NOT NULL UNIQUE,
     calories    INT             NOT NULL,
     protein     INT             NOT NULL,
     carbs       INT             NOT NULL,
@@ -102,9 +102,9 @@ CREATE TABLE nutrition_info (
 -- 7. saved_recipes
 -- =============================================
 CREATE TABLE saved_recipes (
-    id          VARCHAR(36)     PRIMARY KEY,
-    user_id     VARCHAR(36)     NOT NULL,
-    recipe_id   VARCHAR(36)     NOT NULL,
+    id          BIGSERIAL       PRIMARY KEY,
+    user_id     BIGINT          NOT NULL,
+    recipe_id   BIGINT          NOT NULL,
 
     CONSTRAINT fk_saved_user
         FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,

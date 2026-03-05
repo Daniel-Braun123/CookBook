@@ -1,0 +1,41 @@
+package de.cookBook.backend.entities;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "users")
+public class Users {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+    
+    @Column(name = "name", length = 100, nullable = false)
+    private String name;
+    
+    @Column(name = "email", length = 255, nullable = false, unique = true)
+    private String email;
+    
+    @Column(name = "avatar", length = 500)
+    private String avatar;
+    
+    @Column(name = "bio", columnDefinition = "TEXT")
+    private String bio;
+    
+    @Column(name = "password", length = 255, nullable = false)
+    private String password;
+    
+    @CreationTimestamp
+    @Column(name = "joined_at", nullable = false, updatable = false)
+    private LocalDateTime joinedAt;
+}
