@@ -108,9 +108,5 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   toggleSaved(): void {
-    if (!this.recipe) return;
-    this.recipeService.toggleSaveRecipe(this.recipe.id).subscribe(saved => {
-      this.isSaved = saved;
-    });
   }
 }

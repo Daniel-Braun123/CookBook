@@ -31,9 +31,7 @@ export class RecipeCardComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     
-    this.recipeService.toggleSaveRecipe(this.recipe.id).subscribe(saved => {
-      this.isSaved = saved;
-    });
+    
   }
 
   getTotalTime(): number {
