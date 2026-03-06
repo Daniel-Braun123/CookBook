@@ -14,9 +14,9 @@ export interface Recipe {
   category: Category;
   tags: string[];
   author: Author;
-  ingredients: Ingredient[];
-  steps: CookingStep[];
-  nutrition?: NutritionInfo;
+  //ingredients: Ingredient[]; // muss weg
+  //steps: CookingStep[]; // muss weg
+  //nutrition?: NutritionInfo; // muss weg
   createdAt: string;
   isSaved?: boolean;
 }
@@ -25,6 +25,7 @@ export interface Author {
   id: string;
   name: string;
   avatar: string;
+  bio?: string
 }
 
 export interface Ingredient {

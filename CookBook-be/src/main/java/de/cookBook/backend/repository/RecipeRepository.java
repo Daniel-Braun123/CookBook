@@ -22,6 +22,10 @@ public interface RecipeRepository extends JpaRepository<Recipes, Long> {
         return findByCategoryName(categoryName);
     }
 
+    default Recipes getRecipeById(String recipeId) {
+        return findById(Long.parseLong(recipeId)).orElse(null);
+    }
+
     List<Recipes> findTop6ByOrderByRatingDesc();
     
     List<Recipes> findByCategoryName(String categoryName);

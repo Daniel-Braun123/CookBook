@@ -1,11 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Subject, switchMap, takeUntil, filter, map } from 'rxjs';
+import { Subject, switchMap, takeUntil, filter, map, forkJoin } from 'rxjs';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { RecipeService } from '../../services/recipe.service';
-import { Recipe } from '../../models/recipe';
+import { NutritionInfoService } from '../../services/nutritionInfo.service';
+import { CookingStep, Ingredient, NutritionInfo, Recipe } from '../../models/recipe';
+import { IngridientsService } from '@app/services/ingredients.service';
+import { CookingStepsService } from '@app/services/cookingSteps.service';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -16,9 +19,13 @@ import { Recipe } from '../../models/recipe';
 })
 export class RecipeDetailComponent implements OnInit, OnDestroy {
   recipe: Recipe | null = null;
+  nutritionInfo: NutritionInfo | null = null;
+  ingredients: Ingredient[] | null = null;
+  cookingSteps: CookingStep[] | null = null;
   isLoading = true;
   isSaved = false;
-  servings = 4;
+  servings: number = 1;
+  originalServings: number = 1;
   completedSteps = new Set<string>();
 
   Math = Math;
@@ -27,24 +34,40 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private recipeService: RecipeService
+    private recipeService: RecipeService,
+    private nutritionInfoService: NutritionInfoService,
+    private ingridientService: IngridientsService,
+    private cookingStepsService: CookingStepsService
   ) {}
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
+    
     // Use reactive params so navigating between recipes works
     this.route.paramMap.pipe(
       map(params => params.get('id')),
-      filter((id): id is string => id !== null),
-      switchMap(id => {
+      filter((recipeId): recipeId is string => recipeId !== null),
+      switchMap(recipeId => {
         this.isLoading = true;
-        return this.recipeService.getRecipeById(id);
+        window.scrollTo(0, 0);
+        return forkJoin({
+          recipe: this.recipeService.getRecipeById(recipeId),
+          nutrition: this.nutritionInfoService.getNutritionInfoWithRecipeId(recipeId),
+          ingredients: this.ingridientService.getIngredientsWithRecipeId(recipeId),
+          cookingSteps: this.cookingStepsService.getCookingStepsWithRecipeId(recipeId)
+        });
       }),
       takeUntil(this.destroy$)
-    ).subscribe(recipe => {
+    ).subscribe(({ recipe, nutrition, ingredients, cookingSteps }) => {
       if (recipe) {
         this.recipe = recipe;
-        this.isSaved = recipe.isSaved || false;
+        this.nutritionInfo = nutrition;
+        this.ingredients = ingredients;
+        this.cookingSteps = cookingSteps;
+
         this.servings = recipe.servings;
+        this.originalServings = recipe.servings;
+
         this.completedSteps.clear();
       }
       this.isLoading = false;
@@ -65,13 +88,8 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   adjustAmount(amount: number): number {
-    if (!this.recipe) return amount;
-    return Math.round((amount * this.servings / this.recipe.servings) * 100) / 100;
-  }
-
-  getImageUrl(): string {
-    if (!this.recipe) return '';
-    return this.recipeService.getImageUrl(this.recipe.image);
+    if (!this.originalServings) return amount;
+    return Math.round((amount * this.servings / this.originalServings) * 100) / 100;
   }
 
   getTotalTime(): number {
@@ -82,9 +100,9 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   getDifficultyClass(): string {
     if (!this.recipe) return '';
     const classes: Record<string, string> = {
-      'einfach': 'bg-cookbook-green/10 text-cookbook-green border-cookbook-green/20',
-      'mittel': 'bg-cookbook-orange/10 text-cookbook-orange border-cookbook-orange/20',
-      'schwer': 'bg-destructive/10 text-destructive border-destructive/20',
+      'EINFACH': 'bg-cookbook-green/10 text-cookbook-green border-cookbook-green/20',
+      'MITTEl': 'bg-cookbook-orange/10 text-cookbook-orange border-cookbook-orange/20',
+      'SCHWER': 'bg-destructive/10 text-destructive border-destructive/20',
     };
     return classes[this.recipe.difficulty] || '';
   }

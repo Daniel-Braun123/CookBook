@@ -39,6 +39,12 @@ public class RecipesController {
     public List<Recipes> getRecipesByCategory(@RequestParam String categoryName) {
         return recipeRepository.getByCategoryFilter(categoryName);
     }
+
+    @GetMapping("/getRecipeById")
+    public Recipes getRecipeById(@RequestParam String recipeId) {
+        return recipeRepository.getRecipeById(recipeId);
+    }
+    
     
     
 }

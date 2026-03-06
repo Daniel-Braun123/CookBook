@@ -21,9 +21,7 @@ export class HeaderComponent implements OnInit{
   constructor(public themeService: ThemeService, private recipe: RecipeService) {}
 
   ngOnInit(): void {
-    this.recipe.getAllRecipes().subscribe(recipes => {
-      console.log(recipes);
-    });
+  
   }
 
 

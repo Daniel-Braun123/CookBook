@@ -31,17 +31,17 @@
     <!-- Hero Image -->
     <div class="container mx-auto px-4 mb-8">
       <div class="relative aspect-[21/9] rounded-2xl overflow-hidden">
-        <img [src]="getImageUrl()" [alt]="recipe.title" class="w-full h-full object-cover" />
+        <img [src]="'assets/' + recipe.image" [alt]="recipe.title" class="w-full h-full object-cover" />
         <div class="absolute inset-0 image-overlay"></div>
         
         <!-- Actions -->
         <div class="absolute top-4 right-4 flex gap-2">
           <button (click)="toggleSaved()" [ngClass]="{
             'p-3 rounded-full transition-all duration-200': true,
-            'bg-primary text-primary-foreground': isSaved,
-            'bg-card/80 backdrop-blur-sm text-foreground hover:bg-card': !isSaved
+            'bg-primary text-primary-foreground': recipe.isSaved,
+            'bg-card/80 backdrop-blur-sm text-foreground hover:bg-card': !recipe.isSaved
           }">
-            <svg class="h-5 w-5" [class.fill-current]="isSaved" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="h-5 w-5" [class.fill-current]="recipe.isSaved" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
@@ -125,7 +125,7 @@
               </div>
             </div>
             <ul class="space-y-3">
-              <li *ngFor="let ingredient of recipe.ingredients" 
+              <li *ngFor="let ingredient of ingredients" 
                   class="flex items-center gap-3 p-3 rounded-lg bg-secondary/50">
                 <span class="font-medium">{{ adjustAmount(ingredient.amount) }} {{ ingredient.unit }}</span>
                 <span class="text-muted-foreground">{{ ingredient.name }}</span>
@@ -137,7 +137,7 @@
           <div>
             <h2 class="font-display text-2xl font-bold text-foreground mb-4">Zubereitung</h2>
             <div class="space-y-4">
-              <div *ngFor="let step of recipe.steps" class="flex gap-4 p-4 rounded-lg bg-card border border-border hover:shadow-md transition-shadow">
+              <div *ngFor="let step of cookingSteps" class="flex gap-4 p-4 rounded-lg bg-card border border-border hover:shadow-md transition-shadow">
                 <button (click)="toggleStep(step.id)" 
                         [ngClass]="{
                           'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-semibold transition-colors': true,
@@ -166,24 +166,24 @@
         <div class="lg:col-span-1">
           <div class="sticky top-24 space-y-6">
             <!-- Nutrition -->
-            <div *ngIf="recipe.nutrition" class="p-6 rounded-xl bg-card border border-border">
+            <div *ngIf="nutritionInfo" class="p-6 rounded-xl bg-card border border-border">
               <h3 class="font-display text-xl font-bold text-foreground mb-4">Nährwerte pro Portion</h3>
               <div class="space-y-3">
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">Kalorien</span>
-                  <span class="font-semibold">{{ recipe.nutrition.calories }} kcal</span>
+                  <span class="font-semibold">{{ nutritionInfo.calories }} kcal</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">Protein</span>
-                  <span class="font-semibold">{{ recipe.nutrition.protein }} g</span>
+                  <span class="font-semibold">{{ nutritionInfo.protein }} g</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">Kohlenhydrate</span>
-                  <span class="font-semibold">{{ recipe.nutrition.carbs }} g</span>
+                  <span class="font-semibold">{{ nutritionInfo.carbs }} g</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-muted-foreground">Fett</span>
-                  <span class="font-semibold">{{ recipe.nutrition.fat }} g</span>
+                  <span class="font-semibold">{{ nutritionInfo.fat }} g</span>
                 </div>
               </div>
             </div>
@@ -200,7 +200,7 @@
                 </div>
                 <div>
                   <p class="font-semibold text-foreground">{{ recipe.author.name }}</p>
-                  <p class="text-sm text-muted-foreground">{{ recipe.category }}</p>
+                  <p class="text-sm text-muted-foreground">{{ recipe.author.bio }}</p>
                 </div>
               </div>
             </div>
