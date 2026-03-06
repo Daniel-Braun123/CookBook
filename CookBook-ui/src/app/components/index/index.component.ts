@@ -115,7 +115,6 @@ export class IndexComponent implements OnInit, OnDestroy {
       ),
       takeUntil(this.destroy$)
     ).subscribe(recipes => {
-      console.log("Gefilterte Recipes:", recipes);
       this.recipes = recipes;
     });
   }

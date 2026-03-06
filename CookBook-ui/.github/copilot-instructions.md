@@ -9,9 +9,15 @@
 loadComponent: () => import('./components/index/index.component').then(m => m.IndexComponent)
 ```
 
-**Mock-Service-Pattern** - Services liefern hardcodierte Mock-Daten über RxJS Observables (`of().pipe(delay(500))`). Keine HTTP-Calls zur externen API.
-- [recipe.service.ts](../src/app/services/recipe.service.ts) - RecipeService mit 6 vollständigen Mock-Rezepten
-- [user.service.ts](../src/app/services/user.service.ts) - UserService mit Mock-User-Daten
+**Backend-Integration** - Services kommunizieren mit Spring Boot REST API über HttpClient. Alle Daten werden vom Backend geladen.
+- [recipe.service.ts](../src/app/services/recipe.service.ts) - RecipeService für Rezeptdaten
+- [nutritionInfo.service.ts](../src/app/services/nutritionInfo.service.ts) - NutritionInfoService für Nährwertinformationen
+- [ingredients.service.ts](../src/app/services/ingredients.service.ts) - IngredientsService für Zutatenlisten
+- [cookingSteps.service.ts](../src/app/services/cookingSteps.service.ts) - CookingStepsService für Kochanleitungen
+- [categorie.service.ts](../src/app/services/categorie.service.ts) - CategorieService für Kategorien
+- [user.service.ts](../src/app/services/user.service.ts) - UserService für Benutzerdaten
+
+**Separation of Concerns** - Rezeptdaten sind in separate Services aufgeteilt. Recipe-Interface enthält nur Basisdaten (Titel, Beschreibung, Rating). Nutrition, Ingredients und CookingSteps werden separat geladen.
 
 **Single-File Components** - Jede Komponente: TypeScript-Datei mit separaten `.html` und `.scss` Dateien. Templates in `.component.html`, Styles in `.component.scss`.
 
@@ -28,11 +34,18 @@ component-name/
 ### Component Structure
 - **Shared Components**: `src/app/components/` - Wiederverwendbare UI-Elemente (header, footer, recipe-card, category-pill, cookbook-logo)
 - **Page Components**: `src/app/components/` - Routen-Komponenten für jede URL (index, recipe-detail, login, register, profile, not-found)
-- **Services**: `src/app/services/` - RecipeService & UserService mit Observable-Pattern (getrennte Dateien)
+- **Services**: `src/app/services/` - Jede Entität hat ihren eigenen Service mit Observable-Pattern:
+  - RecipeService - Rezept-Basisdaten (Titel, Beschreibung, Rating, Kategorie)
+  - NutritionInfoService - Nährwertinformationen pro Rezept
+  - IngredientsService - Zutatenlisten pro Rezept
+  - CookingStepsService - Kochanleitungen pro Rezept
+  - CategorieService - Kategorien für Filterung
+  - UserService - Benutzerdaten und Authentifizierung
+  - ThemeService - Dark/Light Mode Verwaltung
 - **Models**: `src/app/models/` - TypeScript Interfaces in separaten Dateien:
-  - [recipe.ts](../src/app/models/recipe.ts) - Recipe, Author, Ingredient, CookingStep, NutritionInfo
+  - [recipe.ts](../src/app/models/recipe.ts) - Recipe (keine eingebetteten ingredients/steps/nutrition), Author, Ingredient, CookingStep, NutritionInfo
   - [user.ts](../src/app/models/user.ts) - User Interface
-  - [category.ts](../src/app/models/category.ts) - Category Interface
+  - [category.ts](../src/app/models/category.ts) - Category Interface (id: string | number für Backend-Kompatibilität)
 
 ### Naming Conventions
 - Dateien: `component-name.component.ts` (kebab-case)
@@ -121,9 +134,24 @@ Neue Route in [app.routes.ts](../src/app/app.routes.ts) mit Lazy Loading:
 ```
 
 ### Data Flow Pattern
-1. Service liefert Observable: `getRecipes(): Observable<Recipe[]>`
+1. Service macht HTTP-Call zum Backend: `this.http.get<Recipe[]>(API_URL)`
 2. Component subscribet: `this.recipeService.getRecipes().subscribe(data => this.recipes = data)`
 3. Template nutzt Angular-Pipes: `*ngFor="let recipe of recipes"`
+
+**API-URLs** - Alle Services nutzen `environment.apiUrl` für Backend-URL:
+```typescript
+private readonly API_URL = `${environment.apiUrl}/recipes`;
+```
+
+**Parallele Datenladung** - Verwendung von `forkJoin` für gleichzeitiges Laden mehrerer Entitäten:
+```typescript
+forkJoin({
+  recipe: this.recipeService.getRecipeById(id),
+  nutrition: this.nutritionService.getNutritionInfoWithRecipeId(id),
+  ingredients: this.ingredientsService.getIngredientsWithRecipeId(id),
+  cookingSteps: this.cookingStepsService.getCookingStepsWithRecipeId(id)
+}).subscribe(data => { /* ... */ });
+```
 
 ## Critical Implementation Details
 
@@ -137,10 +165,16 @@ Neue Route in [app.routes.ts](../src/app/app.routes.ts) mit Lazy Loading:
 [main.ts](../src/main.ts) bootstrapt mit:
 - `provideRouter(routes)` - Routing
 - `provideAnimations()` - Angular Animations
-- `provideHttpClient()` - HTTP (aktuell ungenutzt, für spätere API-Integration)
+- `provideHttpClient()` - HTTP Client für Backend-Integration
 
 ### Recipe Detail Logic
-[recipe-detail.component.ts](../src/app/components/recipe-detail/recipe-detail.component.ts) liest Route-Parameter mit `ActivatedRoute`, adjusted Servings mit `adjustServings(direction)` Method, die Ingredient-Mengen proportional skaliert.
+[recipe-detail.component.ts](../src/app/components/recipe-detail/recipe-detail.component.ts) lädt Daten parallel von 4 Services mit `forkJoin`:
+- Recipe-Basisdaten (Titel, Beschreibung, Rating)
+- Nutrition Info (Kalorien, Protein, Carbs, Fett)
+- Ingredients (Zutatenliste mit Mengen)
+- CookingSteps (Schritt-für-Schritt-Anleitung, sortiert nach stepNumber)
+
+Route-Parameter werden mit `ActivatedRoute.paramMap` gelesen. Die `adjustServings(direction)` Methode skaliert Ingredient-Mengen proportional mit Formel: `amount * servings / originalServings`. Bei Navigation wird `window.scrollTo(0, 0)` aufgerufen für Scroll-to-Top.
 
 ## Testing & Debugging
 
@@ -157,7 +191,10 @@ Neue Route in [app.routes.ts](../src/app/app.routes.ts) mit Lazy Loading:
 - Zone.js 0.14 (Angular Change Detection)
 
 ## Gotchas
-- **Mock Data Only** - Alle Daten sind hardcoded in recipe.service.ts und user.service.ts. Keine echte Backend-Integration.
+- **Backend-Abhängigkeit** - Frontend benötigt laufendes Spring Boot Backend auf `http://localhost:8080`. Ohne Backend funktionieren keine API-Calls.
+- **CORS-Konfiguration** - Backend muss CORS für `http://localhost:4200` erlauben.
 - **Image Paths** - Rezept-Bilder referenzieren `/recipes/image.jpg`, diese existieren nicht. Komponenten zeigen Platzhalter.
-- **Authentication** - Login/Register Pages sind UI-Only. Keine echte Auth-Logik implementiert.
-- **LocalStorage** - User-State wird NICHT persistiert. Seite neu laden = State verloren.
+- **Authentication** - Login/Register Pages sind UI-Only. Authentifizierung noch nicht vollständig implementiert.
+- **Type Unions** - Category.id ist `string | number` für Backend-Kompatibilität (Backend sendet Long, Frontend nutzt teilweise String-IDs).
+- **Data Separation** - Recipe-Interface enthält KEINE eingebetteten ingredients/steps/nutrition. Diese werden separat geladen.
+- **JSON Serialization** - Backend verwendet `@JsonRawValue` für tags-Feld (JSON-Spalte in PostgreSQL), damit Array nicht als String escaped wird.
