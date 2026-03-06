@@ -7,6 +7,7 @@ import { FooterComponent } from '../../components/footer/footer.component';
 import { RecipeCardComponent } from '../../components/recipe-card/recipe-card.component';
 import { CategoryPillComponent } from '../../components/category-pill/category-pill.component';
 import { RecipeService } from '../../services/recipe.service';
+import { CategorieService } from '../../services/categorie.service';
 import { Recipe } from '../../models/recipe';
 import { Category } from '../../models/category';
 
@@ -27,7 +28,7 @@ import { Category } from '../../models/category';
 export class IndexComponent implements OnInit, OnDestroy {
   recipes: Recipe[] = [];
   categories: Category[] = [];
-  activeCategory: string | null = null;
+  activeCategory: string | number | null = null;
   isLoading = true;
 
   private destroy$ = new Subject<void>();
@@ -36,7 +37,8 @@ export class IndexComponent implements OnInit, OnDestroy {
 
   constructor(
     private recipeService: RecipeService,
-    private route: ActivatedRoute
+    private categorieService: CategorieService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -52,16 +54,14 @@ export class IndexComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     forkJoin({
-      recipes: this.recipeService.getPopularRecipes(),
-      categories: this.recipeService.getCategories()
+      recipes: this.recipeService.getSixBestRatedRecipes(),
+      categories: this.categorieService.getAllCategories()
     }).pipe(
       takeUntil(this.destroy$)
     ).subscribe(({ recipes, categories }) => {
       this.recipes = recipes;
       this.categories = categories;
       this.isLoading = false;
-
-      // Check for category query param after data is loaded
       this.route.queryParams.pipe(
         takeUntil(this.destroy$)
       ).subscribe(params => {
@@ -78,10 +78,10 @@ export class IndexComponent implements OnInit, OnDestroy {
     });
   }
 
-  handleCategoryClick(categoryId: string): void {
+  handleCategoryClick(categoryId: string | number): void {
     if (this.activeCategory === categoryId) {
       this.activeCategory = null;
-      this.recipeService.getPopularRecipes().pipe(
+      this.recipeService.getSixBestRatedRecipes().pipe(
         takeUntil(this.destroy$)
       ).subscribe(recipes => {
         this.recipes = recipes;
@@ -103,18 +103,19 @@ export class IndexComponent implements OnInit, OnDestroy {
     return recipe.id;
   }
 
-  trackByCategoryId(_index: number, category: Category): string {
+  trackByCategoryId(_index: number, category: Category): string | number {
     return category.id;
   }
 
   private filterByCategory(categoryName: string): void {
-    this.recipeService.getRecipes(undefined, categoryName).pipe(
+    this.recipeService.getRecipesByCategorieFilter(categoryName).pipe(
       switchMap(filtered => filtered.length > 0 
         ? of(filtered) 
-        : this.recipeService.getPopularRecipes()
+        : this.recipeService.getSixBestRatedRecipes()
       ),
       takeUntil(this.destroy$)
     ).subscribe(recipes => {
+      console.log("Gefilterte Recipes:", recipes);
       this.recipes = recipes;
     });
   }

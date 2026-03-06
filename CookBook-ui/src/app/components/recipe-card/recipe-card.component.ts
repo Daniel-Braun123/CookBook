@@ -39,8 +39,4 @@ export class RecipeCardComponent implements OnInit {
   getTotalTime(): number {
     return this.recipe.prepTime + this.recipe.cookTime;
   }
-
-  getImageUrl(): string {
-    return this.recipeService.getImageUrl(this.recipe.image);
-  }
 }

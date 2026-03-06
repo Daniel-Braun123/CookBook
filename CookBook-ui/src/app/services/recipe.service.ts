@@ -3,6 +3,8 @@ import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Recipe } from '../models/recipe';
 import { Category } from '../models/category';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 // Mock data structured like real API responses
 const mockRecipes: Recipe[] = [
@@ -15,9 +17,9 @@ const mockRecipes: Recipe[] = [
     reviewCount: 234,
     prepTime: 15,
     cookTime: 30,
-    difficulty: 'einfach',
+    difficulty: 'EINFACH',
     servings: 4,
-    category: 'Suppen',
+    category: { id: 'cat9', name: 'Suppen', icon: '🍲', count: 32 },
     tags: ['Vegetarisch', 'Gesund', 'Schnell'],
     author: {
       id: 'u1',
@@ -60,9 +62,9 @@ const mockRecipes: Recipe[] = [
     reviewCount: 567,
     prepTime: 10,
     cookTime: 20,
-    difficulty: 'mittel',
+    difficulty: 'MITTEL',
     servings: 4,
-    category: 'Pasta',
+    category: { id: 'cat10', name: 'Pasta', icon: '🍝', count: 76 },
     tags: ['Italienisch', 'Klassiker'],
     author: {
       id: 'u2',
@@ -102,9 +104,9 @@ const mockRecipes: Recipe[] = [
     reviewCount: 189,
     prepTime: 20,
     cookTime: 25,
-    difficulty: 'einfach',
+    difficulty: 'EINFACH',
     servings: 2,
-    category: 'Vegan',
+    category: { id: 'cat4', name: 'Vegan', icon: '🥗', count: 67 },
     tags: ['Vegan', 'Gesund', 'Bowl'],
     author: {
       id: 'u3',
@@ -144,9 +146,9 @@ const mockRecipes: Recipe[] = [
     reviewCount: 423,
     prepTime: 10,
     cookTime: 15,
-    difficulty: 'einfach',
+    difficulty: 'EINFACH',
     servings: 4,
-    category: 'Frühstück',
+    category: { id: 'cat1', name: 'Frühstück', icon: '🍳', count: 45 },
     tags: ['Süß', 'Frühstück', 'Amerikanisch'],
     author: {
       id: 'u4',
@@ -185,9 +187,9 @@ const mockRecipes: Recipe[] = [
     reviewCount: 312,
     prepTime: 15,
     cookTime: 25,
-    difficulty: 'mittel',
+    difficulty: 'MITTEL',
     servings: 2,
-    category: 'Fisch',
+    category: { id: 'cat11', name: 'Fisch', icon: '🐟', count: 41 },
     tags: ['Gesund', 'Low Carb', 'Mediterran'],
     author: {
       id: 'u5',
@@ -228,9 +230,9 @@ const mockRecipes: Recipe[] = [
     reviewCount: 456,
     prepTime: 30,
     cookTime: 0,
-    difficulty: 'mittel',
+    difficulty: 'MITTEL',
     servings: 8,
-    category: 'Dessert',
+    category: { id: 'cat5', name: 'Dessert', icon: '🍰', count: 54 },
     tags: ['Italienisch', 'Süß', 'No-Bake'],
     author: {
       id: 'u2',
@@ -272,6 +274,9 @@ const mockCategories: Category[] = [
   { id: 'cat6', name: 'Schnell & Einfach', icon: '⏱️', count: 89 },
   { id: 'cat7', name: 'Gesund', icon: '💪', count: 72 },
   { id: 'cat8', name: 'Backen', icon: '🥐', count: 43 },
+  { id: 'cat9', name: 'Suppen', icon: '🍲', count: 32 },
+  { id: 'cat10', name: 'Pasta', icon: '🍝', count: 76 },
+  { id: 'cat11', name: 'Fisch', icon: '🐟', count: 41 },
 ];
 
 @Injectable({
@@ -279,8 +284,9 @@ const mockCategories: Category[] = [
 })
 export class RecipeService {
   private readonly SAVED_RECIPES_KEY = 'cookbook-saved-recipes';
+  private readonly API_URL = `${environment.apiUrl}/recipes`;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     // Load saved recipes from localStorage on initialization
     this.loadSavedRecipes();
   }
@@ -327,7 +333,7 @@ export class RecipeService {
     }
     
     if (category) {
-      results = results.filter(r => r.category === category);
+      results = results.filter(r => r.category.name === category);
     }
     
     return of(results).pipe(delay(300));
@@ -384,5 +390,17 @@ export class RecipeService {
       '/recipes/tiramisu.jpg': 'assets/recipes/tiramisu.jpg',
     };
     return imageMap[imagePath] || imagePath;
+  }
+
+  getAllRecipes(): Observable<Recipe[]> {
+    return this.http.get<Recipe[]>(this.API_URL + "/getAll");
+  }
+
+  getSixBestRatedRecipes(): Observable<Recipe[]> {
+    return this.http.get<Recipe[]>(this.API_URL + "/getSixBestRated");
+  }
+
+  getRecipesByCategorieFilter(categoryName: string): Observable<Recipe[]> {
+    return this.http.get<Recipe[]>(this.API_URL + "/getByCategorieFilter", {params: {categoryName: categoryName}});
   }
 }

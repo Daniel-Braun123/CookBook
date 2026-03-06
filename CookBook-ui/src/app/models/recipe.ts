@@ -1,3 +1,5 @@
+import { Category } from "./category";
+
 export interface Recipe {
   id: string;
   title: string;
@@ -7,9 +9,9 @@ export interface Recipe {
   reviewCount: number;
   prepTime: number;
   cookTime: number;
-  difficulty: 'einfach' | 'mittel' | 'schwer';
+  difficulty: 'EINFACH' | 'MITTEL' | 'SCHWER';
   servings: number;
-  category: string;
+  category: Category;
   tags: string[];
   author: Author;
   ingredients: Ingredient[];
