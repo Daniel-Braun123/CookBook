@@ -22,6 +22,7 @@ export class LoginComponent {
   password = '';
   showPassword = false;
   isLoading = false;
+  errorMessage = '';
   errors: { email?: string; password?: string } = {};
 
   constructor(
@@ -54,12 +55,20 @@ export class LoginComponent {
     if (!this.validate()) return;
     
     this.isLoading = true;
+    this.errorMessage = '';
     
-    this.userService.login(this.email, this.password).subscribe(user => {
-      this.isLoading = false;
-      if (user) {
-        alert('Willkommen zurück! Du wurdest erfolgreich angemeldet.');
+    this.userService.login(this.email, this.password).subscribe({
+      next: (response) => {
+        this.isLoading = false;
         this.router.navigate(['/']);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        if (error.status === 401) {
+          this.errorMessage = 'Ungültige E-Mail oder Passwort';
+        } else {
+          this.errorMessage = 'Login fehlgeschlagen. Bitte versuche es später erneut.';
+        }
       }
     });
   }

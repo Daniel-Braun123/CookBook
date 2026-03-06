@@ -1,43 +1,64 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 import { User } from '../models/user';
-
-const mockUser: User = {
-  id: 'u1',
-  name: 'Maria Koch',
-  email: 'maria@cookbook.de',
-  avatar: '/avatars/maria.jpg',
-  bio: 'Leidenschaftliche Hobbyköchin aus München. Ich liebe es, neue Rezepte auszuprobieren und mit der Community zu teilen.',
-  savedRecipes: ['2', '4'],
-  ownRecipes: ['1'],
-  joinedAt: '2023-06-15'
-};
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth';
+import { TokenStorageService } from './token-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private readonly API_URL = `${environment.apiUrl}/auth`;
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
 
-  getCurrentUser(): Observable<User> {
-    return of(mockUser).pipe(delay(200));
+  constructor(
+    private http: HttpClient,
+    private tokenStorage: TokenStorageService
+  ) {
+    // Load user from localStorage if token exists
+    this.loadCurrentUserFromToken();
   }
 
-  login(email: string, password: string): Observable<User | null> {
-    if (email && password) {
-      return of(mockUser).pipe(delay(500));
+  private loadCurrentUserFromToken(): void {
+    if (this.tokenStorage.hasToken()) {
+      // User data will be loaded when making authenticated requests
+      // For now, we just acknowledge that user is logged in
     }
-    return of(null).pipe(delay(500));
   }
 
-  register(name: string, email: string, password: string): Observable<User | null> {
-    if (name && email && password) {
-      return of({ ...mockUser, name, email }).pipe(delay(500));
-    }
-    return of(null).pipe(delay(500));
+  getCurrentUser(): Observable<User | null> {
+    return this.currentUser$;
   }
 
-  logout(): Observable<void> {
-    return of(void 0).pipe(delay(200));
+  login(email: string, password: string): Observable<AuthResponse> {
+    const request: LoginRequest = { email, password };
+    return this.http.post<AuthResponse>(`${this.API_URL}/login`, request).pipe(
+      tap(response => {
+        this.tokenStorage.saveToken(response.token);
+        this.currentUserSubject.next(response.user);
+      })
+    );
+  }
+
+  register(name: string, email: string, password: string): Observable<AuthResponse> {
+    const request: RegisterRequest = { name, email, password };
+    return this.http.post<AuthResponse>(`${this.API_URL}/register`, request).pipe(
+      tap(response => {
+        this.tokenStorage.saveToken(response.token);
+        this.currentUserSubject.next(response.user);
+      })
+    );
+  }
+
+  logout(): void {
+    this.tokenStorage.removeToken();
+    this.currentUserSubject.next(null);
+  }
+
+  isLoggedIn(): boolean {
+    return this.tokenStorage.hasToken();
   }
 }

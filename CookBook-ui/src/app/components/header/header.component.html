@@ -45,12 +45,27 @@
         >
           <mat-icon>{{ themeService.isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
         </button>
-        <a [routerLink]="['/login']">
-          <button class="btn btn-cookbook px-4 py-2 text-sm flex items-center gap-2">
-            <mat-icon class="text-base">person</mat-icon>
-            Anmelden
+        
+        <!-- Auth Buttons -->
+        <ng-container *ngIf="!isLoggedIn">
+          <a [routerLink]="['/login']">
+            <button class="btn btn-cookbook px-4 py-2 text-sm flex items-center gap-2">
+              <mat-icon class="text-base">person</mat-icon>
+              Anmelden
+            </button>
+          </a>
+        </ng-container>
+        
+        <ng-container *ngIf="isLoggedIn">
+          <a [routerLink]="['/profile']" class="nav-link font-medium">Profil</a>
+          <button 
+            (click)="logout()"
+            class="btn btn-cookbook px-4 py-2 text-sm flex items-center gap-2"
+          >
+            <mat-icon class="text-base">logout</mat-icon>
+            Abmelden
           </button>
-        </a>
+        </ng-container>
       </nav>
 
       <!-- Mobile Menu Button -->

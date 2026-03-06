@@ -19,6 +19,7 @@ export class RegisterComponent {
   confirmPassword = '';
   showPassword = false;
   isLoading = false;
+  errorMessage = '';
   errors: Record<string, string> = {};
 
   constructor(
@@ -63,12 +64,20 @@ export class RegisterComponent {
     if (!this.validate()) return;
     
     this.isLoading = true;
+    this.errorMessage = '';
     
-    this.userService.register(this.name, this.email, this.password).subscribe(user => {
-      this.isLoading = false;
-      if (user) {
-        alert('Konto erstellt! Willkommen bei CookBook. Du kannst jetzt Rezepte speichern.');
+    this.userService.register(this.name, this.email, this.password).subscribe({
+      next: (response) => {
+        this.isLoading = false;
         this.router.navigate(['/']);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        if (error.status === 409) {
+          this.errorMessage = 'Diese E-Mail-Adresse ist bereits registriert';
+        } else {
+          this.errorMessage = 'Registrierung fehlgeschlagen. Bitte versuche es später erneut.';
+        }
       }
     });
   }
