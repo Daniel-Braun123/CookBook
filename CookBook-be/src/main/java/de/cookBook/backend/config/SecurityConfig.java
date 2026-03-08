@@ -58,8 +58,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/recipes/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/nutritionInfo/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/ingredients/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/cookingSteps/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/ingridients/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/cooking-steps/**").permitAll()
                 // All other API endpoints require authentication
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().permitAll()

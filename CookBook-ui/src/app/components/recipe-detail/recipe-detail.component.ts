@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subject, switchMap, takeUntil, filter, map, forkJoin } from 'rxjs';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
+import { AvatarDisplayComponent } from '../avatar-display/avatar-display.component';
 import { RecipeService } from '../../services/recipe.service';
+import { UserService } from '../../services/user.service';
 import { NutritionInfoService } from '../../services/nutritionInfo.service';
 import { CookingStep, Ingredient, NutritionInfo, Recipe } from '../../models/recipe';
 import { IngridientsService } from '@app/services/ingredients.service';
@@ -13,7 +15,7 @@ import { CookingStepsService } from '@app/services/cookingSteps.service';
 @Component({
   selector: 'app-recipe-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent],
+  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent, AvatarDisplayComponent],
   templateUrl: './recipe-detail.component.html',
   styleUrls: ['./recipe-detail.component.scss']
 })
@@ -34,7 +36,9 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private recipeService: RecipeService,
+    private userService: UserService,
     private nutritionInfoService: NutritionInfoService,
     private ingridientService: IngridientsService,
     private cookingStepsService: CookingStepsService
@@ -108,5 +112,13 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   toggleSaved(): void {
+    // Check if user is logged in
+    if (!this.userService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    
+    // TODO: Implement save/unsave recipe functionality
+    this.isSaved = !this.isSaved;
   }
 }

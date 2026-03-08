@@ -192,12 +192,11 @@
             <div class="p-6 rounded-xl bg-card border border-border">
               <h3 class="font-display text-lg font-bold text-foreground mb-4">Autor</h3>
               <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <svg class="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                </div>
+                <app-avatar-display
+                  [avatarConfig]="recipe.author.avatar"
+                  [userName]="recipe.author.name"
+                  [size]="48">
+                </app-avatar-display>
                 <div>
                   <p class="font-semibold text-foreground">{{ recipe.author.name }}</p>
                   <p class="text-sm text-muted-foreground">{{ recipe.author.bio }}</p>
