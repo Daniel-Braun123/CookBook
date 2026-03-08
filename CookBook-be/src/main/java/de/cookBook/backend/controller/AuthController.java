@@ -3,6 +3,7 @@ package de.cookBook.backend.controller;
 import de.cookBook.backend.dto.AuthResponse;
 import de.cookBook.backend.dto.LoginRequest;
 import de.cookBook.backend.dto.RegisterRequest;
+import de.cookBook.backend.dto.UpdateProfileRequest;
 import de.cookBook.backend.dto.UserDTO;
 import de.cookBook.backend.entities.Users;
 import de.cookBook.backend.service.AuthService;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -54,6 +56,35 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Login failed");
+        }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal Users user) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not authenticated");
+        }
+        
+        UserDTO userDTO = convertToDTO(user);
+        return ResponseEntity.ok(userDTO);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateProfile(
+            @AuthenticationPrincipal Users user,
+            @RequestBody UpdateProfileRequest request) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not authenticated");
+        }
+
+        try {
+            Users updatedUser = authService.updateProfile(user.getId(), request);
+            UserDTO userDTO = convertToDTO(updatedUser);
+            return ResponseEntity.ok(userDTO);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Update failed");
         }
     }
 

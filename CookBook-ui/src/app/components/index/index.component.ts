@@ -8,6 +8,7 @@ import { RecipeCardComponent } from '../../components/recipe-card/recipe-card.co
 import { CategoryPillComponent } from '../../components/category-pill/category-pill.component';
 import { RecipeService } from '../../services/recipe.service';
 import { CategorieService } from '../../services/categorie.service';
+import { UserService } from '../../services/user.service';
 import { Recipe } from '../../models/recipe';
 import { Category } from '../../models/category';
 
@@ -38,6 +39,7 @@ export class IndexComponent implements OnInit, OnDestroy {
   constructor(
     private recipeService: RecipeService,
     private categorieService: CategorieService,
+    private userService: UserService,
     private route: ActivatedRoute,
   ) {}
 
@@ -105,6 +107,10 @@ export class IndexComponent implements OnInit, OnDestroy {
 
   trackByCategoryId(_index: number, category: Category): string | number {
     return category.id;
+  }
+
+  get isLoggedIn(): boolean {
+    return this.userService.isLoggedIn();
   }
 
   private filterByCategory(categoryName: string): void {

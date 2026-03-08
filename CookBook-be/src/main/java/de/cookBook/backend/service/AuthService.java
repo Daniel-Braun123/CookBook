@@ -1,6 +1,7 @@
 package de.cookBook.backend.service;
 
 import de.cookBook.backend.dto.RegisterRequest;
+import de.cookBook.backend.dto.UpdateProfileRequest;
 import de.cookBook.backend.entities.Users;
 import de.cookBook.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,23 @@ public class AuthService {
         }
 
         return user;
+    }
+
+    public Users updateProfile(Long userId, UpdateProfileRequest request) {
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        // Check if email is being changed and if it's already taken by another user
+        if (!user.getEmail().equals(request.getEmail()) && 
+            userRepository.existsByEmail(request.getEmail())) {
+            throw new IllegalArgumentException("Email already in use");
+        }
+
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setBio(request.getBio());
+        user.setAvatar(request.getAvatar());
+
+        return userRepository.save(user);
     }
 }

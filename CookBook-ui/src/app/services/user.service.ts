@@ -24,9 +24,19 @@ export class UserService {
 
   private loadCurrentUserFromToken(): void {
     if (this.tokenStorage.hasToken()) {
-      // User data will be loaded when making authenticated requests
-      // For now, we just acknowledge that user is logged in
+      // Load user data from backend
+      this.fetchCurrentUser().subscribe({
+        next: (user) => this.currentUserSubject.next(user),
+        error: (err) => {
+          console.error('Failed to load user', err);
+          this.tokenStorage.removeToken(); // Token ungültig
+        }
+      });
     }
+  }
+
+  fetchCurrentUser(): Observable<User> {
+    return this.http.get<User>(`${this.API_URL}/me`);
   }
 
   getCurrentUser(): Observable<User | null> {
@@ -56,6 +66,15 @@ export class UserService {
   logout(): void {
     this.tokenStorage.removeToken();
     this.currentUserSubject.next(null);
+  }
+
+  updateProfile(name: string, email: string, bio?: string, avatar?: string): Observable<User> {
+    const updateData = { name, email, bio, avatar };
+    return this.http.put<User>(`${this.API_URL}/update`, updateData).pipe(
+      tap(user => {
+        this.currentUserSubject.next(user);
+      })
+    );
   }
 
   isLoggedIn(): boolean {

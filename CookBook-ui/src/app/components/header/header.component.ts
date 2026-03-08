@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CookBookLogoComponent } from '../cookbook-logo/cookbook-logo.component';
+import { AvatarDisplayComponent } from '../avatar-display/avatar-display.component';
 import { ThemeService } from '../../services/theme.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
@@ -12,7 +13,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterLink, CookBookLogoComponent, MatIconModule, MatButtonModule],
+  imports: [CommonModule, RouterLink, CookBookLogoComponent, AvatarDisplayComponent, MatIconModule, MatButtonModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
@@ -20,7 +21,6 @@ export class HeaderComponent implements OnInit{
   isMenuOpen = false;
   isSearchFocused = false;
   currentUser$: Observable<User | null>;
-  isLoggedIn = false;
 
   constructor(
     public themeService: ThemeService,
@@ -31,10 +31,10 @@ export class HeaderComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.isLoggedIn = this.userService.isLoggedIn();
-    this.userService.getCurrentUser().subscribe(user => {
-      this.isLoggedIn = user !== null;
-    });
+  }
+
+  get isLoggedIn(): boolean {
+    return this.userService.isLoggedIn();
   }
 
   toggleTheme(): void {
@@ -43,7 +43,6 @@ export class HeaderComponent implements OnInit{
 
   logout(): void {
     this.userService.logout();
-    this.isLoggedIn = false;
     this.router.navigate(['/login']);
   }
 }

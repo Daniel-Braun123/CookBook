@@ -1,0 +1,9 @@
+<div class="avatar-container" [style.width.px]="size" [style.height.px]="size">
+  @if (showFallback) {
+    <div class="fallback-avatar" [style.fontSize.px]="size / 2.5">
+      {{ initial }}
+    </div>
+  } @else {
+    <div class="avatar-svg" [innerHTML]="avatarSVG"></div>
+  }
+</div>
