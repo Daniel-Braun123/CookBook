@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import com.fasterxml.jackson.annotation.JsonRawValue;
 
 import de.cookBook.backend.enums.Difficulty;
@@ -52,7 +55,8 @@ public class Recipes {
     @Column(name = "servings", nullable = false)
     private Integer servings;
 
-    @Column(name = "tags", columnDefinition = "JSON")
+    @Column(name = "tags")
+    @JdbcTypeCode(SqlTypes.JSON)
     @JsonRawValue
     private String tags;
 

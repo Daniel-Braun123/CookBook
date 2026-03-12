@@ -9,6 +9,7 @@ import { AvatarDisplayComponent } from '../avatar-display/avatar-display.compone
 import { AvatarBuilderComponent } from '../avatar-builder/avatar-builder.component';
 import { UserService } from '../../services/user.service';
 import { AvatarService } from '../../services/avatar.service';
+import { ToastService } from '../../services/toast.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { User } from '../../models/user';
 import { AvatarConfig } from '../../models/avatar-config';
@@ -25,7 +26,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   profileForm!: FormGroup;
   isLoading = false;
   errorMessage = '';
-  successMessage = '';
   private destroy$ = new Subject<void>();
   private originalUserData: any = null;
   currentAvatarConfig: string | null = null;
@@ -35,7 +35,8 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     private avatarService: AvatarService,
     private fb: FormBuilder,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private toastService: ToastService
   ) {
     this.currentUser$ = this.userService.currentUser$;
   }
@@ -96,7 +97,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     if (this.profileForm.valid && !this.isLoading) {
       this.isLoading = true;
       this.errorMessage = '';
-      this.successMessage = '';
 
       const formData = this.profileForm.value;
       
@@ -110,14 +110,15 @@ export class EditProfileComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (response) => {
             this.isLoading = false;
-            this.successMessage = 'Profil erfolgreich aktualisiert!';
+            this.toastService.showSuccess('Profil erfolgreich aktualisiert! ✨');
             setTimeout(() => {
               this.router.navigate(['/profile']);
-            }, 1500);
+            }, 1000);
           },
           error: (error) => {
             this.isLoading = false;
             this.errorMessage = error.error?.message || 'Fehler beim Aktualisieren des Profils';
+            this.toastService.showError('Fehler beim Aktualisieren des Profils');
           }
         });
     }

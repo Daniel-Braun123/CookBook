@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CookBookLogoComponent } from '../../components/cookbook-logo/cookbook-logo.component';
 import { UserService } from '../../services/user.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-register',
@@ -24,7 +25,8 @@ export class RegisterComponent {
 
   constructor(
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) {}
 
   validate(): boolean {
@@ -69,7 +71,10 @@ export class RegisterComponent {
     this.userService.register(this.name, this.email, this.password).subscribe({
       next: (response) => {
         this.isLoading = false;
-        this.router.navigate(['/']);
+        this.toastService.showSuccess('Registrierung erfolgreich! Willkommen bei CookBook! 🎉');
+        setTimeout(() => {
+          this.router.navigate(['/']);
+        }, 1000);
       },
       error: (error) => {
         this.isLoading = false;

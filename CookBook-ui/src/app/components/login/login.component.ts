@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CookBookLogoComponent } from '../../components/cookbook-logo/cookbook-logo.component';
 import { UserService } from '../../services/user.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +28,8 @@ export class LoginComponent {
 
   constructor(
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) {}
 
   validate(): boolean {
@@ -60,7 +62,10 @@ export class LoginComponent {
     this.userService.login(this.email, this.password).subscribe({
       next: (response) => {
         this.isLoading = false;
-        this.router.navigate(['/']);
+        this.toastService.showSuccess('Erfolgreich eingeloggt! Willkommen zurück! 👋');
+        setTimeout(() => {
+          this.router.navigate(['/']);
+        }, 800);
       },
       error: (error) => {
         this.isLoading = false;

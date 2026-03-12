@@ -1,0 +1,341 @@
+<div class="min-h-screen bg-background">
+  <app-header></app-header>
+
+  <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <!-- Header -->
+    <div class="mb-8">
+      <a [routerLink]="['/']" class="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-4">
+        <mat-icon class="text-base">arrow_back</mat-icon>
+        Zurück
+      </a>
+      <h1 class="font-display text-3xl md:text-4xl font-bold text-foreground mb-2">
+        Neues Rezept erstellen
+      </h1>
+      <p class="text-muted-foreground">
+        Teile dein Lieblingsrezept mit der Community
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form (ngSubmit)="onSubmit()" class="space-y-8">
+      <!-- Basic Information -->
+      <div class="p-6 rounded-xl bg-card border border-border">
+        <h2 class="font-display text-xl font-bold text-foreground mb-6">Grundinformationen</h2>
+        
+        <div class="space-y-4">
+          <!-- Title -->
+          <div>
+            <label class="block text-sm font-medium text-foreground mb-2">
+              Titel <span class="text-destructive">*</span>
+            </label>
+            <input
+              type="text"
+              [(ngModel)]="title"
+              name="title"
+              required
+              class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="z.B. Spaghetti Carbonara"
+            />
+          </div>
+
+          <!-- Description -->
+          <div>
+            <label class="block text-sm font-medium text-foreground mb-2">
+              Beschreibung <span class="text-destructive">*</span>
+            </label>
+            <textarea
+              [(ngModel)]="description"
+              name="description"
+              required
+              rows="4"
+              class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+              placeholder="Beschreibe dein Rezept..."
+            ></textarea>
+          </div>
+
+          <!-- Category & Difficulty -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-foreground mb-2">
+                Kategorie <span class="text-destructive">*</span>
+              </label>
+              <select
+                [(ngModel)]="category"
+                name="category"
+                required
+                class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="" disabled>Kategorie wählen</option>
+                <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-foreground mb-2">
+                Schwierigkeitsgrad <span class="text-destructive">*</span>
+              </label>
+              <select
+                [(ngModel)]="difficulty"
+                name="difficulty"
+                required
+                class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="EINFACH">Einfach</option>
+                <option value="MITTEL">Mittel</option>
+                <option value="SCHWER">Schwer</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Time & Servings -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-foreground mb-2">
+                Vorbereitungszeit (Min)
+              </label>
+              <input
+                type="number"
+                [(ngModel)]="prepTime"
+                name="prepTime"
+                min="0"
+                class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-foreground mb-2">
+                Kochzeit (Min)
+              </label>
+              <input
+                type="number"
+                [(ngModel)]="cookTime"
+                name="cookTime"
+                min="0"
+                class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-foreground mb-2">
+                Portionen
+              </label>
+              <input
+                type="number"
+                [(ngModel)]="servings"
+                name="servings"
+                min="1"
+                class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div>
+            <label class="block text-sm font-medium text-foreground mb-2">
+              Tags
+            </label>
+            <div class="flex gap-2 mb-2">
+              <input
+                type="text"
+                [(ngModel)]="currentTag"
+                name="currentTag"
+                (keydown.enter)="$event.preventDefault(); addTag()"
+                class="flex-1 px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                placeholder="Tag hinzufügen..."
+              />
+              <button
+                type="button"
+                (click)="addTag()"
+                class="px-6 py-3 rounded-lg bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors font-medium"
+              >
+                Hinzufügen
+              </button>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span
+                *ngFor="let tag of tags"
+                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium"
+              >
+                {{ tag }}
+                <button type="button" (click)="removeTag(tag)" class="hover:text-destructive transition-colors">
+                  <mat-icon class="text-sm">close</mat-icon>
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ingredients -->
+      <div class="p-6 rounded-xl bg-card border border-border">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-display text-xl font-bold text-foreground">Zutaten</h2>
+          <button
+            type="button"
+            (click)="addIngredient()"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium"
+          >
+            <mat-icon class="text-base">add</mat-icon>
+            Zutat hinzufügen
+          </button>
+        </div>
+
+        <div class="space-y-3">
+          <div *ngFor="let ingredient of ingredients; let i = index" class="flex gap-3 items-start">
+            <input
+              type="number"
+              [(ngModel)]="ingredient.amount"
+              [name]="'ingredient-amount-' + i"
+              placeholder="Menge"
+              class="w-24 px-3 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+            <input
+              type="text"
+              [(ngModel)]="ingredient.unit"
+              [name]="'ingredient-unit-' + i"
+              placeholder="Einheit"
+              class="w-24 px-3 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+            <input
+              type="text"
+              [(ngModel)]="ingredient.name"
+              [name]="'ingredient-name-' + i"
+              placeholder="Zutat"
+              class="flex-1 px-3 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+            <button
+              type="button"
+              (click)="removeIngredient(i)"
+              class="p-2 rounded-lg text-destructive hover:bg-destructive/10 transition-colors"
+              [disabled]="ingredients.length === 1"
+            >
+              <mat-icon class="text-base">delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Steps -->
+      <div class="p-6 rounded-xl bg-card border border-border">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-display text-xl font-bold text-foreground">Zubereitungsschritte</h2>
+          <button
+            type="button"
+            (click)="addStep()"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium"
+          >
+            <mat-icon class="text-base">add</mat-icon>
+            Schritt hinzufügen
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <div *ngFor="let step of steps; let i = index" class="flex gap-3 items-start">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold text-sm mt-2">
+              {{ i + 1 }}
+            </div>
+            <div class="flex-1 space-y-2">
+              <textarea
+                [(ngModel)]="step.instruction"
+                [name]="'step-instruction-' + i"
+                placeholder="Beschreibe diesen Zubereitungsschritt..."
+                rows="3"
+                class="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+              ></textarea>
+              <input
+                type="number"
+                [(ngModel)]="step.duration"
+                [name]="'step-duration-' + i"
+                placeholder="Dauer (Min) - optional"
+                min="0"
+                class="w-40 px-3 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+            <button
+              type="button"
+              (click)="removeStep(i)"
+              class="p-2 rounded-lg text-destructive hover:bg-destructive/10 transition-colors mt-2"
+              [disabled]="steps.length === 1"
+            >
+              <mat-icon class="text-base">delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nutrition -->
+      <div class="p-6 rounded-xl bg-card border border-border">
+        <h2 class="font-display text-xl font-bold text-foreground mb-6">Nährwerte (pro Portion)</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-foreground mb-2">
+              Kalorien (kcal)
+            </label>
+            <input
+              type="number"
+              [(ngModel)]="nutrition.calories"
+              name="calories"
+              min="0"
+              class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-foreground mb-2">
+              Protein (g)
+            </label>
+            <input
+              type="number"
+              [(ngModel)]="nutrition.protein"
+              name="protein"
+              min="0"
+              class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-foreground mb-2">
+              Kohlenhydrate (g)
+            </label>
+            <input
+              type="number"
+              [(ngModel)]="nutrition.carbs"
+              name="carbs"
+              min="0"
+              class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-foreground mb-2">
+              Fett (g)
+            </label>
+            <input
+              type="number"
+              [(ngModel)]="nutrition.fat"
+              name="fat"
+              min="0"
+              class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="flex gap-4">
+        <button
+          type="submit"
+          class="btn btn-cookbook flex-1 md:flex-none md:px-12 py-3"
+        >
+          Rezept veröffentlichen
+        </button>
+        <a [routerLink]="['/']" class="btn bg-secondary hover:bg-secondary/80 text-foreground flex-1 md:flex-none md:px-12 py-3 text-center">
+          Abbrechen
+        </a>
+      </div>
+    </form>
+  </div>
+
+  <app-footer></app-footer>
+</div>
