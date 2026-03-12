@@ -32,8 +32,15 @@ public class Users {
     @Column(name = "bio", columnDefinition = "TEXT")
     private String bio;
     
-    @Column(name = "password", length = 255, nullable = false)
+    @Column(name = "password", length = 255)
     private String password;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auth_provider", length = 20, nullable = false)
+    private AuthProvider authProvider = AuthProvider.LOCAL;
+    
+    @Column(name = "provider_id", length = 255)
+    private String providerId;
     
     @CreationTimestamp
     @Column(name = "joined_at", nullable = false, updatable = false)

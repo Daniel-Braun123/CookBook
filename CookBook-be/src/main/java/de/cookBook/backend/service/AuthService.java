@@ -2,6 +2,7 @@ package de.cookBook.backend.service;
 
 import de.cookBook.backend.dto.RegisterRequest;
 import de.cookBook.backend.dto.UpdateProfileRequest;
+import de.cookBook.backend.entities.AuthProvider;
 import de.cookBook.backend.entities.Users;
 import de.cookBook.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class AuthService {
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setAuthProvider(AuthProvider.LOCAL);
+        user.setProviderId(null);
         
         return userRepository.save(user);
     }
@@ -36,6 +39,11 @@ public class AuthService {
     public Users authenticate(String email, String password) {
         Users user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
+
+        // Check if user uses OAuth login
+        if (user.getAuthProvider() != AuthProvider.LOCAL) {
+            throw new BadCredentialsException("Dieser Account nutzt Google Login");
+        }
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Invalid email or password");

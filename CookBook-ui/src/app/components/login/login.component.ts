@@ -23,7 +23,6 @@ export class LoginComponent {
   password = '';
   showPassword = false;
   isLoading = false;
-  errorMessage = '';
   errors: { email?: string; password?: string } = {};
 
   constructor(
@@ -57,7 +56,6 @@ export class LoginComponent {
     if (!this.validate()) return;
     
     this.isLoading = true;
-    this.errorMessage = '';
     
     this.userService.login(this.email, this.password).subscribe({
       next: (response) => {
@@ -70,9 +68,9 @@ export class LoginComponent {
       error: (error) => {
         this.isLoading = false;
         if (error.status === 401) {
-          this.errorMessage = 'Ungültige E-Mail oder Passwort';
+          this.toastService.showError('Ungültige E-Mail oder Passwort');
         } else {
-          this.errorMessage = 'Login fehlgeschlagen. Bitte versuche es später erneut.';
+          this.toastService.showError('Login fehlgeschlagen. Bitte versuche es später erneut.');
         }
       }
     });
@@ -80,5 +78,10 @@ export class LoginComponent {
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
+  }
+
+  signInWithGoogle(): void {
+    // Redirect to backend OAuth2 authorization endpoint
+    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
   }
 }

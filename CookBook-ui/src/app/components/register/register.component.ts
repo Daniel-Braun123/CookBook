@@ -20,7 +20,6 @@ export class RegisterComponent {
   confirmPassword = '';
   showPassword = false;
   isLoading = false;
-  errorMessage = '';
   errors: Record<string, string> = {};
 
   constructor(
@@ -66,7 +65,6 @@ export class RegisterComponent {
     if (!this.validate()) return;
     
     this.isLoading = true;
-    this.errorMessage = '';
     
     this.userService.register(this.name, this.email, this.password).subscribe({
       next: (response) => {
@@ -79,9 +77,9 @@ export class RegisterComponent {
       error: (error) => {
         this.isLoading = false;
         if (error.status === 409) {
-          this.errorMessage = 'Diese E-Mail-Adresse ist bereits registriert';
+          this.toastService.showError('Diese E-Mail-Adresse ist bereits registriert');
         } else {
-          this.errorMessage = 'Registrierung fehlgeschlagen. Bitte versuche es später erneut.';
+          this.toastService.showError('Registrierung fehlgeschlagen. Bitte versuche es später erneut.');
         }
       }
     });
@@ -93,5 +91,10 @@ export class RegisterComponent {
       { met: /[A-Z]/.test(this.password), text: 'Ein Großbuchstabe' },
       { met: /[0-9]/.test(this.password), text: 'Eine Zahl' },
     ];
+  }
+
+  signInWithGoogle(): void {
+    // Redirect to backend OAuth2 authorization endpoint
+    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
   }
 }

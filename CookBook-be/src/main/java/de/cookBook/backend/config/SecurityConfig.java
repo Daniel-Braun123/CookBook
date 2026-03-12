@@ -1,6 +1,9 @@
 package de.cookBook.backend.config;
 
 import de.cookBook.backend.security.JwtAuthenticationFilter;
+import de.cookBook.backend.security.OAuth2AuthenticationFailureHandler;
+import de.cookBook.backend.security.OAuth2AuthenticationSuccessHandler;
+import de.cookBook.backend.security.OAuth2UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +27,15 @@ public class SecurityConfig {
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+    
+    @Autowired
+    private OAuth2UserServiceImpl oauth2UserService;
+    
+    @Autowired
+    private OAuth2AuthenticationSuccessHandler oauth2SuccessHandler;
+    
+    @Autowired
+    private OAuth2AuthenticationFailureHandler oauth2FailureHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -54,6 +66,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints - Auth
                 .requestMatchers("/api/auth/**").permitAll()
+                // Public endpoints - OAuth2
+                .requestMatchers("/login/oauth2/**", "/oauth2/**").permitAll()
                 // Public endpoints - Read-only access
                 .requestMatchers(HttpMethod.GET, "/api/recipes/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
@@ -63,6 +77,13 @@ public class SecurityConfig {
                 // All other API endpoints require authentication
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().permitAll()
+            )
+            .oauth2Login(oauth2 -> oauth2
+                .userInfoEndpoint(userInfo -> userInfo
+                    .userService(oauth2UserService)
+                )
+                .successHandler(oauth2SuccessHandler)
+                .failureHandler(oauth2FailureHandler)
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
