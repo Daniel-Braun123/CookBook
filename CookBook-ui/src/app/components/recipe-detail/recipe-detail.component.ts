@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 import { Subject, switchMap, takeUntil, filter, map, forkJoin } from 'rxjs';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
@@ -16,7 +17,7 @@ import { CookingStepsService } from '@app/services/cookingSteps.service';
 @Component({
   selector: 'app-recipe-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent],
+  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent, MatIconModule],
   templateUrl: './recipe-detail.component.html',
   styleUrls: ['./recipe-detail.component.scss']
 })
@@ -143,5 +144,9 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
         this.toastService.showError('Fehler beim Speichern');
       }
     });
+  }
+
+  printRecipe(): void {
+    window.print();
   }
 }

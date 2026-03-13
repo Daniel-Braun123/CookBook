@@ -19,7 +19,7 @@
 
   <div *ngIf="!isLoading && recipe">
     <!-- Back Button -->
-    <div class="container mx-auto px-4 py-4">
+    <div class="container mx-auto px-4 py-4 print:hidden">
       <a [routerLink]="['/']" class="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -63,7 +63,7 @@
         <!-- Main Content -->
         <div class="lg:col-span-2">
           <div class="mb-8">
-            <div class="flex items-center gap-2 mb-3">
+            <div class="flex items-center gap-2 mb-3 print:hidden">
               <div class="flex items-center">
                 <svg *ngFor="let star of [1,2,3,4,5]" class="h-5 w-5"
                      [ngClass]="{
@@ -114,12 +114,12 @@
               <span class="text-sm text-muted-foreground">Portionen:</span>
               <div class="flex items-center gap-2">
                 <button (click)="servings = servings > 1 ? servings - 1 : 1" 
-                        class="w-8 h-8 rounded-full bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center">
+                        class="print:hidden w-8 h-8 rounded-full bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center">
                   <span>−</span>
                 </button>
                 <span class="w-12 text-center font-semibold">{{ servings }}</span>
                 <button (click)="servings = servings + 1" 
-                        class="w-8 h-8 rounded-full bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center">
+                        class="print:hidden w-8 h-8 rounded-full bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center">
                   <span>+</span>
                 </button>
               </div>
@@ -165,6 +165,14 @@
         <!-- Sidebar -->
         <div class="lg:col-span-1">
           <div class="sticky top-24 space-y-6">
+            <!-- Print Button -->
+            <button 
+              (click)="printRecipe()" 
+              class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors print:hidden">
+              <mat-icon class="text-xl">print</mat-icon>
+              <span class="font-medium">Rezept drucken</span>
+            </button>
+            
             <!-- Nutrition -->
             <div *ngIf="nutritionInfo" class="p-6 rounded-xl bg-card border border-border">
               <h3 class="font-display text-xl font-bold text-foreground mb-4">Nährwerte pro Portion</h3>
@@ -189,7 +197,7 @@
             </div>
 
             <!-- Author -->
-            <div class="p-6 rounded-xl bg-card border border-border">
+            <div class="print:hidden p-6 rounded-xl bg-card border border-border">
               <h3 class="font-display text-lg font-bold text-foreground mb-4">Autor</h3>
               <div class="flex items-center gap-3">
                 <img
