@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RecipeService {
@@ -18,6 +20,7 @@ public class RecipeService {
     private final CookingStepsRepository cookingStepsRepository;
     private final NutritionInfoRepository nutritionInfoRepository;
     private final CategorieRepository categorieRepository;
+    private final SavedRecipesRepository savedRecipesRepository;
     private final ObjectMapper objectMapper;
 
     public RecipeService(
@@ -26,6 +29,7 @@ public class RecipeService {
             CookingStepsRepository cookingStepsRepository,
             NutritionInfoRepository nutritionInfoRepository,
             CategorieRepository categorieRepository,
+            SavedRecipesRepository savedRecipesRepository,
             ObjectMapper objectMapper
     ) {
         this.recipeRepository = recipeRepository;
@@ -33,6 +37,7 @@ public class RecipeService {
         this.cookingStepsRepository = cookingStepsRepository;
         this.nutritionInfoRepository = nutritionInfoRepository;
         this.categorieRepository = categorieRepository;
+        this.savedRecipesRepository = savedRecipesRepository;
         this.objectMapper = objectMapper;
     }
 
@@ -106,4 +111,42 @@ public class RecipeService {
 
         return savedRecipe;
     }
+    
+    // ================== Saved Recipes Methods ==================
+    
+    @Transactional
+    public boolean toggleSaveRecipe(Long recipeId, Users user) {
+        Recipes recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RuntimeException("Recipe not found"));
+        
+        Optional<SavedRecipes> existingSaved = savedRecipesRepository.findByUserAndRecipe(user, recipe);
+        
+        if (existingSaved.isPresent()) {
+            // Already saved, so unsave it
+            savedRecipesRepository.delete(existingSaved.get());
+            return false; // false = unsaved
+        } else {
+            // Not saved yet, so save it
+            SavedRecipes savedRecipe = new SavedRecipes();
+            savedRecipe.setUser(user);
+            savedRecipe.setRecipe(recipe);
+            savedRecipesRepository.save(savedRecipe);
+            return true; // true = saved
+        }
+    }
+    
+    public boolean isRecipeSavedByUser(Long recipeId, Users user) {
+        Recipes recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RuntimeException("Recipe not found"));
+        return savedRecipesRepository.existsByUserAndRecipe(user, recipe);
+    }
+    
+    public List<Recipes> getSavedRecipesByUser(Users user) {
+        return savedRecipesRepository.findRecipesByUserId(user.getId());
+    }
+    
+    public List<Long> getSavedRecipeIdsByUser(Users user) {
+        return savedRecipesRepository.findRecipeIdsByUserId(user.getId());
+    }
 }
+

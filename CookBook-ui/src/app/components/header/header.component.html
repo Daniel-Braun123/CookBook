@@ -33,8 +33,8 @@
       <nav class="hidden md:flex items-center gap-6">
         <a [routerLink]="['/']" class="nav-link font-medium">Rezepte</a>
         <a [routerLink]="['/categories']" class="nav-link font-medium">Kategorien</a>
-        <a [routerLink]="['/']" class="relative p-2 rounded-full hover:bg-secondary transition-colors">
-          <mat-icon>favorite_border</mat-icon>
+        <a [routerLink]="['/saved']" class="nav-link font-medium flex items-center gap-1">
+          <mat-icon class="text-lg">favorite</mat-icon>
         </a>
         <!-- Theme Toggle -->
         <button 
@@ -110,8 +110,8 @@
       <a [routerLink]="['/categories']" (click)="isMenuOpen = false" class="py-2 font-medium text-foreground hover:text-primary transition-colors">
         Kategorien
       </a>
-      <a [routerLink]="['/']" (click)="isMenuOpen = false" class="py-2 font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2">
-        <mat-icon>favorite_border</mat-icon>
+      <a [routerLink]="['/saved']" (click)="isMenuOpen = false" class="py-2 font-medium text-foreground hover:text-primary transition-colors flex items-center gap-2">
+        <mat-icon>favorite</mat-icon>
         Gespeichert
       </a>
       <!-- Mobile Theme Toggle -->

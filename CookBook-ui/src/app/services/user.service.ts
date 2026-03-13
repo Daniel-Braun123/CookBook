@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth';
 import { TokenStorageService } from './token-storage.service';
+import { SavedRecipeService } from './saved-recipe.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class UserService {
 
   constructor(
     private http: HttpClient,
-    private tokenStorage: TokenStorageService
+    private tokenStorage: TokenStorageService,
+    private savedRecipeService: SavedRecipeService
   ) {
     // Load user from localStorage if token exists
     this.loadCurrentUserFromToken();
@@ -41,7 +43,11 @@ export class UserService {
 
   loadAndSetCurrentUser(): Observable<User> {
     return this.fetchCurrentUser().pipe(
-      tap(user => this.currentUserSubject.next(user))
+      tap(user => {
+        this.currentUserSubject.next(user);
+        // Load saved recipe IDs after user is loaded
+        this.savedRecipeService.loadSavedRecipeIds();
+      })
     );
   }
 
@@ -55,6 +61,8 @@ export class UserService {
       tap(response => {
         this.tokenStorage.saveToken(response.token);
         this.currentUserSubject.next(response.user);
+        // Load saved recipe IDs after login
+        this.savedRecipeService.loadSavedRecipeIds();
       })
     );
   }
@@ -65,6 +73,8 @@ export class UserService {
       tap(response => {
         this.tokenStorage.saveToken(response.token);
         this.currentUserSubject.next(response.user);
+        // Load saved recipe IDs after register
+        this.savedRecipeService.loadSavedRecipeIds();
       })
     );
   }
@@ -72,6 +82,8 @@ export class UserService {
   logout(): void {
     this.tokenStorage.removeToken();
     this.currentUserSubject.next(null);
+    // Clear saved recipe IDs on logout
+    this.savedRecipeService.loadSavedRecipeIds(); // This will fail and clear the set
   }
 
   updateProfile(name: string, email: string, bio?: string, profilePicture?: string): Observable<User> {

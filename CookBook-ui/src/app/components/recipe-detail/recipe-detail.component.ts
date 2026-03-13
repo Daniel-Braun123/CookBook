@@ -5,7 +5,9 @@ import { Subject, switchMap, takeUntil, filter, map, forkJoin } from 'rxjs';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { RecipeService } from '../../services/recipe.service';
+import { SavedRecipeService } from '../../services/saved-recipe.service';
 import { UserService } from '../../services/user.service';
+import { ToastService } from '../../services/toast.service';
 import { NutritionInfoService } from '../../services/nutritionInfo.service';
 import { CookingStep, Ingredient, NutritionInfo, Recipe } from '../../models/recipe';
 import { IngridientsService } from '@app/services/ingredients.service';
@@ -37,7 +39,9 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private recipeService: RecipeService,
+    private savedRecipeService: SavedRecipeService,
     private userService: UserService,
+    private toastService: ToastService,
     private nutritionInfoService: NutritionInfoService,
     private ingridientService: IngridientsService,
     private cookingStepsService: CookingStepsService
@@ -72,6 +76,11 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
         this.originalServings = recipe.servings;
 
         this.completedSteps.clear();
+        
+        // Check if recipe is saved
+        if (this.userService.isLoggedIn()) {
+          this.isSaved = this.savedRecipeService.isRecipeSaved(Number(recipe.id));
+        }
       }
       this.isLoading = false;
     });
@@ -111,13 +120,28 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   toggleSaved(): void {
+    if (!this.recipe) return;
+    
     // Check if user is logged in
     if (!this.userService.isLoggedIn()) {
       this.router.navigate(['/login']);
       return;
     }
     
-    // TODO: Implement save/unsave recipe functionality
-    this.isSaved = !this.isSaved;
+    // Toggle save state via service
+    this.savedRecipeService.toggleSaveRecipe(Number(this.recipe.id)).subscribe({
+      next: (response) => {
+        this.isSaved = response.saved;
+        if (response.saved) {
+          this.toastService.showSuccess('Rezept gespeichert! ❤️');
+        } else {
+          this.toastService.showSuccess('Rezept entfernt');
+        }
+      },
+      error: (err) => {
+        console.error('Failed to toggle save recipe', err);
+        this.toastService.showError('Fehler beim Speichern');
+      }
+    });
   }
 }

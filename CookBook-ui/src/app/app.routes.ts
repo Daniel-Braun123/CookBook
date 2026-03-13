@@ -38,6 +38,10 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'saved',
+    loadComponent: () => import('./components/saved-recipes/saved-recipes.component').then(m => m.SavedRecipesComponent)
+  },
+  {
     path: 'oauth2/redirect',
     loadComponent: () => import('./components/oauth2-redirect/oauth2-redirect.component').then(m => m.OAuth2RedirectComponent)
   },
