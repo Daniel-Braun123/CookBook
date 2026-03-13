@@ -27,6 +27,7 @@ export class SavedRecipesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
     this.isLoggedIn = this.userService.isLoggedIn();
     
     if (this.isLoggedIn) {
