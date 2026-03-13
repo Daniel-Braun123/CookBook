@@ -7,11 +7,11 @@
       <div *ngIf="currentUser$ | async as user; else loading" class="bg-card rounded-lg shadow-lg p-8">
         <div class="text-center mb-8">
           <div class="w-24 h-24 mx-auto mb-4 flex items-center justify-center">
-            <app-avatar-display 
-              [avatarConfig]="user.avatar" 
-              [userName]="user.name || 'User'" 
-              [size]="96">
-            </app-avatar-display>
+            <img 
+              [src]="user.profilePicture || 'assets/fallbackProfilePicture.png'" 
+              [alt]="user.name || 'User'" 
+              referrerpolicy="no-referrer"
+              class="w-24 h-24 rounded-full object-cover">
           </div>
           <h1 class="font-display text-3xl font-bold text-foreground mb-2">
             {{ user.name || 'Unbekannt' }}

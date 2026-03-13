@@ -36,8 +36,8 @@ export class OAuth2RedirectComponent implements OnInit {
       if (token) {
         this.tokenStorage.saveToken(token);
         
-        // Load current user from backend
-        this.userService.fetchCurrentUser().subscribe({
+        // Load current user from backend and set in service
+        this.userService.loadAndSetCurrentUser().subscribe({
           next: (user) => {
             this.toastService.showSuccess('Erfolgreich mit Google angemeldet! Willkommen! 🎉');
             setTimeout(() => {

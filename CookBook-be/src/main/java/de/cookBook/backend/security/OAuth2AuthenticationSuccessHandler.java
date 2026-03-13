@@ -57,7 +57,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 // Update existing user
                 user = existingUser.get();
                 user.setName(name);
-                user.setAvatar(picture);
+                user.setProfilePicture(picture);
                 log.info("Existing Google user logged in: {}", email);
             } else {
                 // Create new user
@@ -66,7 +66,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 user.setProviderId(providerId);
                 user.setEmail(email);
                 user.setName(name);
-                user.setAvatar(picture);
+                user.setProfilePicture(picture);
                 user.setPassword(null); // OAuth users don't have passwords
                 log.info("New Google user registered: {}", email);
             }

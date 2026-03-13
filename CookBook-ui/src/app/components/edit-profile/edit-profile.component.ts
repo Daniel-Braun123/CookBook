@@ -1,23 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
-import { AvatarDisplayComponent } from '../avatar-display/avatar-display.component';
-import { AvatarBuilderComponent } from '../avatar-builder/avatar-builder.component';
 import { UserService } from '../../services/user.service';
-import { AvatarService } from '../../services/avatar.service';
+import { CloudinaryService } from '../../services/cloudinary.service';
 import { ToastService } from '../../services/toast.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { User } from '../../models/user';
-import { AvatarConfig } from '../../models/avatar-config';
 
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule, HeaderComponent, FooterComponent, AvatarDisplayComponent],
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, FooterComponent, MatIconModule],
   templateUrl: './edit-profile.component.html',
   styleUrls: ['./edit-profile.component.scss']
 })
@@ -25,17 +22,19 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   currentUser$: Observable<User | null>;
   profileForm!: FormGroup;
   isLoading = false;
+  isUploading = false;
   errorMessage = '';
+  selectedFile: File | null = null;
+  uploadedImageUrl: string | null = null;
+  previewUrl: string | null = null;
   private destroy$ = new Subject<void>();
   private originalUserData: any = null;
-  currentAvatarConfig: string | null = null;
 
   constructor(
     private userService: UserService,
-    private avatarService: AvatarService,
+    private cloudinaryService: CloudinaryService,
     private fb: FormBuilder,
     private router: Router,
-    private dialog: MatDialog,
     private toastService: ToastService
   ) {
     this.currentUser$ = this.userService.currentUser$;
@@ -70,8 +69,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
             bio: user.bio || ''
           };
           
-          this.originalUserData = { ...userData, avatar: user.avatar };
-          this.currentAvatarConfig = user.avatar || null;
+          this.originalUserData = { ...userData };
           this.profileForm.patchValue(userData);
         }
       });
@@ -83,28 +81,30 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     }
     
     const currentValues = this.profileForm.value;
-    const avatarChanged = (this.currentAvatarConfig || null) !== (this.originalUserData.avatar || null);
     
     return (
       currentValues.name !== this.originalUserData.name ||
       currentValues.email !== this.originalUserData.email ||
       currentValues.bio !== this.originalUserData.bio ||
-      avatarChanged
+      this.uploadedImageUrl !== null
     );
   }
 
   onSubmit(): void {
-    if (this.profileForm.valid && !this.isLoading) {
+    if (this.profileForm.valid && !this.isLoading && !this.isUploading) {
       this.isLoading = true;
       this.errorMessage = '';
 
       const formData = this.profileForm.value;
       
+      // Use uploaded image URL if available, otherwise keep current profilePicture
+      const profilePictureUrl = this.uploadedImageUrl || undefined;
+      
       this.userService.updateProfile(
         formData.name, 
         formData.email, 
         formData.bio,
-        this.currentAvatarConfig || undefined
+        profilePictureUrl
       )
         .pipe(takeUntil(this.destroy$))
         .subscribe({
@@ -128,19 +128,61 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     this.router.navigate(['/profile']);
   }
 
-  onAvatarChange(): void {
-    const currentConfig = this.avatarService.parseConfig(this.currentAvatarConfig);
-    
-    const dialogRef = this.dialog.open(AvatarBuilderComponent, {
-      width: '90vw',
-      maxWidth: '1100px',
-      data: { config: currentConfig }
-    });
-
-    dialogRef.afterClosed().subscribe((result: AvatarConfig | null) => {
-      if (result) {
-        this.currentAvatarConfig = this.avatarService.stringifyConfig(result);
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      
+      // Validate file
+      const validation = this.cloudinaryService.validateImage(file);
+      if (!validation.valid) {
+        this.toastService.showError(validation.error || 'Ungültige Datei');
+        input.value = ''; // Reset input
+        return;
       }
-    });
+      
+      this.selectedFile = file;
+      
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.previewUrl = e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+      
+      this.toastService.showSuccess(`${file.name} ausgewählt. Klicke auf "Hochladen" um fortzufahren.`);
+    }
+  }
+
+  onUploadImage(): void {
+    if (!this.selectedFile) return;
+    
+    this.isUploading = true;
+    
+    this.cloudinaryService.uploadImage(this.selectedFile)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (imageUrl) => {
+          this.isUploading = false;
+          this.uploadedImageUrl = imageUrl;
+          this.selectedFile = null;
+          this.toastService.showSuccess('Bild erfolgreich hochgeladen! 🎉');
+        },
+        error: (error) => {
+          this.isUploading = false;
+          this.toastService.showError(error.message || 'Upload fehlgeschlagen');
+        }
+      });
+  }
+
+  getDisplayImageUrl(user: User): string {
+    // Priority: 1. Uploaded image, 2. Current profile picture, 3. Fallback
+    if (this.uploadedImageUrl) {
+      return this.uploadedImageUrl;
+    }
+    if (this.previewUrl) {
+      return this.previewUrl;
+    }
+    return user.profilePicture || 'assets/fallbackProfilePicture.png';
   }
 }

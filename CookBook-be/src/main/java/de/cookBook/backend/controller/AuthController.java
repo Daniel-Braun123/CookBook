@@ -93,7 +93,7 @@ public class AuthController {
         dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
-        dto.setAvatar(user.getAvatar());
+        dto.setProfilePicture(user.getProfilePicture());
         dto.setBio(user.getBio());
         dto.setJoinedAt(user.getJoinedAt());
         return dto;

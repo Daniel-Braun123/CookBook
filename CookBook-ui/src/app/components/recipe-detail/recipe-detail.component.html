@@ -192,11 +192,11 @@
             <div class="p-6 rounded-xl bg-card border border-border">
               <h3 class="font-display text-lg font-bold text-foreground mb-4">Autor</h3>
               <div class="flex items-center gap-3">
-                <app-avatar-display
-                  [avatarConfig]="recipe.author.avatar"
-                  [userName]="recipe.author.name"
-                  [size]="48">
-                </app-avatar-display>
+                <img
+                  [src]="recipe.author.profilePicture || 'assets/fallbackProfilePicture.png'"
+                  [alt]="recipe.author.name"
+                  referrerpolicy="no-referrer"
+                  class="w-12 h-12 rounded-full object-cover">
                 <div>
                   <p class="font-semibold text-foreground">{{ recipe.author.name }}</p>
                   <p class="text-sm text-muted-foreground">{{ recipe.author.bio }}</p>

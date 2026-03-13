@@ -36,7 +36,7 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
             // Update existing user
             user = existingUser.get();
             user.setName(name);
-            user.setAvatar(picture);
+            user.setProfilePicture(picture);
         } else {
             // Create new user
             user = new Users();
@@ -44,7 +44,7 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
             user.setProviderId(providerId);
             user.setEmail(email);
             user.setName(name);
-            user.setAvatar(picture);
+            user.setProfilePicture(picture);
             user.setPassword(null); // OAuth users don't have passwords
         }
         

@@ -58,12 +58,12 @@
         
         <ng-container *ngIf="isLoggedIn">
           <a [routerLink]="['/profile']" class="nav-link font-medium flex items-center gap-2">
-            <app-avatar-display 
+            <img 
               *ngIf="currentUser$ | async as user" 
-              [avatarConfig]="user.avatar" 
-              [userName]="user.name"
-              [size]="32">
-            </app-avatar-display>
+              [src]="user.profilePicture || 'assets/fallbackProfilePicture.png'" 
+              [alt]="user.name"
+              referrerpolicy="no-referrer"
+              class="w-8 h-8 rounded-full object-cover">
             Profil
           </a>
           <button 
@@ -135,12 +135,12 @@
       
       <ng-container *ngIf="isLoggedIn">
         <a [routerLink]="['/profile']" (click)="isMenuOpen = false" class="py-2 font-medium text-foreground hover:text-primary transition-colors flex items-center gap-3">
-          <app-avatar-display 
+          <img 
             *ngIf="currentUser$ | async as user" 
-            [avatarConfig]="user.avatar" 
-            [userName]="user.name"
-            [size]="40">
-          </app-avatar-display>
+            [src]="user.profilePicture || 'assets/fallbackProfilePicture.png'" 
+            [alt]="user.name"
+            referrerpolicy="no-referrer"
+            class="w-10 h-10 rounded-full object-cover">
           Profil
         </a>
         <button 

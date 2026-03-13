@@ -26,8 +26,8 @@ public class Users {
     @Column(name = "email", length = 255, nullable = false, unique = true)
     private String email;
     
-    @Column(name = "avatar", length = 500)
-    private String avatar;
+    @Column(name = "profile_picture", length = 500)
+    private String profilePicture;
     
     @Column(name = "bio", columnDefinition = "TEXT")
     private String bio;

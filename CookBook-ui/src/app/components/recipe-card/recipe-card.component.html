@@ -107,14 +107,12 @@
           </span>
         </div>
 
-        <!-- Author Avatar -->
+        <!-- Author Profile Picture -->
         <div class="flex items-center gap-2">
           <div class="relative group/avatar">
-            <app-avatar-display
-              [avatarConfig]="recipe.author.avatar"
-              [userName]="recipe.author.name"
-              [size]="24">
-            </app-avatar-display>
+            <img
+              [src]="recipe.author.profilePicture || 'assets/fallbackProfilePicture.png'"
+              [alt]="recipe.author.name"              referrerpolicy="no-referrer"              class="w-6 h-6 rounded-full object-cover">
             <!-- Tooltip -->
             <div class="absolute bottom-full right-0 mb-2 px-2 py-1 bg-foreground text-card text-xs rounded whitespace-nowrap opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-200 pointer-events-none z-20">
               {{ recipe.author.name }}

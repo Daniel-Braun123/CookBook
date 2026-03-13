@@ -25,8 +25,8 @@ export class UserService {
   private loadCurrentUserFromToken(): void {
     if (this.tokenStorage.hasToken()) {
       // Load user data from backend
-      this.fetchCurrentUser().subscribe({
-        next: (user) => this.currentUserSubject.next(user),
+      this.loadAndSetCurrentUser().subscribe({
+        next: () => {}, // User already set in tap
         error: (err) => {
           console.error('Failed to load user', err);
           this.tokenStorage.removeToken(); // Token ungültig
@@ -37,6 +37,12 @@ export class UserService {
 
   fetchCurrentUser(): Observable<User> {
     return this.http.get<User>(`${this.API_URL}/me`);
+  }
+
+  loadAndSetCurrentUser(): Observable<User> {
+    return this.fetchCurrentUser().pipe(
+      tap(user => this.currentUserSubject.next(user))
+    );
   }
 
   getCurrentUser(): Observable<User | null> {
@@ -68,8 +74,8 @@ export class UserService {
     this.currentUserSubject.next(null);
   }
 
-  updateProfile(name: string, email: string, bio?: string, avatar?: string): Observable<User> {
-    const updateData = { name, email, bio, avatar };
+  updateProfile(name: string, email: string, bio?: string, profilePicture?: string): Observable<User> {
+    const updateData = { name, email, bio, profilePicture };
     return this.http.put<User>(`${this.API_URL}/update`, updateData).pipe(
       tap(user => {
         this.currentUserSubject.next(user);

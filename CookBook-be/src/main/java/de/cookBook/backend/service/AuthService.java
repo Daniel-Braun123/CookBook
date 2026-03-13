@@ -65,7 +65,7 @@ public class AuthService {
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setBio(request.getBio());
-        user.setAvatar(request.getAvatar());
+        user.setProfilePicture(request.getProfilePicture());
 
         return userRepository.save(user);
     }

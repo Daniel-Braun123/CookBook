@@ -4,7 +4,6 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subject, switchMap, takeUntil, filter, map, forkJoin } from 'rxjs';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
-import { AvatarDisplayComponent } from '../avatar-display/avatar-display.component';
 import { RecipeService } from '../../services/recipe.service';
 import { UserService } from '../../services/user.service';
 import { NutritionInfoService } from '../../services/nutritionInfo.service';
@@ -15,7 +14,7 @@ import { CookingStepsService } from '@app/services/cookingSteps.service';
 @Component({
   selector: 'app-recipe-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent, AvatarDisplayComponent],
+  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent],
   templateUrl: './recipe-detail.component.html',
   styleUrls: ['./recipe-detail.component.scss']
 })

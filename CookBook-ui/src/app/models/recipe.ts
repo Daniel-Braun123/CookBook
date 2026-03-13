@@ -24,7 +24,7 @@ export interface Recipe {
 export interface Author {
   id: string;
   name: string;
-  avatar: string;
+  profilePicture: string;
   bio?: string
 }
 

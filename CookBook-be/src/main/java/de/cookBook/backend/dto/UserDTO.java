@@ -13,7 +13,7 @@ public class UserDTO {
     private Long id;
     private String name;
     private String email;
-    private String avatar;
+    private String profilePicture;
     private String bio;
     private LocalDateTime joinedAt;
 }
