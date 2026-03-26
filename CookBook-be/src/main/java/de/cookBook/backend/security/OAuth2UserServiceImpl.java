@@ -36,7 +36,14 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
             // Update existing user
             user = existingUser.get();
             user.setName(name);
-            user.setProfilePicture(picture);
+
+            // Keep manually uploaded/custom profile pictures.
+            String existingPicture = user.getProfilePicture();
+            boolean hasNoPicture = existingPicture == null || existingPicture.isBlank();
+            boolean isGooglePicture = existingPicture != null && existingPicture.contains("googleusercontent.com");
+            if (hasNoPicture || isGooglePicture) {
+                user.setProfilePicture(picture);
+            }
         } else {
             // Create new user
             user = new Users();

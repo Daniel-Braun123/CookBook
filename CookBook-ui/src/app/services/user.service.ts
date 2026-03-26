@@ -87,7 +87,16 @@ export class UserService {
   }
 
   updateProfile(name: string, email: string, bio?: string, profilePicture?: string): Observable<User> {
-    const updateData = { name, email, bio, profilePicture };
+    const updateData: { name: string; email: string; bio?: string; profilePicture?: string } = {
+      name,
+      email,
+      bio
+    };
+
+    if (profilePicture) {
+      updateData.profilePicture = profilePicture;
+    }
+
     return this.http.put<User>(`${this.API_URL}/update`, updateData).pipe(
       tap(user => {
         this.currentUserSubject.next(user);

@@ -65,7 +65,12 @@ public class AuthService {
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setBio(request.getBio());
-        user.setProfilePicture(request.getProfilePicture());
+
+        // Keep existing profile picture unless a new non-empty value was provided.
+        String newProfilePicture = request.getProfilePicture();
+        if (newProfilePicture != null && !newProfilePicture.isBlank()) {
+            user.setProfilePicture(newProfilePicture);
+        }
 
         return userRepository.save(user);
     }

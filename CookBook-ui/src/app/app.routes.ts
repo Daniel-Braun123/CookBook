@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { pendingChangesGuard } from './guards/pending-changes.guard';
 
 export const routes: Routes = [
   {
@@ -26,7 +27,8 @@ export const routes: Routes = [
   {
     path: 'edit-profile',
     loadComponent: () => import('./components/edit-profile/edit-profile.component').then(m => m.EditProfileComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    canDeactivate: [pendingChangesGuard]
   },
   {
     path: 'categories',

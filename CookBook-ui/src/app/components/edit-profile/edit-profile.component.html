@@ -51,16 +51,6 @@
                 Neues Bild wählen
               </button>
               
-              <button 
-                *ngIf="selectedFile && !isUploading"
-                type="button" 
-                class="btn btn-cookbook text-sm"
-                (click)="onUploadImage()"
-                [disabled]="isLoading">
-                <mat-icon class="text-base mr-2">cloud_upload</mat-icon>
-                Hochladen
-              </button>
-              
               <div *ngIf="isUploading" class="flex items-center gap-2 text-primary">
                 <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -71,6 +61,7 @@
             </div>
             
             <p class="text-xs text-muted-foreground mt-3">
+              <span *ngIf="selectedFile && !uploadedImageUrl">Neues Bild ausgewählt (wird beim Speichern hochgeladen)</span>
               <span *ngIf="uploadedImageUrl">Neues Bild hochgeladen</span>
               <span *ngIf="!uploadedImageUrl && user.profilePicture">
                 {{ user.profilePicture.includes('googleusercontent.com') ? 'Aktuell: Google-Bild' : 'Aktuell: Hochgeladenes Bild' }}
@@ -195,5 +186,36 @@
     </div>
   </div>
   
+  <!-- Leave Without Saving Modal -->
+  <div
+    *ngIf="showLeaveConfirmModal"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+  >
+    <div class="w-full max-w-md rounded-xl bg-card border border-border shadow-xl p-6">
+      <h3 class="font-display text-xl font-bold text-foreground mb-2">
+        Änderungen verwerfen?
+      </h3>
+      <p class="text-muted-foreground mb-6">
+        Du hast ungespeicherte Änderungen. Möchtest du die Seite wirklich verlassen?
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <button
+          type="button"
+          class="btn btn-cookbook-outline flex-1"
+          (click)="stayOnEditPage()"
+        >
+          Abbrechen
+        </button>
+        <button
+          type="button"
+          class="btn btn-cookbook flex-1"
+          (click)="confirmLeaveWithoutSaving()"
+        >
+          Verlassen
+        </button>
+      </div>
+    </div>
+  </div>
+
   <app-footer></app-footer>
 </div>

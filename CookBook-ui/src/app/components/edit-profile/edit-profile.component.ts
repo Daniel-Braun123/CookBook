@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -8,8 +8,9 @@ import { FooterComponent } from '../footer/footer.component';
 import { UserService } from '../../services/user.service';
 import { CloudinaryService } from '../../services/cloudinary.service';
 import { ToastService } from '../../services/toast.service';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { finalize, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import { User } from '../../models/user';
+import { PendingChangesComponent } from '../../guards/pending-changes.guard';
 
 @Component({
   selector: 'app-edit-profile',
@@ -18,7 +19,7 @@ import { User } from '../../models/user';
   templateUrl: './edit-profile.component.html',
   styleUrls: ['./edit-profile.component.scss']
 })
-export class EditProfileComponent implements OnInit, OnDestroy {
+export class EditProfileComponent implements OnInit, OnDestroy, PendingChangesComponent {
   currentUser$: Observable<User | null>;
   profileForm!: FormGroup;
   isLoading = false;
@@ -27,8 +28,11 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   selectedFile: File | null = null;
   uploadedImageUrl: string | null = null;
   previewUrl: string | null = null;
+  showLeaveConfirmModal = false;
   private destroy$ = new Subject<void>();
   private originalUserData: any = null;
+  private isSaving = false;
+  private pendingLeaveDecision: Subject<boolean> | null = null;
 
   constructor(
     private userService: UserService,
@@ -86,42 +90,90 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       currentValues.name !== this.originalUserData.name ||
       currentValues.email !== this.originalUserData.email ||
       currentValues.bio !== this.originalUserData.bio ||
+      this.selectedFile !== null ||
       this.uploadedImageUrl !== null
     );
   }
 
-  onSubmit(): void {
-    if (this.profileForm.valid && !this.isLoading && !this.isUploading) {
-      this.isLoading = true;
-      this.errorMessage = '';
-
-      const formData = this.profileForm.value;
-      
-      // Use uploaded image URL if available, otherwise keep current profilePicture
-      const profilePictureUrl = this.uploadedImageUrl || undefined;
-      
-      this.userService.updateProfile(
-        formData.name, 
-        formData.email, 
-        formData.bio,
-        profilePictureUrl
-      )
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (response) => {
-            this.isLoading = false;
-            this.toastService.showSuccess('Profil erfolgreich aktualisiert! ✨');
-            setTimeout(() => {
-              this.router.navigate(['/profile']);
-            }, 1000);
-          },
-          error: (error) => {
-            this.isLoading = false;
-            this.errorMessage = error.error?.message || 'Fehler beim Aktualisieren des Profils';
-            this.toastService.showError('Fehler beim Aktualisieren des Profils');
-          }
-        });
+  canDeactivate(): boolean | Observable<boolean> {
+    if (!this.hasChanges || this.isSaving) {
+      return true;
     }
+
+    this.showLeaveConfirmModal = true;
+    this.pendingLeaveDecision = new Subject<boolean>();
+    return this.pendingLeaveDecision.asObservable().pipe(take(1));
+  }
+
+  confirmLeaveWithoutSaving(): void {
+    this.showLeaveConfirmModal = false;
+    this.pendingLeaveDecision?.next(true);
+    this.pendingLeaveDecision?.complete();
+    this.pendingLeaveDecision = null;
+  }
+
+  stayOnEditPage(): void {
+    this.showLeaveConfirmModal = false;
+    this.pendingLeaveDecision?.next(false);
+    this.pendingLeaveDecision?.complete();
+    this.pendingLeaveDecision = null;
+  }
+
+  onSubmit(): void {
+    if (!this.profileForm.valid || this.isLoading || this.isUploading) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.isSaving = true;
+    this.errorMessage = '';
+
+    const formData = this.profileForm.value;
+    const upload$ = this.selectedFile
+      ? this.cloudinaryService.uploadImage(this.selectedFile)
+      : of(this.uploadedImageUrl);
+
+    if (this.selectedFile) {
+      this.isUploading = true;
+    }
+
+    upload$
+      .pipe(
+        switchMap((imageUrl) => {
+          if (imageUrl) {
+            this.uploadedImageUrl = imageUrl;
+          }
+
+          return this.userService.updateProfile(
+            formData.name,
+            formData.email,
+            formData.bio,
+            imageUrl || undefined
+          );
+        }),
+        finalize(() => {
+          this.isLoading = false;
+          this.isUploading = false;
+          this.isSaving = false;
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: () => {
+          this.selectedFile = null;
+          this.previewUrl = null;
+          this.uploadedImageUrl = null;
+          this.originalUserData = { ...formData };
+          this.toastService.showSuccess('Profil erfolgreich aktualisiert! ✨');
+          setTimeout(() => {
+            this.router.navigate(['/profile']);
+          }, 700);
+        },
+        error: (error) => {
+          this.errorMessage = error?.error?.message || error?.message || 'Fehler beim Aktualisieren des Profils';
+          this.toastService.showError(this.errorMessage);
+        }
+      });
   }
 
   onCancel(): void {
@@ -150,29 +202,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       };
       reader.readAsDataURL(file);
       
-      this.toastService.showSuccess(`${file.name} ausgewählt. Klicke auf "Hochladen" um fortzufahren.`);
     }
-  }
-
-  onUploadImage(): void {
-    if (!this.selectedFile) return;
-    
-    this.isUploading = true;
-    
-    this.cloudinaryService.uploadImage(this.selectedFile)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (imageUrl) => {
-          this.isUploading = false;
-          this.uploadedImageUrl = imageUrl;
-          this.selectedFile = null;
-          this.toastService.showSuccess('Bild erfolgreich hochgeladen! 🎉');
-        },
-        error: (error) => {
-          this.isUploading = false;
-          this.toastService.showError(error.message || 'Upload fehlgeschlagen');
-        }
-      });
   }
 
   getDisplayImageUrl(user: User): string {
