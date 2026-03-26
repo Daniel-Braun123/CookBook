@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { CookingStep } from "@app/models/recipe";
+import { CookingStep } from "@app/models/cooking-step";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 

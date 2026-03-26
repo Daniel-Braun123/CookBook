@@ -3,7 +3,7 @@ package de.cookBook.backend.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.cookBook.backend.entities.Categories;
+import de.cookBook.backend.dto.CategoryResponseDto;
 import de.cookBook.backend.repository.CategorieRepository;
 
 import java.util.List;
@@ -20,8 +20,11 @@ public class CategorieController {
     }
 
     @GetMapping("/getAll")
-    public List<Categories> getAllCategories() {
-        return categorieRepository.getAll();
+    public List<CategoryResponseDto> getAllCategories() {
+        return categorieRepository.getAll()
+                .stream()
+                .map(CategoryResponseDto::fromEntity)
+                .toList();
     }
     
 }

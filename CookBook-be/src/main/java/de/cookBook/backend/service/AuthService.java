@@ -1,7 +1,7 @@
 package de.cookBook.backend.service;
 
-import de.cookBook.backend.dto.RegisterRequest;
-import de.cookBook.backend.dto.UpdateProfileRequest;
+import de.cookBook.backend.dto.RegisterRequestDto;
+import de.cookBook.backend.dto.UpdateProfileRequestDto;
 import de.cookBook.backend.entities.AuthProvider;
 import de.cookBook.backend.entities.Users;
 import de.cookBook.backend.repository.UserRepository;
@@ -20,7 +20,7 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Users register(RegisterRequest request) {
+    public Users register(RegisterRequestDto request) {
         // Check if email already exists
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("Email already registered");
@@ -53,7 +53,7 @@ public class AuthService {
         return user;
     }
 
-    public Users updateProfile(Long userId, UpdateProfileRequest request) {
+    public Users updateProfile(Long userId, UpdateProfileRequestDto request) {
         Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 

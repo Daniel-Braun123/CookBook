@@ -8,8 +8,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.cookBook.backend.dto.CreateRecipeRequest;
-import de.cookBook.backend.entities.Recipes;
+import de.cookBook.backend.dto.CreateRecipeRequestDto;
+import de.cookBook.backend.dto.RecipeResponseDto;
 import de.cookBook.backend.entities.Users;
 import de.cookBook.backend.repository.RecipeRepository;
 import de.cookBook.backend.service.RecipeService;
@@ -33,28 +33,28 @@ public class RecipesController {
     }
 
     @GetMapping("/getAll")
-    public List<Recipes> getAllRecipes() {
-        return recipeRepository.getAll();
+    public List<RecipeResponseDto> getAllRecipes() {
+        return recipeService.toResponseList(recipeRepository.getAll());
     }
 
     @GetMapping("/getSixBestRated")
-    public List<Recipes> getSixBestRatedRecipes() {
-        return recipeRepository.getSixBestRated();
+    public List<RecipeResponseDto> getSixBestRatedRecipes() {
+        return recipeService.toResponseList(recipeRepository.getSixBestRated());
     }
     
     @GetMapping("/getByCategorieFilter")
-    public List<Recipes> getRecipesByCategory(@RequestParam String categoryName) {
-        return recipeRepository.getByCategoryFilter(categoryName);
+    public List<RecipeResponseDto> getRecipesByCategory(@RequestParam String categoryName) {
+        return recipeService.toResponseList(recipeRepository.getByCategoryFilter(categoryName));
     }
 
     @GetMapping("/getRecipeById")
-    public Recipes getRecipeById(@RequestParam String recipeId) {
-        return recipeRepository.getRecipeById(recipeId);
+    public RecipeResponseDto getRecipeById(@RequestParam String recipeId) {
+        return recipeService.toResponse(recipeRepository.getRecipeById(recipeId));
     }
     
     @PostMapping("/create")
-    public Recipes createRecipe(
-            @RequestBody CreateRecipeRequest request,
+    public RecipeResponseDto createRecipe(
+            @RequestBody CreateRecipeRequestDto request,
             @AuthenticationPrincipal Users currentUser
     ) {
         return recipeService.createRecipe(request, currentUser);
@@ -76,14 +76,14 @@ public class RecipesController {
     }
     
     @GetMapping("/saved")
-    public ResponseEntity<List<Recipes>> getSavedRecipes(
+    public ResponseEntity<List<RecipeResponseDto>> getSavedRecipes(
             @AuthenticationPrincipal Users currentUser
     ) {
         if (currentUser == null) {
             return ResponseEntity.status(401).build();
         }
         
-        List<Recipes> savedRecipes = recipeService.getSavedRecipesByUser(currentUser);
+        List<RecipeResponseDto> savedRecipes = recipeService.getSavedRecipesByUser(currentUser);
         return ResponseEntity.ok(savedRecipes);
     }
     

@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { NutritionInfo } from "@app/models/recipe";
+import { NutritionInfo } from "@app/models/nutrition-info";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 

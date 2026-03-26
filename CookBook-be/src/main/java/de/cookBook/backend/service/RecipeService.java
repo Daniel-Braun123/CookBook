@@ -1,7 +1,7 @@
 package de.cookBook.backend.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.cookBook.backend.dto.CreateRecipeRequest;
+import de.cookBook.backend.dto.*;
 import de.cookBook.backend.entities.*;
 import de.cookBook.backend.repository.*;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class RecipeService {
     }
 
     @Transactional
-    public Recipes createRecipe(CreateRecipeRequest request, Users author) {
+    public RecipeResponseDto createRecipe(CreateRecipeRequestDto request, Users author) {
         // Find category
         Categories category = categorieRepository.findByName(request.getCategoryName())
                 .orElseThrow(() -> new RuntimeException("Category not found: " + request.getCategoryName()));
@@ -74,7 +74,7 @@ public class RecipeService {
 
         // Create ingredients
         if (request.getIngredients() != null) {
-            for (CreateRecipeRequest.IngredientDto ingredientDto : request.getIngredients()) {
+            for (IngredientDto ingredientDto : request.getIngredients()) {
                 Ingredients ingredient = new Ingredients();
                 ingredient.setRecipe(recipe);
                 ingredient.setName(ingredientDto.getName());
@@ -87,7 +87,7 @@ public class RecipeService {
         // Create cooking steps
         if (request.getSteps() != null) {
             for (int i = 0; i < request.getSteps().size(); i++) {
-                CreateRecipeRequest.CookingStepDto stepDto = request.getSteps().get(i);
+                CookingStepDto stepDto = request.getSteps().get(i);
                 CookingSteps step = new CookingSteps();
                 step.setRecipe(recipe);
                 step.setStepNumber(i + 1);
@@ -108,7 +108,7 @@ public class RecipeService {
             nutritionInfoRepository.save(nutrition);
         }
 
-        return recipe;
+        return RecipeResponseDto.fromEntity(recipe, objectMapper);
     }
     
     // ================== Saved Recipes Methods ==================
@@ -140,12 +140,25 @@ public class RecipeService {
         return savedRecipesRepository.existsByUserAndRecipe(user, recipe);
     }
     
-    public List<Recipes> getSavedRecipesByUser(Users user) {
-        return savedRecipesRepository.findRecipesByUserId(user.getId());
+    public List<RecipeResponseDto> getSavedRecipesByUser(Users user) {
+        return savedRecipesRepository.findRecipesByUserId(user.getId())
+                .stream()
+                .map(recipe -> RecipeResponseDto.fromEntity(recipe, objectMapper))
+                .toList();
     }
     
     public List<Long> getSavedRecipeIdsByUser(Users user) {
         return savedRecipesRepository.findRecipeIdsByUserId(user.getId());
+    }
+
+    public RecipeResponseDto toResponse(Recipes recipe) {
+        return RecipeResponseDto.fromEntity(recipe, objectMapper);
+    }
+
+    public List<RecipeResponseDto> toResponseList(List<Recipes> recipes) {
+        return recipes.stream()
+                .map(recipe -> RecipeResponseDto.fromEntity(recipe, objectMapper))
+                .toList();
     }
 }
 

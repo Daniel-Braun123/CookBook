@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.cookBook.backend.entities.CookingSteps;
+import de.cookBook.backend.dto.CookingStepResponseDto;
 import de.cookBook.backend.repository.CookingStepsRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,8 +21,11 @@ public class CookingStepsController {
     }
 
     @GetMapping("/getCookingStepsWithRecipeId")
-    public List<CookingSteps> getCookingStepsWithRecipeId(@RequestParam String recipeId) {
-        return cookingStepsRepository.getCookingStepsWithRecipeId(recipeId);
+    public List<CookingStepResponseDto> getCookingStepsWithRecipeId(@RequestParam String recipeId) {
+        return cookingStepsRepository.getCookingStepsWithRecipeId(recipeId)
+                .stream()
+                .map(CookingStepResponseDto::fromEntity)
+                .toList();
     }
     
 }

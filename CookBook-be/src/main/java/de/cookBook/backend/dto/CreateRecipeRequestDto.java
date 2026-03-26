@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CreateRecipeRequest {
+public class CreateRecipeRequestDto {
     private String title;
     private String description;
     private String categoryName;

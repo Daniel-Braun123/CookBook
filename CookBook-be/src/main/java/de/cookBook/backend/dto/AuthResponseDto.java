@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateProfileRequest {
-    private String name;
-    private String email;
-    private String bio;
-    private String profilePicture;
+public class AuthResponseDto {
+    private String token;
+    private UserDTO user;
 }

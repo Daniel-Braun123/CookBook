@@ -10,7 +10,10 @@ import { SavedRecipeService } from '../../services/saved-recipe.service';
 import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
 import { NutritionInfoService } from '../../services/nutritionInfo.service';
-import { CookingStep, Ingredient, NutritionInfo, Recipe } from '../../models/recipe';
+import { Recipe } from '../../models/recipe';
+import { CookingStep } from '../../models/cooking-step';
+import { Ingredient } from '../../models/ingredient';
+import { NutritionInfo } from '../../models/nutrition-info';
 import { IngridientsService } from '@app/services/ingredients.service';
 import { CookingStepsService } from '@app/services/cookingSteps.service';
 

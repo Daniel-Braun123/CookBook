@@ -1,9 +1,9 @@
 package de.cookBook.backend.controller;
 
-import de.cookBook.backend.dto.AuthResponse;
-import de.cookBook.backend.dto.LoginRequest;
-import de.cookBook.backend.dto.RegisterRequest;
-import de.cookBook.backend.dto.UpdateProfileRequest;
+import de.cookBook.backend.dto.AuthResponseDto;
+import de.cookBook.backend.dto.LoginRequestDto;
+import de.cookBook.backend.dto.RegisterRequestDto;
+import de.cookBook.backend.dto.UpdateProfileRequestDto;
 import de.cookBook.backend.dto.UserDTO;
 import de.cookBook.backend.entities.Users;
 import de.cookBook.backend.service.AuthService;
@@ -27,13 +27,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequestDto request) {
         try {
             Users user = authService.register(request);
             String token = jwtTokenProvider.generateToken(user.getEmail(), user.getId());
             
             UserDTO userDTO = convertToDTO(user);
-            AuthResponse response = new AuthResponse(token, userDTO);
+            AuthResponseDto response = new AuthResponseDto(token, userDTO);
             
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (IllegalArgumentException e) {
@@ -44,13 +44,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto request) {
         try {
             Users user = authService.authenticate(request.getEmail(), request.getPassword());
             String token = jwtTokenProvider.generateToken(user.getEmail(), user.getId());
             
             UserDTO userDTO = convertToDTO(user);
-            AuthResponse response = new AuthResponse(token, userDTO);
+            AuthResponseDto response = new AuthResponseDto(token, userDTO);
             
             return ResponseEntity.ok(response);
         } catch (BadCredentialsException e) {
@@ -73,7 +73,7 @@ public class AuthController {
     @PutMapping("/update")
     public ResponseEntity<?> updateProfile(
             @AuthenticationPrincipal Users user,
-            @RequestBody UpdateProfileRequest request) {
+            @RequestBody UpdateProfileRequestDto request) {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not authenticated");
         }

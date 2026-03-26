@@ -4,7 +4,7 @@ package de.cookBook.backend.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.cookBook.backend.entities.NutritionInfo;
+import de.cookBook.backend.dto.NutritionInfoResponseDto;
 import de.cookBook.backend.repository.NutritionInfoRepository;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +21,10 @@ public class NutritionInfoController {
     }
 
     @GetMapping("/getNutritionInfoWithRecipeId")
-    public NutritionInfo getNutritionInfoWithRecipeId(@RequestParam String recipeId) {
-        return nutritionInfoRepository.getNutritionInfoWithRecipeId(recipeId);
+    public NutritionInfoResponseDto getNutritionInfoWithRecipeId(@RequestParam String recipeId) {
+        return NutritionInfoResponseDto.fromEntity(
+                nutritionInfoRepository.getNutritionInfoWithRecipeId(recipeId)
+        );
     }
     
 }
