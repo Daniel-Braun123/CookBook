@@ -232,4 +232,8 @@ $cookbook-dark-theme: mat.define-dark-theme((
   .label {
     @apply text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
   }
+
+  textarea.input {
+    @apply h-auto resize-none;
+  }
 }

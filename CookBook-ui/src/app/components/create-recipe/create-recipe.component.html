@@ -25,7 +25,7 @@
         <div class="space-y-4">
           <!-- Title -->
           <div>
-            <label class="block text-sm font-medium text-foreground mb-2">
+            <label class="label block mb-2">
               Titel <span class="text-destructive">*</span>
             </label>
             <input
@@ -33,14 +33,14 @@
               [(ngModel)]="title"
               name="title"
               required
-              class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              class="input"
               placeholder="z.B. Spaghetti Carbonara"
             />
           </div>
 
           <!-- Description -->
           <div>
-            <label class="block text-sm font-medium text-foreground mb-2">
+            <label class="label block mb-2">
               Beschreibung <span class="text-destructive">*</span>
             </label>
             <textarea
@@ -48,7 +48,7 @@
               name="description"
               required
               rows="4"
-              class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+              class="input"
               placeholder="Beschreibe dein Rezept..."
             ></textarea>
           </div>
@@ -56,14 +56,14 @@
           <!-- Category & Difficulty -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-foreground mb-2">
+              <label class="label block mb-2">
                 Kategorie <span class="text-destructive">*</span>
               </label>
               <select
                 [(ngModel)]="category"
                 name="category"
                 required
-                class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                class="input"
               >
                 <option value="" disabled>Kategorie wählen</option>
                 <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
@@ -71,14 +71,14 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-foreground mb-2">
+              <label class="label block mb-2">
                 Schwierigkeitsgrad <span class="text-destructive">*</span>
               </label>
               <select
                 [(ngModel)]="difficulty"
                 name="difficulty"
                 required
-                class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                class="input"
               >
                 <option value="EINFACH">Einfach</option>
                 <option value="MITTEL">Mittel</option>
@@ -90,7 +90,7 @@
           <!-- Time & Servings -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label class="block text-sm font-medium text-foreground mb-2">
+              <label class="label block mb-2">
                 Vorbereitungszeit (Min)
               </label>
               <input
@@ -98,12 +98,12 @@
                 [(ngModel)]="prepTime"
                 name="prepTime"
                 min="0"
-                class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                class="input"
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-foreground mb-2">
+              <label class="label block mb-2">
                 Kochzeit (Min)
               </label>
               <input
@@ -111,12 +111,12 @@
                 [(ngModel)]="cookTime"
                 name="cookTime"
                 min="0"
-                class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                class="input"
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-foreground mb-2">
+              <label class="label block mb-2">
                 Portionen
               </label>
               <input
@@ -124,14 +124,14 @@
                 [(ngModel)]="servings"
                 name="servings"
                 min="1"
-                class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                class="input"
               />
             </div>
           </div>
 
           <!-- Tags -->
           <div>
-            <label class="block text-sm font-medium text-foreground mb-2">
+            <label class="label block mb-2">
               Tags
             </label>
             <div class="flex gap-2 mb-2">
@@ -140,7 +140,7 @@
                 [(ngModel)]="currentTag"
                 name="currentTag"
                 (keydown.enter)="$event.preventDefault(); addTag()"
-                class="flex-1 px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                class="input flex-1 !w-auto"
                 placeholder="Tag hinzufügen..."
               />
               <button
@@ -187,21 +187,21 @@
               [(ngModel)]="ingredient.amount"
               [name]="'ingredient-amount-' + i"
               placeholder="Menge"
-              class="w-24 px-3 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              class="input !w-24"
             />
             <input
               type="text"
               [(ngModel)]="ingredient.unit"
               [name]="'ingredient-unit-' + i"
               placeholder="Einheit"
-              class="w-24 px-3 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              class="input !w-24"
             />
             <input
               type="text"
               [(ngModel)]="ingredient.name"
               [name]="'ingredient-name-' + i"
               placeholder="Zutat"
-              class="flex-1 px-3 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              class="input flex-1 !w-auto"
             />
             <button
               type="button"
@@ -240,7 +240,7 @@
                 [name]="'step-instruction-' + i"
                 placeholder="Beschreibe diesen Zubereitungsschritt..."
                 rows="3"
-                class="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                class="input"
               ></textarea>
               <input
                 type="number"
@@ -248,7 +248,7 @@
                 [name]="'step-duration-' + i"
                 placeholder="Dauer (Min) - optional"
                 min="0"
-                class="w-40 px-3 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                class="input !w-40"
               />
             </div>
             <button
@@ -269,7 +269,7 @@
         
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
-            <label class="block text-sm font-medium text-foreground mb-2">
+            <label class="label block mb-2">
               Kalorien (kcal)
             </label>
             <input
@@ -277,12 +277,12 @@
               [(ngModel)]="nutrition.calories"
               name="calories"
               min="0"
-              class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              class="input"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-foreground mb-2">
+            <label class="label block mb-2">
               Protein (g)
             </label>
             <input
@@ -290,12 +290,12 @@
               [(ngModel)]="nutrition.protein"
               name="protein"
               min="0"
-              class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              class="input"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-foreground mb-2">
+            <label class="label block mb-2">
               Kohlenhydrate (g)
             </label>
             <input
@@ -303,12 +303,12 @@
               [(ngModel)]="nutrition.carbs"
               name="carbs"
               min="0"
-              class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              class="input"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-foreground mb-2">
+            <label class="label block mb-2">
               Fett (g)
             </label>
             <input
@@ -316,7 +316,7 @@
               [(ngModel)]="nutrition.fat"
               name="fat"
               min="0"
-              class="w-full px-4 py-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              class="input"
             />
           </div>
         </div>
