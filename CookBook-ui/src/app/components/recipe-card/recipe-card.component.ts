@@ -4,7 +4,6 @@ import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Recipe } from '../../models/recipe';
-import { RecipeService } from '../../services/recipe.service';
 import { SavedRecipeService } from '../../services/saved-recipe.service';
 import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
@@ -26,7 +25,6 @@ export class RecipeCardComponent implements OnInit {
   Math = Math;
 
   constructor(
-    private recipeService: RecipeService,
     private savedRecipeService: SavedRecipeService,
     private userService: UserService,
     private toastService: ToastService,

@@ -114,7 +114,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     if (!this.recipe) return '';
     const classes: Record<string, string> = {
       'EINFACH': 'bg-cookbook-green/10 text-cookbook-green border-cookbook-green/20',
-      'MITTEl': 'bg-cookbook-orange/10 text-cookbook-orange border-cookbook-orange/20',
+      'MITTEL': 'bg-cookbook-orange/10 text-cookbook-orange border-cookbook-orange/20',
       'SCHWER': 'bg-destructive/10 text-destructive border-destructive/20',
     };
     return classes[this.recipe.difficulty] || '';

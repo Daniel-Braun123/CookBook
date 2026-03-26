@@ -10,14 +10,13 @@ import de.cookBook.backend.repository.CookingStepsRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @RequestMapping(value = "/api/cooking-steps")
 @RestController
-
 public class CookingStepsController {
+
     private final CookingStepsRepository cookingStepsRepository;
 
-    public CookingStepsController (CookingStepsRepository cookingStepsRepository) {
+    public CookingStepsController(CookingStepsRepository cookingStepsRepository) {
         this.cookingStepsRepository = cookingStepsRepository;
     }
 

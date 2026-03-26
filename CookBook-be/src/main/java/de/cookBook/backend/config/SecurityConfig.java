@@ -4,7 +4,6 @@ import de.cookBook.backend.security.JwtAuthenticationFilter;
 import de.cookBook.backend.security.OAuth2AuthenticationFailureHandler;
 import de.cookBook.backend.security.OAuth2AuthenticationSuccessHandler;
 import de.cookBook.backend.security.OAuth2UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,23 +18,25 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-    
-    @Autowired
-    private OAuth2UserServiceImpl oauth2UserService;
-    
-    @Autowired
-    private OAuth2AuthenticationSuccessHandler oauth2SuccessHandler;
-    
-    @Autowired
-    private OAuth2AuthenticationFailureHandler oauth2FailureHandler;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final OAuth2UserServiceImpl oauth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oauth2SuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oauth2FailureHandler;
+
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter,
+                          OAuth2UserServiceImpl oauth2UserService,
+                          OAuth2AuthenticationSuccessHandler oauth2SuccessHandler,
+                          OAuth2AuthenticationFailureHandler oauth2FailureHandler) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.oauth2UserService = oauth2UserService;
+        this.oauth2SuccessHandler = oauth2SuccessHandler;
+        this.oauth2FailureHandler = oauth2FailureHandler;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -46,8 +47,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
         

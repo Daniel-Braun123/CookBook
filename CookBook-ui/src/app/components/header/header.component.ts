@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit{
+export class HeaderComponent {
   isMenuOpen = false;
   isSearchFocused = false;
   currentUser$: Observable<User | null>;
@@ -27,9 +27,6 @@ export class HeaderComponent implements OnInit{
     private router: Router
   ) {
     this.currentUser$ = this.userService.getCurrentUser();
-  }
-
-  ngOnInit(): void {
   }
 
   get isLoggedIn(): boolean {

@@ -8,12 +8,11 @@ import { environment } from "src/environments/environment";
 	providedIn: "root",
 })
 export class CategorieService {
-private readonly API_URL = `${environment.apiUrl}/categories`;
+  private readonly API_URL = `${environment.apiUrl}/categories`;
 
-    constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-
-    getAllCategories(): Observable<Category[]> {
-        return this.http.get<Category[]>(this.API_URL + "/getAll");
-    }
+  getAllCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(this.API_URL + "/getAll");
+  }
 }

@@ -20,18 +20,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-
-
 @RequestMapping(value = "/api/recipes")
 @RestController
-
 public class RecipesController {
+
     private final RecipeRepository recipeRepository;
     private final RecipeService recipeService;
 
-
-    public RecipesController (RecipeRepository recipeRepository, RecipeService recipeService) {
+    public RecipesController(RecipeRepository recipeRepository, RecipeService recipeService) {
         this.recipeRepository = recipeRepository;
         this.recipeService = recipeService;
     }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Recipe } from '../models/recipe';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -8,13 +8,9 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class RecipeService {
-  private readonly SAVED_RECIPES_KEY = 'cookbook-saved-recipes';
   private readonly API_URL = `${environment.apiUrl}/recipes`;
 
   constructor(private http: HttpClient) { }
-
-  toggleSaveRecipe(recipeId: string) {
-  }
 
   getAllRecipes(): Observable<Recipe[]> {
     return this.http.get<Recipe[]>(this.API_URL + "/getAll");

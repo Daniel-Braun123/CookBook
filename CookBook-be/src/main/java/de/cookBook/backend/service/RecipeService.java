@@ -73,11 +73,10 @@ public class RecipeService {
         recipe = recipeRepository.save(recipe);
 
         // Create ingredients
-        final Recipes savedRecipe = recipe;
         if (request.getIngredients() != null) {
             for (CreateRecipeRequest.IngredientDto ingredientDto : request.getIngredients()) {
                 Ingredients ingredient = new Ingredients();
-                ingredient.setRecipe(savedRecipe);
+                ingredient.setRecipe(recipe);
                 ingredient.setName(ingredientDto.getName());
                 ingredient.setAmount(BigDecimal.valueOf(ingredientDto.getAmount()));
                 ingredient.setUnit(ingredientDto.getUnit());
@@ -90,7 +89,7 @@ public class RecipeService {
             for (int i = 0; i < request.getSteps().size(); i++) {
                 CreateRecipeRequest.CookingStepDto stepDto = request.getSteps().get(i);
                 CookingSteps step = new CookingSteps();
-                step.setRecipe(savedRecipe);
+                step.setRecipe(recipe);
                 step.setStepNumber(i + 1);
                 step.setInstruction(stepDto.getInstruction());
                 step.setDuration(stepDto.getDuration());
@@ -101,7 +100,7 @@ public class RecipeService {
         // Create nutrition info
         if (request.getNutrition() != null) {
             NutritionInfo nutrition = new NutritionInfo();
-            nutrition.setRecipe(savedRecipe);
+            nutrition.setRecipe(recipe);
             nutrition.setCalories(request.getNutrition().getCalories());
             nutrition.setProtein(request.getNutrition().getProtein());
             nutrition.setCarbs(request.getNutrition().getCarbs());
@@ -109,7 +108,7 @@ public class RecipeService {
             nutritionInfoRepository.save(nutrition);
         }
 
-        return savedRecipe;
+        return recipe;
     }
     
     // ================== Saved Recipes Methods ==================

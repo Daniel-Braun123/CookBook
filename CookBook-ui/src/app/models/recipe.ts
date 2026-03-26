@@ -14,9 +14,6 @@ export interface Recipe {
   category: Category;
   tags: string[];
   author: Author;
-  //ingredients: Ingredient[]; // muss weg
-  //steps: CookingStep[]; // muss weg
-  //nutrition?: NutritionInfo; // muss weg
   createdAt: string;
   isSaved?: boolean;
 }

@@ -8,12 +8,11 @@ import { environment } from "src/environments/environment";
     providedIn: "root",
 })
 export class NutritionInfoService {
-private readonly API_URL = `${environment.apiUrl}/nutritionInfo`;
+  private readonly API_URL = `${environment.apiUrl}/nutritionInfo`;
 
-    constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-
-    getNutritionInfoWithRecipeId(recipeId: string): Observable<NutritionInfo> {
-        return this.http.get<NutritionInfo>(this.API_URL + "/getNutritionInfoWithRecipeId", {params: {recipeId: recipeId}});
-    }
+  getNutritionInfoWithRecipeId(recipeId: string): Observable<NutritionInfo> {
+    return this.http.get<NutritionInfo>(this.API_URL + "/getNutritionInfoWithRecipeId", {params: {recipeId: recipeId}});
+  }
 }

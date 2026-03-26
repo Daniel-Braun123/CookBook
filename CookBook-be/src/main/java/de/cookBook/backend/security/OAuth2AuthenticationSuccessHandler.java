@@ -32,60 +32,24 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             Authentication authentication) throws IOException, ServletException {
         
         try {
-            OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
-            
-            // Extract user information from OAuth2User attributes
-            String providerId = oauth2User.getAttribute("sub");
-            String email = oauth2User.getAttribute("email");
-            String name = oauth2User.getAttribute("name");
-            String picture = oauth2User.getAttribute("picture");
-            
-            if (providerId == null || email == null) {
-                log.error("Missing required OAuth2 attributes. sub: {}, email: {}", providerId, email);
+            Users user;
+
+            if (authentication.getPrincipal() instanceof CustomOAuth2User customOAuth2User) {
+                user = customOAuth2User.getUser();
+            } else {
+                OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
+                user = findOrCreateUser(oauth2User);
+            }
+
+            if (user == null || user.getEmail() == null) {
+                log.error("Missing user data after OAuth2 authentication");
                 String errorUrl = UriComponentsBuilder.fromUriString("http://localhost:4200/oauth2/redirect")
                     .queryParam("error", "missing_user_info")
                     .build().toUriString();
                 getRedirectStrategy().sendRedirect(request, response, errorUrl);
                 return;
             }
-            
-            // Find or create user
-            Optional<Users> existingUser = userRepository.findByAuthProviderAndProviderId(AuthProvider.GOOGLE, providerId);
-            
-            Users user;
-            if (existingUser.isPresent()) {
-                // Update existing user
-                user = existingUser.get();
 
-                // Keep manually changed names. Only fill from Google if missing.
-                String existingName = user.getName();
-                if ((existingName == null || existingName.isBlank()) && name != null && !name.isBlank()) {
-                    user.setName(name);
-                }
-
-                // Keep manually uploaded/custom profile pictures.
-                String existingPicture = user.getProfilePicture();
-                boolean hasNoPicture = existingPicture == null || existingPicture.isBlank();
-                boolean isGooglePicture = existingPicture != null && existingPicture.contains("googleusercontent.com");
-                if (hasNoPicture || isGooglePicture) {
-                    user.setProfilePicture(picture);
-                }
-
-                log.info("Existing Google user logged in: {}", email);
-            } else {
-                // Create new user
-                user = new Users();
-                user.setAuthProvider(AuthProvider.GOOGLE);
-                user.setProviderId(providerId);
-                user.setEmail(email);
-                user.setName(name);
-                user.setProfilePicture(picture);
-                user.setPassword(null); // OAuth users don't have passwords
-                log.info("New Google user registered: {}", email);
-            }
-            
-            user = userRepository.save(user);
-            
             // Generate JWT token
             String token = jwtTokenProvider.generateToken(user.getEmail(), user.getId());
             
@@ -104,5 +68,44 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .build().toUriString();
             getRedirectStrategy().sendRedirect(request, response, errorUrl);
         }
+    }
+
+    private Users findOrCreateUser(OAuth2User oauth2User) {
+        String providerId = oauth2User.getAttribute("sub");
+        String email = oauth2User.getAttribute("email");
+        String name = oauth2User.getAttribute("name");
+        String picture = oauth2User.getAttribute("picture");
+
+        Optional<Users> existingUser = userRepository.findByAuthProviderAndProviderId(AuthProvider.GOOGLE, providerId);
+
+        Users user;
+        if (existingUser.isPresent()) {
+            user = existingUser.get();
+
+            String existingName = user.getName();
+            if ((existingName == null || existingName.isBlank()) && name != null && !name.isBlank()) {
+                user.setName(name);
+            }
+
+            String existingPicture = user.getProfilePicture();
+            boolean hasNoPicture = existingPicture == null || existingPicture.isBlank();
+            boolean isGooglePicture = existingPicture != null && existingPicture.contains("googleusercontent.com");
+            if (hasNoPicture || isGooglePicture) {
+                user.setProfilePicture(picture);
+            }
+
+            log.info("Existing Google user logged in: {}", email);
+        } else {
+            user = new Users();
+            user.setAuthProvider(AuthProvider.GOOGLE);
+            user.setProviderId(providerId);
+            user.setEmail(email);
+            user.setName(name);
+            user.setProfilePicture(picture);
+            user.setPassword(null);
+            log.info("New Google user registered: {}", email);
+        }
+
+        return userRepository.save(user);
     }
 }
