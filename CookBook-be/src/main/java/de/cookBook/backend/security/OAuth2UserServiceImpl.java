@@ -35,7 +35,12 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
         if (existingUser.isPresent()) {
             // Update existing user
             user = existingUser.get();
-            user.setName(name);
+
+            // Keep manually changed names. Only fill from Google if missing.
+            String existingName = user.getName();
+            if ((existingName == null || existingName.isBlank()) && name != null && !name.isBlank()) {
+                user.setName(name);
+            }
 
             // Keep manually uploaded/custom profile pictures.
             String existingPicture = user.getProfilePicture();
