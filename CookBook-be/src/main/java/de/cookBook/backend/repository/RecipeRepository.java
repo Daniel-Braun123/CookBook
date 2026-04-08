@@ -29,5 +29,13 @@ public interface RecipeRepository extends JpaRepository<Recipes, Long> {
     List<Recipes> findTop6ByOrderByRatingDesc();
     
     List<Recipes> findByCategoryName(String categoryName);
-    
+
+    List<Recipes> findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+        String title, String description
+    );
+
+    default List<Recipes> searchByQuery(String query) {
+        return findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(query, query);
+    }
+
 } 

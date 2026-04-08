@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Recipe } from '../models/recipe';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -30,5 +30,10 @@ export class RecipeService {
 
   createRecipe(recipeData: any): Observable<Recipe> {
     return this.http.post<Recipe>(this.API_URL + "/create", recipeData);
+  }
+
+  searchRecipes(query: string): Observable<Recipe[]> {
+    if (!query?.trim()) return of([]);
+    return this.http.get<Recipe[]>(this.API_URL + '/search', { params: { query: query.trim() } });
   }
 }

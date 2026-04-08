@@ -51,6 +51,11 @@ public class RecipesController {
     public RecipeResponseDto getRecipeById(@RequestParam String recipeId) {
         return recipeService.toResponse(recipeRepository.getRecipeById(recipeId));
     }
+
+    @GetMapping("/search")
+    public List<RecipeResponseDto> searchRecipes(@RequestParam String query) {
+        return recipeService.searchRecipes(query);
+    }
     
     @PostMapping("/create")
     public RecipeResponseDto createRecipe(

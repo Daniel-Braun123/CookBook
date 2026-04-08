@@ -44,6 +44,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/saved-recipes/saved-recipes.component').then(m => m.SavedRecipesComponent)
   },
   {
+    path: 'search',
+    loadComponent: () => import('./components/search-results/search-results.component').then(m => m.SearchResultsComponent)
+  },
+  {
     path: 'oauth2/redirect',
     loadComponent: () => import('./components/oauth2-redirect/oauth2-redirect.component').then(m => m.OAuth2RedirectComponent)
   },

@@ -151,6 +151,13 @@ public class RecipeService {
         return savedRecipesRepository.findRecipeIdsByUserId(user.getId());
     }
 
+    public List<RecipeResponseDto> searchRecipes(String query) {
+        if (query == null || query.isBlank()) {
+            return List.of();
+        }
+        return toResponseList(recipeRepository.searchByQuery(query.trim()));
+    }
+
     public RecipeResponseDto toResponse(Recipes recipe) {
         return RecipeResponseDto.fromEntity(recipe, objectMapper);
     }

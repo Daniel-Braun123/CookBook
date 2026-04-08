@@ -1,0 +1,64 @@
+<!-- Full-page takeover -->
+<div class="fixed inset-0 z-[100] bg-card overflow-y-auto">
+  <!-- Top bar: logo + close -->
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-between h-16 md:h-20">
+      <a routerLink="/" (click)="close()" class="flex items-center gap-2 group">
+        <app-cookbook-logo
+          [size]="40"
+          className="h-8 w-8 md:h-10 md:w-10 transition-transform group-hover:scale-110">
+        </app-cookbook-logo>
+        <span class="font-display text-xl md:text-2xl font-bold text-foreground">
+          Cook<span class="text-primary">Book</span>
+        </span>
+      </a>
+      <button
+        (click)="close()"
+        class="p-2 rounded-full hover:bg-secondary transition-colors"
+        aria-label="Suche schließen"
+      >
+        <mat-icon class="text-2xl text-foreground">close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Centered search area -->
+  <div class="container mx-auto px-4 pt-8 md:pt-16 max-w-2xl">
+    <!-- Search input + button -->
+    <div class="flex gap-3">
+      <div class="relative flex-1">
+        <mat-icon class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">search</mat-icon>
+        <input
+          #searchInput
+          type="text"
+          [(ngModel)]="searchQuery"
+          (keydown.enter)="search()"
+          placeholder="z.B. Pfannkuchen, Lasagne, Salat"
+          class="search-input pl-12 pr-4 w-full text-lg"
+        />
+      </div>
+      <button
+        (click)="search()"
+        class="btn btn-cookbook px-6 py-3 text-sm font-medium whitespace-nowrap"
+      >
+        Suchen
+      </button>
+    </div>
+
+    <!-- Suggestion list -->
+    <div class="mt-8">
+      <p class="text-sm text-muted-foreground mb-4">Beliebte Suchbegriffe</p>
+      <div class="flex flex-col gap-1">
+        <button
+          *ngFor="let term of suggestions"
+          (click)="searchTerm(term)"
+          class="flex items-center gap-3 px-3 py-3 rounded-lg text-foreground
+                 hover:bg-secondary transition-colors text-left cursor-pointer"
+        >
+          <mat-icon class="text-muted-foreground text-lg">search</mat-icon>
+          <span class="font-medium">{{ term }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
