@@ -1,35 +1,35 @@
 <div class="min-h-screen bg-background">
   <app-header></app-header>
   
-  <div class="container mx-auto px-4 py-16">
+  <div class="container mx-auto px-4 py-16 md:py-20">
     <div class="max-w-3xl mx-auto">
       <!-- Page Header -->
-      <div class="mb-8">
-        <h1 class="font-display text-3xl md:text-4xl font-bold text-foreground mb-2">
+      <div class="mb-10 animate-fade-in">
+        <h1 class="font-display text-3xl md:text-4xl font-bold text-foreground mb-3 tracking-tight">
           Profil bearbeiten
         </h1>
-        <p class="text-muted-foreground">
+        <p class="text-muted-foreground leading-relaxed">
           Aktualisiere deine persönlichen Informationen
         </p>
       </div>
 
       <!-- Error Message -->
-      <div *ngIf="errorMessage" class="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-600">
+      <div *ngIf="errorMessage" class="mb-6 p-4 bg-destructive/8 border border-destructive/20 rounded-2xl text-destructive">
         {{ errorMessage }}
       </div>
 
       <!-- Edit Form -->
-      <div *ngIf="currentUser$ | async as user" class="bg-card rounded-lg shadow-lg p-6 md:p-8">
+      <div *ngIf="currentUser$ | async as user" class="bg-card rounded-2xl shadow-card border border-border/40 p-7 md:p-10 animate-fade-in">
         <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
           
           <!-- Profile Picture Display -->
-          <div class="mb-8 text-center">
-            <div class="w-32 h-32 mx-auto mb-4 flex items-center justify-center">
+          <div class="mb-10 text-center">
+            <div class="w-32 h-32 mx-auto mb-5 flex items-center justify-center">
               <img 
                 [src]="getDisplayImageUrl(user)" 
                 [alt]="user.name || 'User'" 
                 referrerpolicy="no-referrer"
-                class="w-32 h-32 rounded-full object-cover border-2 border-border">
+                class="w-32 h-32 rounded-2xl object-cover ring-4 ring-border/60 shadow-soft">
             </div>
             
             <!-- File Input (hidden) -->
@@ -41,7 +41,7 @@
               class="hidden">
             
             <!-- Upload Buttons -->
-            <div class="flex flex-col gap-2 items-center">
+            <div class="flex flex-col gap-2.5 items-center">
               <button 
                 type="button" 
                 class="btn btn-cookbook-outline"
@@ -56,7 +56,7 @@
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                <span class="text-sm">Wird hochgeladen...</span>
+                <span class="text-sm font-medium">Wird hochgeladen...</span>
               </div>
             </div>
             
@@ -89,7 +89,7 @@
                 placeholder="Dein Name"
               />
               <p *ngIf="profileForm.get('name')?.invalid && profileForm.get('name')?.touched" 
-                 class="text-red-500 text-sm mt-1">
+                 class="text-destructive text-sm mt-1.5">
                 Name ist erforderlich
               </p>
             </div>
@@ -107,7 +107,7 @@
                 placeholder="deine@email.de"
               />
               <p *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" 
-                 class="text-red-500 text-sm mt-1">
+                 class="text-destructive text-sm mt-1.5">
                 Gültige E-Mail erforderlich
               </p>
             </div>
@@ -124,21 +124,21 @@
                 class="input"
                 placeholder="Erzähle etwas über dich..."
               ></textarea>
-              <p class="text-xs text-muted-foreground mt-1">
+              <p class="text-xs text-muted-foreground mt-1.5">
                 {{ profileForm.get('bio')?.value?.length || 0 }} / 500 Zeichen
               </p>
             </div>
 
             <!-- Current User Info Display -->
-            <div class="border-t border-border pt-6 space-y-3">
-              <h3 class="text-sm font-medium text-foreground mb-3">Aktuelle Informationen</h3>
-              <div class="flex justify-between text-sm">
+            <div class="border-t border-border/60 pt-6 space-y-3">
+              <h3 class="text-sm font-semibold text-foreground mb-3 tracking-wide">Aktuelle Informationen</h3>
+              <div class="flex justify-between text-sm py-1">
                 <span class="text-muted-foreground">Mitglied seit:</span>
-                <span class="text-foreground">{{ user.joinedAt | date:'dd.MM.yyyy' }}</span>
+                <span class="text-foreground font-medium">{{ user.joinedAt | date:'dd.MM.yyyy' }}</span>
               </div>
-              <div class="flex justify-between text-sm">
+              <div class="flex justify-between text-sm py-1">
                 <span class="text-muted-foreground">User ID:</span>
-                <span class="text-foreground font-mono">{{ user.id }}</span>
+                <span class="text-foreground font-mono text-xs">{{ user.id }}</span>
               </div>
             </div>
 
@@ -146,7 +146,7 @@
           </div>
 
           <!-- Action Buttons -->
-          <div class="flex flex-col md:flex-row gap-4 mt-8 pt-6 border-t border-border">
+          <div class="flex flex-col md:flex-row gap-4 mt-10 pt-7 border-t border-border/60">
             <button 
               type="submit" 
               class="btn btn-cookbook flex-1"
@@ -174,13 +174,13 @@
       </div>
 
       <!-- Loading State -->
-      <div *ngIf="!(currentUser$ | async)" class="bg-card rounded-lg shadow-lg p-8 animate-pulse">
-        <div class="w-32 h-32 mx-auto mb-4 rounded-full bg-muted"></div>
-        <div class="space-y-4">
-          <div class="h-4 bg-muted rounded w-1/4"></div>
-          <div class="h-10 bg-muted rounded"></div>
-          <div class="h-4 bg-muted rounded w-1/4"></div>
-          <div class="h-10 bg-muted rounded"></div>
+      <div *ngIf="!(currentUser$ | async)" class="bg-card rounded-2xl shadow-card border border-border/40 p-10 animate-shimmer">
+        <div class="w-32 h-32 mx-auto mb-5 rounded-2xl bg-muted"></div>
+        <div class="space-y-5">
+          <div class="h-4 bg-muted rounded-lg w-1/4"></div>
+          <div class="h-11 bg-muted rounded-xl"></div>
+          <div class="h-4 bg-muted rounded-lg w-1/4"></div>
+          <div class="h-11 bg-muted rounded-xl"></div>
         </div>
       </div>
     </div>
@@ -189,13 +189,13 @@
   <!-- Leave Without Saving Modal -->
   <div
     *ngIf="showLeaveConfirmModal"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 backdrop-blur-sm px-4"
   >
-    <div class="w-full max-w-md rounded-xl bg-card border border-border shadow-xl p-6">
-      <h3 class="font-display text-xl font-bold text-foreground mb-2">
+    <div class="w-full max-w-md rounded-2xl bg-card border border-border/60 shadow-overlay p-7 animate-scale-in">
+      <h3 class="font-display text-xl font-bold text-foreground mb-3 tracking-tight">
         Änderungen verwerfen?
       </h3>
-      <p class="text-muted-foreground mb-6">
+      <p class="text-muted-foreground mb-7 leading-relaxed">
         Du hast ungespeicherte Änderungen. Möchtest du die Seite wirklich verlassen?
       </p>
       <div class="flex flex-col sm:flex-row gap-3">

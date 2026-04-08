@@ -1,17 +1,17 @@
 <button
   (click)="handleClick()"
   [ngClass]="{
-    'category-pill flex items-center gap-2 whitespace-nowrap': true,
-    'bg-primary text-primary-foreground shadow-button': isActive,
-    'bg-secondary text-secondary-foreground hover:bg-primary/10': !isActive
+    'category-pill flex items-center gap-2.5 whitespace-nowrap transition-all duration-300 ease-out': true,
+    'bg-primary text-primary-foreground shadow-button scale-[1.02]': isActive,
+    'bg-secondary text-secondary-foreground hover:bg-primary/10 hover:shadow-soft': !isActive
   }"
 >
-  <span class="text-lg">{{ category.icon }}</span>
-  <span>{{ category.name }}</span>
+  <span class="text-lg transition-transform duration-300 group-hover:scale-110">{{ category.icon }}</span>
+  <span class="font-medium tracking-wide">{{ category.name }}</span>
   <span [ngClass]="{
-    'text-xs px-1.5 py-0.5 rounded-full': true,
+    'text-[11px] font-semibold px-2 py-0.5 rounded-full tracking-wide': true,
     'bg-primary-foreground/20': isActive,
-    'bg-muted': !isActive
+    'bg-muted/80': !isActive
   }">
     {{ category.count }}
   </span>

@@ -1,20 +1,20 @@
 <!-- Full-page takeover -->
-<div class="fixed inset-0 z-[100] bg-card overflow-y-auto">
+<div class="fixed inset-0 z-[100] bg-background backdrop-blur-3xl overflow-y-auto">
   <!-- Top bar: logo + close -->
   <div class="container mx-auto px-4">
     <div class="flex items-center justify-between h-16 md:h-20">
-      <a routerLink="/" (click)="close()" class="flex items-center gap-2 group">
+      <a routerLink="/" (click)="close()" class="flex items-center gap-2.5 group">
         <app-cookbook-logo
           [size]="40"
-          className="h-8 w-8 md:h-10 md:w-10 transition-transform group-hover:scale-110">
+          className="h-8 w-8 md:h-10 md:w-10 transition-transform duration-300 group-hover:scale-110">
         </app-cookbook-logo>
-        <span class="font-display text-xl md:text-2xl font-bold text-foreground">
+        <span class="font-display text-xl md:text-2xl font-bold text-foreground tracking-tight">
           Cook<span class="text-primary">Book</span>
         </span>
       </a>
       <button
         (click)="close()"
-        class="p-2 rounded-full hover:bg-secondary transition-colors"
+        class="p-2.5 rounded-xl hover:bg-secondary transition-all duration-300"
         aria-label="Suche schließen"
       >
         <mat-icon class="text-2xl text-foreground">close</mat-icon>
@@ -23,11 +23,11 @@
   </div>
 
   <!-- Centered search area -->
-  <div class="container mx-auto px-4 pt-8 md:pt-16 max-w-2xl">
+  <div class="container mx-auto px-4 pt-10 md:pt-20 max-w-2xl animate-fade-in">
     <!-- Search input + button -->
     <div class="flex gap-3">
-      <div class="relative flex-1">
-        <mat-icon class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">search</mat-icon>
+      <div class="relative flex-1 group/search">
+        <mat-icon class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors duration-300 group-focus-within/search:text-primary">search</mat-icon>
         <input
           #searchInput
           type="text"
@@ -39,23 +39,23 @@
       </div>
       <button
         (click)="search()"
-        class="btn btn-cookbook px-6 py-3 text-sm font-medium whitespace-nowrap"
+        class="btn btn-cookbook px-7 py-3 text-sm font-semibold whitespace-nowrap"
       >
         Suchen
       </button>
     </div>
 
     <!-- Suggestion list -->
-    <div class="mt-8">
-      <p class="text-sm text-muted-foreground mb-4">Beliebte Suchbegriffe</p>
-      <div class="flex flex-col gap-1">
+    <div class="mt-10">
+      <p class="text-xs text-muted-foreground mb-4 uppercase tracking-wider font-semibold">Beliebte Suchbegriffe</p>
+      <div class="flex flex-col gap-0.5">
         <button
           *ngFor="let term of suggestions"
           (click)="searchTerm(term)"
-          class="flex items-center gap-3 px-3 py-3 rounded-lg text-foreground
-                 hover:bg-secondary transition-colors text-left cursor-pointer"
+          class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-foreground
+                 hover:bg-secondary/80 transition-all duration-300 text-left cursor-pointer group"
         >
-          <mat-icon class="text-muted-foreground text-lg">search</mat-icon>
+          <mat-icon class="text-muted-foreground/60 text-lg transition-colors duration-300 group-hover:text-primary">search</mat-icon>
           <span class="font-medium">{{ term }}</span>
         </button>
       </div>

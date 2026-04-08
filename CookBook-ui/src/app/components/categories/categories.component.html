@@ -1,70 +1,76 @@
 <div class="min-h-screen bg-background">
   <!-- Hero Section -->
-  <section class="hero-gradient py-16 md:py-24 relative">
+  <section class="hero-gradient py-20 md:py-28 relative overflow-hidden">
+    <!-- Grain texture -->
+    <div class="absolute inset-0 opacity-[0.03] mix-blend-overlay" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%270 0 256 256%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%274%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E');"></div>
+    
     <!-- Back Button -->
     <a 
       [routerLink]="['/']"
-      class="absolute top-6 left-4 md:left-8 flex items-center gap-2 text-white/90 hover:text-white transition-colors group"
+      class="absolute top-6 left-4 md:left-8 flex items-center gap-2 text-white/80 hover:text-white transition-all duration-300 group"
     >
-      <svg class="h-6 w-6 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="h-5 w-5 transform group-hover:-translate-x-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
       </svg>
-      <span class="hidden md:inline font-medium">Zurück</span>
+      <span class="hidden md:inline font-medium text-sm tracking-wide">Zurück</span>
     </a>
     
-    <div class="container mx-auto px-4 text-center">
-      <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm text-white/90 text-sm font-medium tracking-wider uppercase mb-6">
+        Alle Kategorien
+      </span>
+      <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 tracking-tight">
         Rezept-Kategorien
       </h1>
-      <p class="text-white/90 text-lg md:text-xl max-w-2xl mx-auto">
+      <p class="text-white/80 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
         Entdecke unsere vielfältigen Rezeptkategorien
       </p>
     </div>
   </section>
 
   <!-- Categories Grid -->
-  <section class="py-12 md:py-16">
+  <section class="py-14 md:py-20">
     <div class="container mx-auto px-4">
       <!-- Loading State -->
-      <div *ngIf="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div *ngFor="let i of [1,2,3,4,5,6,7,8]" class="animate-pulse">
-          <div class="bg-card rounded-xl p-6 border border-border h-48">
-            <div class="w-16 h-16 bg-muted rounded-full mb-4"></div>
-            <div class="h-6 bg-muted rounded w-3/4 mb-3"></div>
-            <div class="h-4 bg-muted rounded w-full mb-2"></div>
-            <div class="h-4 bg-muted rounded w-5/6"></div>
+      <div *ngIf="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+        <div *ngFor="let i of [1,2,3,4,5,6,7,8]" class="animate-shimmer">
+          <div class="bg-card rounded-2xl p-7 border border-border h-52">
+            <div class="w-16 h-16 bg-muted rounded-full mb-5"></div>
+            <div class="h-6 bg-muted rounded-lg w-3/4 mb-3"></div>
+            <div class="h-4 bg-muted rounded-lg w-full mb-2"></div>
+            <div class="h-4 bg-muted rounded-lg w-5/6"></div>
           </div>
         </div>
       </div>
 
       <!-- Categories -->
-      <div *ngIf="!isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngIf="!isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
         <article
           *ngFor="let category of categories; let i = index"
           (click)="navigateToCategory(category.name)"
-          class="bg-card rounded-xl p-6 border border-border transition-all duration-300 cursor-pointer group hover:shadow-xl hover:-translate-y-1 animate-fade-in"
-          [style.animation-delay]="i * 0.1 + 's'"
+          class="bg-card rounded-2xl p-7 border border-border/60 transition-all duration-500 ease-out cursor-pointer group hover:shadow-card-hover hover:-translate-y-1.5 animate-fade-in-up"
+          [style.animation-delay]="i * 0.08 + 's'"
         >
           <!-- Icon -->
-          <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-4xl transition-transform group-hover:scale-110">
+          <div class="w-16 h-16 bg-primary/8 rounded-2xl flex items-center justify-center mb-5 text-4xl transition-all duration-500 group-hover:scale-110 group-hover:bg-primary/12 group-hover:rounded-xl">
             {{ category.icon }}
           </div>
 
           <!-- Title -->
-          <h2 class="font-display text-2xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+          <h2 class="font-display text-2xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300 tracking-tight">
             {{ category.name }}
           </h2>
 
           <!-- Recipe Count -->
-          <p class="text-sm text-muted-foreground mb-3">
+          <p class="text-sm text-muted-foreground mb-4 tracking-wide">
             {{ category.count }} Rezepte
           </p>
 
           <!-- Arrow Icon -->
-          <div class="flex items-center text-primary font-medium group-hover:gap-3 transition-all">
+          <div class="flex items-center gap-2 text-primary font-medium text-sm tracking-wide group-hover:gap-3 transition-all duration-300">
             <span>Rezepte ansehen</span>
             <svg 
-              class="h-5 w-5 transform group-hover:translate-x-1 transition-transform" 
+              class="h-4 w-4 transform group-hover:translate-x-1 transition-transform duration-300" 
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24"
@@ -76,12 +82,12 @@
       </div>
 
       <!-- Back to Home -->
-      <div class="mt-12 text-center">
+      <div class="mt-14 text-center">
         <a 
           [routerLink]="['/']"
-          class="inline-flex items-center gap-2 text-foreground hover:text-primary transition-colors font-medium"
+          class="inline-flex items-center gap-2 text-foreground hover:text-primary transition-all duration-300 font-medium group"
         >
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
           Zurück zur Startseite

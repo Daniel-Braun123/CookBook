@@ -1,17 +1,17 @@
 <div class="min-h-screen bg-background">
   <app-header></app-header>
 
-  <div class="container mx-auto px-4 py-8 max-w-4xl">
+  <div class="container mx-auto px-4 py-10 md:py-14 max-w-4xl">
     <!-- Header -->
-    <div class="mb-8">
-      <a [routerLink]="['/']" class="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-4">
-        <mat-icon class="text-base">arrow_back</mat-icon>
-        Zurück
+    <div class="mb-10 animate-fade-in">
+      <a [routerLink]="['/']" class="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-all duration-300 mb-5 group">
+        <mat-icon class="text-base transition-transform duration-300 group-hover:-translate-x-1">arrow_back</mat-icon>
+        <span class="text-sm font-medium">Zurück</span>
       </a>
-      <h1 class="font-display text-3xl md:text-4xl font-bold text-foreground mb-2">
+      <h1 class="font-display text-3xl md:text-4xl font-bold text-foreground mb-3 tracking-tight">
         Neues Rezept erstellen
       </h1>
-      <p class="text-muted-foreground">
+      <p class="text-muted-foreground leading-relaxed">
         Teile dein Lieblingsrezept mit der Community
       </p>
     </div>
@@ -19,10 +19,10 @@
     <!-- Form -->
     <form (ngSubmit)="onSubmit()" class="space-y-8">
       <!-- Basic Information -->
-      <div class="p-6 rounded-xl bg-card border border-border">
-        <h2 class="font-display text-xl font-bold text-foreground mb-6">Grundinformationen</h2>
+      <div class="p-7 rounded-2xl bg-card border border-border/60 shadow-soft">
+        <h2 class="font-display text-xl font-bold text-foreground mb-7 tracking-tight">Grundinformationen</h2>
         
-        <div class="space-y-4">
+        <div class="space-y-5">
           <!-- Title -->
           <div>
             <label class="label block mb-2">
@@ -54,7 +54,7 @@
           </div>
 
           <!-- Category & Difficulty -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label class="label block mb-2">
                 Kategorie <span class="text-destructive">*</span>
@@ -88,7 +88,7 @@
           </div>
 
           <!-- Time & Servings -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div>
               <label class="label block mb-2">
                 Vorbereitungszeit (Min)
@@ -134,7 +134,7 @@
             <label class="label block mb-2">
               Tags
             </label>
-            <div class="flex gap-2 mb-2">
+            <div class="flex gap-2.5 mb-3">
               <input
                 type="text"
                 [(ngModel)]="currentTag"
@@ -146,7 +146,7 @@
               <button
                 type="button"
                 (click)="addTag()"
-                class="px-6 py-3 rounded-lg bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors font-medium"
+                class="px-6 py-3 rounded-xl bg-secondary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-semibold"
               >
                 Hinzufügen
               </button>
@@ -154,10 +154,10 @@
             <div class="flex flex-wrap gap-2">
               <span
                 *ngFor="let tag of tags"
-                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium"
+                class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/8 text-primary text-sm font-semibold transition-all duration-200 hover:bg-primary/15"
               >
                 {{ tag }}
-                <button type="button" (click)="removeTag(tag)" class="hover:text-destructive transition-colors">
+                <button type="button" (click)="removeTag(tag)" class="hover:text-destructive transition-colors duration-200">
                   <mat-icon class="text-sm">close</mat-icon>
                 </button>
               </span>
@@ -167,13 +167,13 @@
       </div>
 
       <!-- Ingredients -->
-      <div class="p-6 rounded-xl bg-card border border-border">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="font-display text-xl font-bold text-foreground">Zutaten</h2>
+      <div class="p-7 rounded-2xl bg-card border border-border/60 shadow-soft">
+        <div class="flex items-center justify-between mb-7">
+          <h2 class="font-display text-xl font-bold text-foreground tracking-tight">Zutaten</h2>
           <button
             type="button"
             (click)="addIngredient()"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium"
+            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 font-semibold text-sm"
           >
             <mat-icon class="text-base">add</mat-icon>
             Zutat hinzufügen
@@ -206,7 +206,7 @@
             <button
               type="button"
               (click)="removeIngredient(i)"
-              class="p-2 rounded-lg text-destructive hover:bg-destructive/10 transition-colors"
+              class="p-2.5 rounded-xl text-destructive hover:bg-destructive/8 transition-all duration-300"
               [disabled]="ingredients.length === 1"
             >
               <mat-icon class="text-base">delete</mat-icon>
@@ -216,13 +216,13 @@
       </div>
 
       <!-- Steps -->
-      <div class="p-6 rounded-xl bg-card border border-border">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="font-display text-xl font-bold text-foreground">Zubereitungsschritte</h2>
+      <div class="p-7 rounded-2xl bg-card border border-border/60 shadow-soft">
+        <div class="flex items-center justify-between mb-7">
+          <h2 class="font-display text-xl font-bold text-foreground tracking-tight">Zubereitungsschritte</h2>
           <button
             type="button"
             (click)="addStep()"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-medium"
+            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 font-semibold text-sm"
           >
             <mat-icon class="text-base">add</mat-icon>
             Schritt hinzufügen
@@ -231,10 +231,10 @@
 
         <div class="space-y-4">
           <div *ngFor="let step of steps; let i = index" class="flex gap-3 items-start">
-            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-semibold text-sm mt-2">
+            <div class="flex-shrink-0 w-9 h-9 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm mt-2">
               {{ i + 1 }}
             </div>
-            <div class="flex-1 space-y-2">
+            <div class="flex-1 space-y-2.5">
               <textarea
                 [(ngModel)]="step.instruction"
                 [name]="'step-instruction-' + i"
@@ -254,7 +254,7 @@
             <button
               type="button"
               (click)="removeStep(i)"
-              class="p-2 rounded-lg text-destructive hover:bg-destructive/10 transition-colors mt-2"
+              class="p-2.5 rounded-xl text-destructive hover:bg-destructive/8 transition-all duration-300 mt-2"
               [disabled]="steps.length === 1"
             >
               <mat-icon class="text-base">delete</mat-icon>
@@ -264,10 +264,10 @@
       </div>
 
       <!-- Nutrition -->
-      <div class="p-6 rounded-xl bg-card border border-border">
-        <h2 class="font-display text-xl font-bold text-foreground mb-6">Nährwerte (pro Portion)</h2>
+      <div class="p-7 rounded-2xl bg-card border border-border/60 shadow-soft">
+        <h2 class="font-display text-xl font-bold text-foreground mb-7 tracking-tight">Nährwerte (pro Portion)</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
           <div>
             <label class="label block mb-2">
               Kalorien (kcal)
@@ -326,11 +326,11 @@
       <div class="flex gap-4">
         <button
           type="submit"
-          class="btn btn-cookbook flex-1 md:flex-none md:px-12 py-3"
+          class="btn btn-cookbook flex-1 md:flex-none md:px-14 py-3.5"
         >
           Rezept veröffentlichen
         </button>
-        <a [routerLink]="['/']" class="btn bg-secondary hover:bg-secondary/80 text-foreground flex-1 md:flex-none md:px-12 py-3 text-center">
+        <a [routerLink]="['/']" class="btn bg-secondary hover:bg-secondary/70 text-foreground flex-1 md:flex-none md:px-14 py-3.5 text-center rounded-xl transition-all duration-300 font-semibold">
           Abbrechen
         </a>
       </div>

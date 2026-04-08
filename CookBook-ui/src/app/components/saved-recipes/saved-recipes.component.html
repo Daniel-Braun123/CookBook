@@ -1,55 +1,58 @@
 <div class="min-h-screen bg-background">
   <app-header></app-header>
   
-  <div class="container mx-auto px-4 py-16">
+  <div class="container mx-auto px-4 py-16 md:py-20">
     <!-- Header -->
-    <div class="mb-12 text-center">
-      <h1 class="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
+    <div class="mb-14 text-center animate-fade-in">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-primary/8 text-primary text-sm font-semibold tracking-wider uppercase mb-5">
+        Deine Sammlung
+      </span>
+      <h1 class="font-display text-4xl md:text-5xl font-bold text-foreground mb-5 tracking-tight">
         Gespeicherte Rezepte
       </h1>
-      <p class="text-muted-foreground text-lg">
+      <p class="text-muted-foreground text-lg max-w-lg mx-auto leading-relaxed">
         Deine persönliche Sammlung deiner Lieblingsrezepte
       </p>
     </div>
 
     <!-- Not Logged In Message -->
-    <div *ngIf="!isLoggedIn" class="max-w-md mx-auto text-center py-16">
-      <mat-icon class="text-muted-foreground mb-4" style="font-size: 4rem; width: 4rem; height: 4rem;">lock</mat-icon>
-      <h2 class="font-display text-2xl font-bold text-foreground mb-4">
+    <div *ngIf="!isLoggedIn" class="max-w-md mx-auto text-center py-16 animate-fade-in">
+      <mat-icon class="text-muted-foreground/40 mb-6" style="font-size: 4rem; width: 4rem; height: 4rem;">lock</mat-icon>
+      <h2 class="font-display text-2xl font-bold text-foreground mb-4 tracking-tight">
         Anmeldung erforderlich
       </h2>
-      <p class="text-muted-foreground mb-8">
+      <p class="text-muted-foreground mb-8 leading-relaxed">
         Melde dich an, um Rezepte zu speichern und deine persönliche Sammlung zu erstellen.
       </p>
       <a [routerLink]="['/login']">
-        <button class="btn btn-cookbook px-6 py-3">
+        <button class="btn btn-cookbook px-8 py-3.5">
           Jetzt anmelden
         </button>
       </a>
     </div>
 
     <!-- Loading State -->
-    <div *ngIf="isLoggedIn && isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div *ngFor="let i of [1,2,3,4,5,6]" class="bg-card rounded-lg shadow-lg overflow-hidden animate-pulse">
+    <div *ngIf="isLoggedIn && isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+      <div *ngFor="let i of [1,2,3,4,5,6]" class="bg-card rounded-2xl shadow-soft overflow-hidden animate-shimmer">
         <div class="h-48 bg-muted"></div>
-        <div class="p-6">
-          <div class="h-6 bg-muted rounded mb-4"></div>
-          <div class="h-4 bg-muted rounded w-3/4"></div>
+        <div class="p-5">
+          <div class="h-6 bg-muted rounded-lg mb-4"></div>
+          <div class="h-4 bg-muted rounded-lg w-3/4"></div>
         </div>
       </div>
     </div>
 
     <!-- No Saved Recipes -->
-    <div *ngIf="isLoggedIn && !isLoading && savedRecipes.length === 0" class="max-w-md mx-auto text-center py-16">
-      <mat-icon class="text-muted-foreground mb-4" style="font-size: 4rem; width: 4rem; height: 4rem;">favorite_border</mat-icon>
-      <h2 class="font-display text-2xl font-bold text-foreground mb-4">
+    <div *ngIf="isLoggedIn && !isLoading && savedRecipes.length === 0" class="max-w-md mx-auto text-center py-16 animate-fade-in">
+      <mat-icon class="text-muted-foreground/30 mb-6" style="font-size: 4rem; width: 4rem; height: 4rem;">favorite_border</mat-icon>
+      <h2 class="font-display text-2xl font-bold text-foreground mb-4 tracking-tight">
         Noch keine gespeicherten Rezepte
       </h2>
-      <p class="text-muted-foreground mb-8">
+      <p class="text-muted-foreground mb-8 leading-relaxed">
         Beginne damit, deine Lieblingsrezepte zu speichern, indem du auf das Herz-Symbol klickst.
       </p>
       <a [routerLink]="['/']">
-        <button class="btn btn-cookbook px-6 py-3">
+        <button class="btn btn-cookbook px-8 py-3.5">
           Rezepte entdecken
         </button>
       </a>
@@ -57,7 +60,7 @@
 
     <!-- Recipe Grid -->
     <div *ngIf="isLoggedIn && !isLoading && savedRecipes.length > 0" 
-         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
       <app-recipe-card 
         *ngFor="let recipe of savedRecipes" 
         [recipe]="recipe"
@@ -67,7 +70,7 @@
 
     <!-- Recipe Count -->
     <div *ngIf="isLoggedIn && !isLoading && savedRecipes.length > 0" 
-         class="mt-8 text-center text-muted-foreground">
+         class="mt-10 text-center text-sm text-muted-foreground font-medium tracking-wide">
       {{ savedRecipes.length }} {{ savedRecipes.length === 1 ? 'Rezept' : 'Rezepte' }} gespeichert
     </div>
   </div>

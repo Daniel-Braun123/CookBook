@@ -2,14 +2,14 @@
   <app-header></app-header>
 
   <div *ngIf="isLoading" class="container mx-auto px-4 py-8">
-    <div class="animate-pulse space-y-8">
-      <div class="h-8 bg-muted rounded w-1/4"></div>
-      <div class="h-96 bg-muted rounded-xl"></div>
+    <div class="animate-shimmer space-y-8">
+      <div class="h-8 bg-muted rounded-lg w-1/4"></div>
+      <div class="h-96 bg-muted rounded-2xl"></div>
     </div>
   </div>
 
-  <div *ngIf="!isLoading && !recipe" class="container mx-auto px-4 py-16 text-center">
-    <h1 class="font-display text-3xl font-bold text-foreground mb-4">
+  <div *ngIf="!isLoading && !recipe" class="container mx-auto px-4 py-20 text-center">
+    <h1 class="font-display text-3xl font-bold text-foreground mb-5 tracking-tight">
       Rezept nicht gefunden
     </h1>
     <a [routerLink]="['/']">
@@ -19,27 +19,27 @@
 
   <div *ngIf="!isLoading && recipe">
     <!-- Back Button -->
-    <div class="container mx-auto px-4 py-4 print:hidden">
-      <a [routerLink]="['/']" class="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="container mx-auto px-4 py-5 print:hidden">
+      <a [routerLink]="['/']" class="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-all duration-300 group">
+        <svg class="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
-        Zurück zu Rezepte
+        <span class="text-sm font-medium">Zurück zu Rezepte</span>
       </a>
     </div>
 
     <!-- Hero Image -->
-    <div class="container mx-auto px-4 mb-8">
-      <div class="relative aspect-[21/9] rounded-2xl overflow-hidden">
+    <div class="container mx-auto px-4 mb-10">
+      <div class="relative aspect-[21/9] rounded-2xl overflow-hidden shadow-card">
         <img [src]="'assets/' + recipe.image" [alt]="recipe.title" class="w-full h-full object-cover" />
         <div class="absolute inset-0 image-overlay"></div>
         
         <!-- Actions -->
         <div class="absolute top-4 right-4 flex gap-2">
           <button (click)="toggleSaved()" [ngClass]="{
-            'p-3 rounded-full transition-all duration-200': true,
-            'bg-primary text-primary-foreground': recipe.isSaved,
-            'bg-card/80 backdrop-blur-sm text-foreground hover:bg-card': !recipe.isSaved
+            'p-3 rounded-xl transition-all duration-300 backdrop-blur-md': true,
+            'bg-primary text-primary-foreground shadow-button': recipe.isSaved,
+            'bg-card/80 text-foreground hover:bg-card hover:shadow-soft': !recipe.isSaved
           }">
             <svg class="h-5 w-5" [class.fill-current]="recipe.isSaved" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -50,7 +50,7 @@
 
         <!-- Tags -->
         <div class="absolute bottom-4 left-4 flex flex-wrap gap-2">
-          <span *ngFor="let tag of recipe.tags" class="px-3 py-1.5 text-sm font-medium bg-card/90 backdrop-blur-sm rounded-full">
+          <span *ngFor="let tag of recipe.tags" class="px-3 py-1.5 text-sm font-medium bg-card/90 backdrop-blur-md rounded-full shadow-soft">
             {{ tag }}
           </span>
         </div>
@@ -58,17 +58,17 @@
     </div>
 
     <!-- Content -->
-    <div class="container mx-auto px-4 pb-16">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="container mx-auto px-4 pb-20">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
         <!-- Main Content -->
         <div class="lg:col-span-2">
-          <div class="mb-8">
-            <div class="flex items-center gap-2 mb-3 print:hidden">
+          <div class="mb-10">
+            <div class="flex items-center gap-2.5 mb-4 print:hidden">
               <div class="flex items-center">
                 <svg *ngFor="let star of [1,2,3,4,5]" class="h-5 w-5"
                      [ngClass]="{
                        'rating-star': star <= Math.round(recipe.rating),
-                       'text-muted-foreground/30': star > Math.round(recipe.rating)
+                       'text-muted-foreground/20': star > Math.round(recipe.rating)
                      }"
                      [attr.fill]="star <= Math.round(recipe.rating) ? 'currentColor' : 'none'"
                      stroke="currentColor" viewBox="0 0 24 24">
@@ -81,53 +81,56 @@
               </span>
             </div>
 
-            <h1 class="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+            <h1 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-5 tracking-tight leading-tight">
               {{ recipe.title }}
             </h1>
             
-            <p class="text-lg text-muted-foreground mb-6">{{ recipe.description }}</p>
+            <p class="text-lg text-muted-foreground mb-8 leading-relaxed">{{ recipe.description }}</p>
 
-            <div class="flex flex-wrap items-center gap-4">
-              <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-5 p-5 rounded-2xl bg-secondary/50 border border-border/40">
+              <div class="flex items-center gap-2.5">
                 <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span class="text-sm"><strong>{{ getTotalTime() }} Min</strong> Gesamt</span>
+                <span class="text-sm"><strong class="font-semibold">{{ getTotalTime() }} Min</strong> Gesamt</span>
               </div>
+              <div class="w-px h-5 bg-border/60"></div>
               <div class="flex items-center gap-2">
-                <span class="text-sm"><strong>{{ recipe.prepTime }} Min</strong> Vorbereitung</span>
+                <span class="text-sm"><strong class="font-semibold">{{ recipe.prepTime }} Min</strong> Vorbereitung</span>
               </div>
+              <div class="w-px h-5 bg-border/60"></div>
               <div class="flex items-center gap-2">
-                <span class="text-sm"><strong>{{ recipe.cookTime }} Min</strong> Zubereitung</span>
+                <span class="text-sm"><strong class="font-semibold">{{ recipe.cookTime }} Min</strong> Zubereitung</span>
               </div>
-              <span class="px-3 py-1 rounded-full text-sm font-medium border" [ngClass]="getDifficultyClass()">
+              <div class="w-px h-5 bg-border/60"></div>
+              <span class="px-3 py-1.5 rounded-full text-sm font-semibold border" [ngClass]="getDifficultyClass()">
                 {{ recipe.difficulty }}
               </span>
             </div>
           </div>
 
           <!-- Ingredients -->
-          <div class="mb-8">
-            <h2 class="font-display text-2xl font-bold text-foreground mb-4">Zutaten</h2>
-            <div class="flex items-center gap-4 mb-4">
-              <span class="text-sm text-muted-foreground">Portionen:</span>
-              <div class="flex items-center gap-2">
+          <div class="mb-10">
+            <h2 class="font-display text-2xl font-bold text-foreground mb-5 tracking-tight">Zutaten</h2>
+            <div class="flex items-center gap-4 mb-5">
+              <span class="text-sm text-muted-foreground font-medium">Portionen:</span>
+              <div class="flex items-center gap-2.5">
                 <button (click)="servings = servings > 1 ? servings - 1 : 1" 
-                        class="print:hidden w-8 h-8 rounded-full bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center">
+                        class="print:hidden w-9 h-9 rounded-xl bg-secondary hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center justify-center font-medium">
                   <span>−</span>
                 </button>
-                <span class="w-12 text-center font-semibold">{{ servings }}</span>
+                <span class="w-12 text-center font-bold text-lg">{{ servings }}</span>
                 <button (click)="servings = servings + 1" 
-                        class="print:hidden w-8 h-8 rounded-full bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center">
+                        class="print:hidden w-9 h-9 rounded-xl bg-secondary hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center justify-center font-medium">
                   <span>+</span>
                 </button>
               </div>
             </div>
-            <ul class="space-y-3">
+            <ul class="space-y-2.5">
               <li *ngFor="let ingredient of ingredients" 
-                  class="flex items-center gap-3 p-3 rounded-lg bg-secondary/50">
-                <span class="font-medium">{{ adjustAmount(ingredient.amount) }} {{ ingredient.unit }}</span>
+                  class="flex items-center gap-3 p-3.5 rounded-xl bg-secondary/40 border border-border/30 transition-colors duration-200 hover:bg-secondary/70">
+                <span class="font-semibold text-foreground">{{ adjustAmount(ingredient.amount) }} {{ ingredient.unit }}</span>
                 <span class="text-muted-foreground">{{ ingredient.name }}</span>
               </li>
             </ul>
@@ -135,14 +138,14 @@
 
           <!-- Steps -->
           <div>
-            <h2 class="font-display text-2xl font-bold text-foreground mb-4">Zubereitung</h2>
+            <h2 class="font-display text-2xl font-bold text-foreground mb-5 tracking-tight">Zubereitung</h2>
             <div class="space-y-4">
-              <div *ngFor="let step of cookingSteps" class="flex gap-4 p-4 rounded-lg bg-card border border-border hover:shadow-md transition-shadow">
+              <div *ngFor="let step of cookingSteps" class="flex gap-4 p-5 rounded-2xl bg-card border border-border/60 hover:shadow-card transition-all duration-300 group">
                 <button (click)="toggleStep(step.id)" 
                         [ngClass]="{
-                          'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-semibold transition-colors': true,
-                          'bg-primary text-primary-foreground': completedSteps.has(step.id),
-                          'bg-secondary text-foreground': !completedSteps.has(step.id)
+                          'flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center font-semibold transition-all duration-300': true,
+                          'bg-primary text-primary-foreground shadow-button scale-95': completedSteps.has(step.id),
+                          'bg-secondary text-foreground group-hover:bg-primary/10': !completedSteps.has(step.id)
                         }">
                   <span *ngIf="!completedSteps.has(step.id)">{{ step.stepNumber }}</span>
                   <svg *ngIf="completedSteps.has(step.id)" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,10 +153,10 @@
                   </svg>
                 </button>
                 <div class="flex-1">
-                  <p [class.line-through]="completedSteps.has(step.id)" [class.text-muted-foreground]="completedSteps.has(step.id)">
+                  <p [class.line-through]="completedSteps.has(step.id)" [class.text-muted-foreground]="completedSteps.has(step.id)" class="leading-relaxed transition-all duration-300">
                     {{ step.instruction }}
                   </p>
-                  <span *ngIf="step.duration" class="text-xs text-muted-foreground mt-1 inline-block">
+                  <span *ngIf="step.duration" class="text-xs text-muted-foreground mt-2 inline-flex items-center gap-1">
                     ⏱️ {{ step.duration }} Min
                   </span>
                 </div>
@@ -168,46 +171,46 @@
             <!-- Print Button -->
             <button 
               (click)="printRecipe()" 
-              class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors print:hidden">
-              <mat-icon class="text-xl">print</mat-icon>
-              <span class="font-medium">Rezept drucken</span>
+              class="w-full flex items-center justify-center gap-2.5 px-4 py-3.5 rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 print:hidden shadow-button hover:shadow-lg group">
+              <mat-icon class="text-xl transition-transform duration-300 group-hover:scale-110">print</mat-icon>
+              <span class="font-semibold">Rezept drucken</span>
             </button>
             
             <!-- Nutrition -->
-            <div *ngIf="nutritionInfo" class="p-6 rounded-xl bg-card border border-border">
-              <h3 class="font-display text-xl font-bold text-foreground mb-4">Nährwerte pro Portion</h3>
-              <div class="space-y-3">
-                <div class="flex justify-between">
+            <div *ngIf="nutritionInfo" class="p-6 rounded-2xl bg-card border border-border/60 shadow-soft">
+              <h3 class="font-display text-xl font-bold text-foreground mb-5 tracking-tight">Nährwerte pro Portion</h3>
+              <div class="space-y-4">
+                <div class="flex justify-between items-center py-2 border-b border-border/40 last:border-0">
                   <span class="text-muted-foreground">Kalorien</span>
-                  <span class="font-semibold">{{ nutritionInfo.calories }} kcal</span>
+                  <span class="font-bold text-foreground">{{ nutritionInfo.calories }} kcal</span>
                 </div>
-                <div class="flex justify-between">
+                <div class="flex justify-between items-center py-2 border-b border-border/40 last:border-0">
                   <span class="text-muted-foreground">Protein</span>
-                  <span class="font-semibold">{{ nutritionInfo.protein }} g</span>
+                  <span class="font-bold text-foreground">{{ nutritionInfo.protein }} g</span>
                 </div>
-                <div class="flex justify-between">
+                <div class="flex justify-between items-center py-2 border-b border-border/40 last:border-0">
                   <span class="text-muted-foreground">Kohlenhydrate</span>
-                  <span class="font-semibold">{{ nutritionInfo.carbs }} g</span>
+                  <span class="font-bold text-foreground">{{ nutritionInfo.carbs }} g</span>
                 </div>
-                <div class="flex justify-between">
+                <div class="flex justify-between items-center py-2">
                   <span class="text-muted-foreground">Fett</span>
-                  <span class="font-semibold">{{ nutritionInfo.fat }} g</span>
+                  <span class="font-bold text-foreground">{{ nutritionInfo.fat }} g</span>
                 </div>
               </div>
             </div>
 
             <!-- Author -->
-            <div class="print:hidden p-6 rounded-xl bg-card border border-border">
-              <h3 class="font-display text-lg font-bold text-foreground mb-4">Autor</h3>
-              <div class="flex items-center gap-3">
+            <div class="print:hidden p-6 rounded-2xl bg-card border border-border/60 shadow-soft">
+              <h3 class="font-display text-lg font-bold text-foreground mb-5 tracking-tight">Autor</h3>
+              <div class="flex items-center gap-4">
                 <img
                   [src]="recipe.author.profilePicture || 'assets/fallbackProfilePicture.png'"
                   [alt]="recipe.author.name"
                   referrerpolicy="no-referrer"
-                  class="w-12 h-12 rounded-full object-cover">
+                  class="w-14 h-14 rounded-2xl object-cover ring-2 ring-border">
                 <div>
-                  <p class="font-semibold text-foreground">{{ recipe.author.name }}</p>
-                  <p class="text-sm text-muted-foreground">{{ recipe.author.bio }}</p>
+                  <p class="font-bold text-foreground">{{ recipe.author.name }}</p>
+                  <p class="text-sm text-muted-foreground leading-relaxed">{{ recipe.author.bio }}</p>
                 </div>
               </div>
             </div>

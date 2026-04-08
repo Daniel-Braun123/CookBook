@@ -1,16 +1,22 @@
 <div class="min-h-screen bg-background flex items-center justify-center px-4">
-  <div class="text-center">
-    <h1 class="font-display text-9xl font-bold text-primary mb-4">404</h1>
-    <h2 class="font-display text-3xl font-bold text-foreground mb-4">
+  <div class="text-center animate-fade-in">
+    <!-- Decorative element -->
+    <div class="relative inline-block mb-6">
+      <h1 class="font-display text-[10rem] md:text-[12rem] font-bold text-primary/10 leading-none select-none">404</h1>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span class="text-6xl">🍳</span>
+      </div>
+    </div>
+    <h2 class="font-display text-3xl md:text-4xl font-bold text-foreground mb-4 tracking-tight">
       Seite nicht gefunden
     </h2>
-    <p class="text-lg text-muted-foreground mb-8 max-w-md mx-auto">
+    <p class="text-lg text-muted-foreground mb-10 max-w-md mx-auto leading-relaxed">
       Die von dir gesuchte Seite existiert leider nicht. 
       Vielleicht findest du stattdessen ein leckeres Rezept?
     </p>
     <a [routerLink]="['/']">
-      <button class="btn btn-cookbook px-6 py-3 text-lg">
-        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <button class="btn btn-cookbook px-8 py-3.5 text-lg group">
+        <svg class="h-5 w-5 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
         Zurück zur Startseite

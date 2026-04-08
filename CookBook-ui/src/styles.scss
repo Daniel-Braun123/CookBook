@@ -1,38 +1,43 @@
+// ============================================================
+// CookBook — "Artisan Kitchen" Design System
+// A warm, editorial-luxury food aesthetic
+// ============================================================
+
 // Angular Material Theme
 @use '@angular/material' as mat;
 
 @include mat.core();
 
-$cookbook-primary: mat.define-palette(mat.$orange-palette, 600);
-$cookbook-accent: mat.define-palette(mat.$amber-palette, 300);
+$cookbook-primary: mat.define-palette(mat.$deep-orange-palette, 600);
+$cookbook-accent: mat.define-palette(mat.$green-palette, 400);
 $cookbook-warn: mat.define-palette(mat.$red-palette);
 
-// Light Theme
 $cookbook-light-theme: mat.define-light-theme((
   color: (
     primary: $cookbook-primary,
     accent: $cookbook-accent,
     warn: $cookbook-warn,
   ),
-  typography: mat.define-typography-config(),
+  typography: mat.define-typography-config(
+    $font-family: 'Outfit, sans-serif',
+  ),
   density: 0,
 ));
 
-// Dark Theme
 $cookbook-dark-theme: mat.define-dark-theme((
   color: (
     primary: $cookbook-primary,
     accent: $cookbook-accent,
     warn: $cookbook-warn,
   ),
-  typography: mat.define-typography-config(),
+  typography: mat.define-typography-config(
+    $font-family: 'Outfit, sans-serif',
+  ),
   density: 0,
 ));
 
-// Apply light theme by default
 @include mat.all-component-themes($cookbook-light-theme);
 
-// Apply dark theme when .dark class is present
 .dark {
   @include mat.all-component-colors($cookbook-dark-theme);
 }
@@ -42,166 +47,296 @@ $cookbook-dark-theme: mat.define-dark-theme((
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+// ============================================================
+// Design Tokens
+// ============================================================
 @layer base {
   :root {
-    /* CookBook Design System - Warm Food-Inspired Colors (Light Mode) */
-    --background: 30 50% 98%;
-    --foreground: 20 20% 15%;
+    /* ---- Light Mode: Warm Parchment ---- */
+    --background: 38 45% 96%;
+    --foreground: 16 44% 12%;
 
-    --card: 30 40% 99%;
-    --card-foreground: 20 20% 15%;
+    --card: 40 33% 99%;
+    --card-foreground: 16 44% 12%;
 
-    --popover: 30 40% 99%;
-    --popover-foreground: 20 20% 15%;
+    --popover: 40 33% 99%;
+    --popover-foreground: 16 44% 12%;
 
-    /* Warm Orange - Primary Brand Color */
-    --primary: 20 80% 55%;
-    --primary-foreground: 0 0% 100%;
+    /* Terracotta — Primary */
+    --primary: 14 55% 48%;
+    --primary-foreground: 40 50% 97%;
 
-    /* Creamy Beige - Secondary */
-    --secondary: 35 30% 94%;
-    --secondary-foreground: 20 20% 25%;
+    /* Warm Parchment — Secondary */
+    --secondary: 34 28% 91%;
+    --secondary-foreground: 16 30% 25%;
 
     /* Muted Warm Tones */
-    --muted: 30 20% 92%;
-    --muted-foreground: 20 10% 45%;
+    --muted: 34 20% 88%;
+    --muted-foreground: 20 12% 46%;
 
-    /* Accent - Fresh Green for Vegan/Healthy */
-    --accent: 140 45% 45%;
+    /* Sage Green — Accent */
+    --accent: 148 22% 38%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 30 20% 88%;
-    --input: 30 20% 88%;
-    --ring: 20 80% 55%;
+    --border: 34 16% 84%;
+    --input: 34 16% 84%;
+    --ring: 14 55% 48%;
 
-    --radius: 0.75rem;
+    --radius: 0.875rem;
 
-    /* Custom CookBook tokens */
-    --cookbook-orange: 20 80% 55%;
-    --cookbook-orange-light: 25 70% 65%;
-    --cookbook-orange-dark: 15 85% 45%;
-    --cookbook-cream: 35 40% 96%;
-    --cookbook-brown: 25 30% 25%;
-    --cookbook-green: 140 45% 45%;
-    --cookbook-gold: 45 90% 55%;
+    /* Shadows (using rgba for cross-theme) */
+    --shadow-soft: 0 2px 12px rgba(44, 24, 16, 0.06);
+    --shadow-card: 0 1px 3px rgba(44, 24, 16, 0.04), 0 4px 16px rgba(44, 24, 16, 0.06);
+    --shadow-card-hover: 0 8px 32px rgba(44, 24, 16, 0.10), 0 2px 8px rgba(44, 24, 16, 0.06);
+    --shadow-button: 0 2px 8px rgba(44, 24, 16, 0.12);
+    --shadow-overlay: 0 24px 64px rgba(44, 24, 16, 0.18);
+
+    /* CookBook brand tokens */
+    --cookbook-terracotta: 14 55% 48%;
+    --cookbook-terracotta-light: 14 58% 62%;
+    --cookbook-terracotta-dark: 14 58% 38%;
+    --cookbook-ivory: 38 45% 96%;
+    --cookbook-espresso: 16 44% 12%;
+    --cookbook-sage: 148 22% 38%;
+    --cookbook-sage-light: 148 22% 52%;
+    --cookbook-gold: 42 78% 56%;
+    --cookbook-amber: 28 72% 56%;
+
+    /* Grain overlay opacity */
+    --grain-opacity: 0.03;
   }
 
-  /* Dark Mode Theme */
+  /* ---- Dark Mode: Deep Espresso ---- */
   .dark {
-    /* Dark backgrounds with warm undertones */
-    --background: 20 15% 12%;
-    --foreground: 30 20% 95%;
+    --background: 16 22% 9%;
+    --foreground: 38 40% 93%;
 
-    --card: 20 20% 15%;
-    --card-foreground: 30 20% 95%;
+    --card: 18 20% 13%;
+    --card-foreground: 38 40% 93%;
 
-    --popover: 20 20% 15%;
-    --popover-foreground: 30 20% 95%;
+    --popover: 18 20% 13%;
+    --popover-foreground: 38 40% 93%;
 
-    /* Primary stays vibrant but slightly adjusted for dark */
-    --primary: 20 80% 55%;
+    /* Warm Amber primary for dark */
+    --primary: 18 68% 58%;
     --primary-foreground: 0 0% 100%;
 
-    /* Dark secondary with subtle warmth */
-    --secondary: 20 15% 20%;
-    --secondary-foreground: 30 20% 90%;
+    /* Dark chocolate secondary */
+    --secondary: 20 22% 17%;
+    --secondary-foreground: 38 28% 85%;
 
-    /* Muted tones for dark mode */
-    --muted: 20 15% 22%;
-    --muted-foreground: 30 10% 65%;
+    --muted: 20 16% 20%;
+    --muted-foreground: 32 14% 58%;
 
-    /* Accent stays green but adjusted */
-    --accent: 140 45% 50%;
+    /* Muted sage for dark */
+    --accent: 148 18% 50%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 70% 55%;
+    --destructive: 0 62% 54%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 20 15% 25%;
-    --input: 20 15% 25%;
-    --ring: 20 80% 55%;
+    --border: 20 14% 22%;
+    --input: 20 14% 22%;
+    --ring: 18 68% 58%;
 
-    /* Custom tokens for dark mode */
-    --cookbook-orange: 20 80% 55%;
-    --cookbook-orange-light: 25 75% 60%;
-    --cookbook-orange-dark: 15 85% 50%;
-    --cookbook-cream: 20 15% 18%;
-    --cookbook-brown: 30 20% 85%;
-    --cookbook-green: 140 45% 50%;
-    --cookbook-gold: 45 85% 60%;
+    --shadow-soft: 0 2px 12px rgba(0, 0, 0, 0.20);
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.16), 0 4px 16px rgba(0, 0, 0, 0.20);
+    --shadow-card-hover: 0 8px 32px rgba(0, 0, 0, 0.30), 0 2px 8px rgba(0, 0, 0, 0.16);
+    --shadow-button: 0 2px 8px rgba(0, 0, 0, 0.24);
+    --shadow-overlay: 0 24px 64px rgba(0, 0, 0, 0.40);
+
+    --cookbook-terracotta: 18 68% 58%;
+    --cookbook-terracotta-light: 18 62% 66%;
+    --cookbook-terracotta-dark: 14 58% 48%;
+    --cookbook-ivory: 20 16% 16%;
+    --cookbook-espresso: 38 40% 93%;
+    --cookbook-sage: 148 18% 50%;
+    --cookbook-sage-light: 148 18% 62%;
+    --cookbook-gold: 42 72% 62%;
+    --cookbook-amber: 28 68% 62%;
+
+    --grain-opacity: 0.04;
   }
 
   * {
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
   }
 
   .font-display {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+
+  /* Selection color */
+  ::selection {
+    background: hsl(var(--primary) / 0.16);
+    color: hsl(var(--foreground));
   }
 }
 
+// ============================================================
+// Component Styles
+// ============================================================
 @layer components {
-  /* Buttons */
+
+  /* ---------- Grain Texture Overlay ---------- */
+  .grain-overlay::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: var(--grain-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 128px;
+  }
+
+  /* ---------- Buttons ---------- */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold
+           transition-all duration-300 ease-out
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background
+           disabled:pointer-events-none disabled:opacity-50;
+    letter-spacing: 0.01em;
   }
 
   .btn-cookbook {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg;
+    @apply bg-primary text-primary-foreground;
+    box-shadow: var(--shadow-button);
+    &:hover {
+      @apply brightness-110;
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-1px);
+    }
+    &:active {
+      transform: translateY(0);
+      box-shadow: var(--shadow-soft);
+    }
   }
 
   .btn-cookbook-outline {
-    @apply border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground;
+    @apply border-2 border-primary text-primary bg-transparent;
+    &:hover {
+      @apply bg-primary text-primary-foreground;
+      box-shadow: var(--shadow-button);
+      transform: translateY(-1px);
+    }
+    &:active {
+      transform: translateY(0);
+    }
   }
 
-  /* Recipe Card */
+  /* ---------- Recipe Card ---------- */
   .recipe-card {
-    @apply bg-card rounded-xl overflow-hidden border border-border transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+    @apply bg-card rounded-2xl overflow-hidden border border-border;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    &:hover {
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-6px);
+    }
   }
 
-  /* Category Pill */
+  /* ---------- Category Pill ---------- */
   .category-pill {
-    @apply px-4 py-2 rounded-full text-sm font-medium transition-all duration-200;
+    @apply px-4 py-2 rounded-full text-sm font-medium;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  /* Search Input */
+  /* ---------- Search Input ---------- */
   .search-input {
-    @apply w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200;
+    @apply w-full px-4 py-3 rounded-2xl bg-secondary border border-border text-foreground
+           placeholder:text-muted-foreground
+           focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50
+           transition-all duration-300;
   }
 
-  /* Nav Link */
+  /* ---------- Nav Link ---------- */
   .nav-link {
-    @apply text-foreground hover:text-primary transition-colors duration-200;
+    @apply text-foreground/80 font-medium relative;
+    transition: color 0.3s ease;
+    &:hover {
+      @apply text-primary;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: hsl(var(--primary));
+      border-radius: 1px;
+      transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    &:hover::after {
+      width: 100%;
+    }
   }
 
-  /* Rating Star */
+  /* ---------- Rating Star ---------- */
   .rating-star {
-    @apply text-cookbook-gold;
+    color: hsl(var(--cookbook-gold));
   }
 
-  /* Hero Gradient */
+  /* ---------- Hero Gradient ---------- */
   .hero-gradient {
-    background: linear-gradient(135deg, hsl(20 80% 55%) 0%, hsl(35 70% 60%) 100%);
+    background: linear-gradient(
+      135deg,
+      hsl(14 55% 48%) 0%,
+      hsl(28 60% 52%) 50%,
+      hsl(148 22% 38%) 100%
+    );
   }
 
-  /* Image Overlay */
+  /* ---------- Image Overlay ---------- */
   .image-overlay {
-    background: linear-gradient(180deg, transparent 0%, hsl(20 20% 10% / 0.7) 100%);
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      hsl(16 44% 6% / 0.75) 100%
+    );
   }
 
-  /* Animations */
+  /* ---------- Animations ---------- */
   @keyframes fade-in {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(16px);
     }
     to {
       opacity: 1;
@@ -209,31 +344,114 @@ $cookbook-dark-theme: mat.define-dark-theme((
     }
   }
 
-  .animate-fade-in {
-    animation: fade-in 0.6s ease-out forwards;
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(24px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 
-  /* Scrollbar Hide */
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted-foreground) / 0.08) 50%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+  }
+
+  /* ---------- Scrollbar Hide ---------- */
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
 
-  /* Input Styles */
+  /* ---------- Input Styles ---------- */
   .input {
-    @apply flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply flex h-11 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm
+           ring-offset-background
+           file:border-0 file:bg-transparent file:text-sm file:font-medium
+           placeholder:text-muted-foreground
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-1
+           disabled:cursor-not-allowed disabled:opacity-50;
+    font-family: 'Outfit', sans-serif;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    &:focus-visible {
+      border-color: hsl(var(--primary) / 0.5);
+    }
   }
 
-  /* Label Styles */
+  /* ---------- Label Styles ---------- */
   .label {
-    @apply text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
+    @apply text-sm font-semibold leading-none;
+    letter-spacing: 0.01em;
   }
 
   textarea.input {
     @apply h-auto resize-none;
+  }
+
+  /* ---------- Glass Card (dark mode overlay effect) ---------- */
+  .glass-card {
+    @apply bg-card/80 backdrop-blur-xl border border-border/50 rounded-2xl;
+    box-shadow: var(--shadow-card);
+  }
+
+  /* ---------- Section Divider ---------- */
+  .section-divider {
+    @apply border-t border-border/60;
   }
 }
