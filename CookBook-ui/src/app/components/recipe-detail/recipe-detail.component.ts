@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { Subject, switchMap, takeUntil, filter, map, forkJoin } from 'rxjs';
@@ -16,11 +17,13 @@ import { Ingredient } from '../../models/ingredient';
 import { NutritionInfo } from '../../models/nutrition-info';
 import { IngridientsService } from '@app/services/ingredients.service';
 import { CookingStepsService } from '@app/services/cookingSteps.service';
+import { ReviewService } from '../../services/review.service';
+import { Review } from '../../models/review';
 
 @Component({
   selector: 'app-recipe-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent, MatIconModule],
+  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent, MatIconModule, FormsModule],
   templateUrl: './recipe-detail.component.html',
   styleUrls: ['./recipe-detail.component.scss']
 })
@@ -34,6 +37,13 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   servings: number = 1;
   originalServings: number = 1;
   completedSteps = new Set<string>();
+
+  reviews: Review[] = [];
+  hoverStar = 0;
+  selectedStar = 0;
+  reviewComment = '';
+  isSubmittingReview = false;
+  existingUserReview: Review | null = null;
 
   cookingMode = false;
   cookingStepIndex = 0;
@@ -50,11 +60,12 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     private recipeService: RecipeService,
     private savedRecipeService: SavedRecipeService,
-    private userService: UserService,
+    public userService: UserService,
     private toastService: ToastService,
     private nutritionInfoService: NutritionInfoService,
     private ingridientService: IngridientsService,
-    private cookingStepsService: CookingStepsService
+    private cookingStepsService: CookingStepsService,
+    private reviewService: ReviewService
   ) {}
 
   ngOnInit(): void {
@@ -71,11 +82,12 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
           recipe: this.recipeService.getRecipeById(recipeId),
           nutrition: this.nutritionInfoService.getNutritionInfoWithRecipeId(recipeId),
           ingredients: this.ingridientService.getIngredientsWithRecipeId(recipeId),
-          cookingSteps: this.cookingStepsService.getCookingStepsWithRecipeId(recipeId)
+          cookingSteps: this.cookingStepsService.getCookingStepsWithRecipeId(recipeId),
+          reviews: this.reviewService.getReviewsForRecipe(recipeId)
         });
       }),
       takeUntil(this.destroy$)
-    ).subscribe(({ recipe, nutrition, ingredients, cookingSteps }) => {
+    ).subscribe(({ recipe, nutrition, ingredients, cookingSteps, reviews }) => {
       if (recipe) {
         // Redirect to edit page if the current user is the author,
         // unless ?view=true is set (navigating from my-recipes detail view)
@@ -96,6 +108,20 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
         this.originalServings = recipe.servings;
 
         this.completedSteps.clear();
+
+        // Reviews
+        this.reviews = reviews;
+        const me = this.userService.getCurrentUserSnapshot();
+        this.existingUserReview = me
+          ? (reviews.find(r => String(r.authorId) === me.id) ?? null)
+          : null;
+        if (this.existingUserReview) {
+          this.selectedStar = this.existingUserReview.stars;
+          this.reviewComment = this.existingUserReview.comment ?? '';
+        } else {
+          this.selectedStar = 0;
+          this.reviewComment = '';
+        }
         
         // Check if recipe is saved
         if (this.userService.isLoggedIn()) {
@@ -233,5 +259,47 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
 
   printRecipe(): void {
     window.print();
+  }
+
+  onSubmitReview(): void {
+    if (!this.recipe || this.selectedStar === 0 || this.isSubmittingReview) return;
+    this.isSubmittingReview = true;
+    this.reviewService.submitReview(String(this.recipe.id), this.selectedStar, this.reviewComment)
+      .subscribe({
+        next: (review) => {
+          this.existingUserReview = review;
+          // Replace in list or prepend
+          const idx = this.reviews.findIndex(r => r.authorId === review.authorId);
+          if (idx >= 0) {
+            this.reviews = [review, ...this.reviews.filter((_, i) => i !== idx)];
+          } else {
+            this.reviews = [review, ...this.reviews];
+          }
+          // Update aggregate
+          if (this.recipe) {
+            this.recipe = { ...this.recipe, reviewCount: this.reviews.length };
+          }
+          this.toastService.showSuccess('Bewertung gespeichert! ⭐');
+          this.isSubmittingReview = false;
+        },
+        error: () => {
+          this.toastService.showError('Fehler beim Speichern der Bewertung');
+          this.isSubmittingReview = false;
+        }
+      });
+  }
+
+  onDeleteReview(): void {
+    if (!this.recipe || !this.existingUserReview) return;
+    this.reviewService.deleteReview(String(this.recipe.id)).subscribe({
+      next: () => {
+        this.reviews = this.reviews.filter(r => r.id !== this.existingUserReview!.id);
+        this.existingUserReview = null;
+        this.selectedStar = 0;
+        this.reviewComment = '';
+        this.toastService.showSuccess('Bewertung gelöscht');
+      },
+      error: () => this.toastService.showError('Fehler beim Löschen')
+    });
   }
 }
