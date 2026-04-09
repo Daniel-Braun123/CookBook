@@ -10,13 +10,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.cookBook.backend.dto.CreateRecipeRequestDto;
 import de.cookBook.backend.dto.RecipeResponseDto;
+import de.cookBook.backend.dto.UpdateRecipeRequestDto;
 import de.cookBook.backend.entities.Users;
 import de.cookBook.backend.repository.RecipeRepository;
 import de.cookBook.backend.service.RecipeService;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -63,6 +66,31 @@ public class RecipesController {
             @AuthenticationPrincipal Users currentUser
     ) {
         return recipeService.createRecipe(request, currentUser);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> delete(
+        @PathVariable("id") Long id,
+        @AuthenticationPrincipal Users currentUser    
+    ) {
+        if (currentUser == null) {
+            return ResponseEntity.status(401).build();
+        }
+        recipeService.deleteRecipe(id, currentUser);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<RecipeResponseDto> update(
+            @PathVariable("id") Long id,
+            @RequestBody UpdateRecipeRequestDto request,
+            @AuthenticationPrincipal Users currentUser
+    ) {
+        if (currentUser == null) {
+            return ResponseEntity.status(401).build();
+        }
+        RecipeResponseDto updated = recipeService.updateRecipe(id, request, currentUser);
+        return ResponseEntity.ok(updated);
     }
     
     // ================== Saved Recipes Endpoints ==================

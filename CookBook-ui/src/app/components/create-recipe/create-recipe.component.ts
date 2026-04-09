@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { HeaderComponent } from '../header/header.component';
@@ -65,6 +66,7 @@ export class CreateRecipeComponent implements OnInit {
     private userService: UserService,
     private recipeService: RecipeService,
     private router: Router,
+    private location: Location,
     private toastService: ToastService,
     private cloudinaryService: CloudinaryService,
     private categoryService: CategorieService
@@ -201,5 +203,9 @@ export class CreateRecipeComponent implements OnInit {
         this.toastService.showError('Fehler beim Erstellen des Rezepts. Bitte versuche es erneut.');
       }
     });
+  }
+
+   goBack(): void { 
+    this.location.back(); 
   }
 }

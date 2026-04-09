@@ -56,6 +56,16 @@ export const routes: Routes = [
     loadComponent: () => import('./components/all-recipes/all-recipes.component').then(m => m.AllRecipesComponent)
   },
   {
+    path: 'my-recipes',
+    loadComponent: () => import('./components/my-recipes/my-recipes.component').then(m => m.MyRecipesComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'edit-recipe/:id',
+    loadComponent: () => import('./components/edit-recipe/edit-recipe.component').then(m => m.EditRecipeComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: '**',
     loadComponent: () => import('./components/not-found/not-found.component').then(m => m.NotFoundComponent)
   }

@@ -55,6 +55,10 @@ export class UserService {
     return this.currentUser$;
   }
 
+  getCurrentUserSnapshot(): User | null {
+    return this.currentUserSubject.getValue();
+  }
+
   login(email: string, password: string): Observable<AuthResponse> {
     const request: LoginRequest = { email, password };
     return this.http.post<AuthResponse>(`${this.API_URL}/login`, request).pipe(

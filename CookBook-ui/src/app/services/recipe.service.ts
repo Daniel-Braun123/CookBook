@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Recipe } from '../models/recipe';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -35,5 +36,19 @@ export class RecipeService {
   searchRecipes(query: string): Observable<Recipe[]> {
     if (!query?.trim()) return of([]);
     return this.http.get<Recipe[]>(this.API_URL + '/search', { params: { query: query.trim() } });
+  }
+
+  getMyRecipes(authorId: string): Observable<Recipe[]> {
+    return this.getAllRecipes().pipe(
+      map(recipes => recipes.filter(r => r.author?.id === authorId))
+    );
+  }
+
+  deleteRecipe(recipeId: string): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/delete/${recipeId}`);
+  }
+
+  updateRecipe(recipeId: string, recipeData: any): Observable<Recipe> {
+    return this.http.put<Recipe>(`${this.API_URL}/update/${recipeId}`, recipeData);
   }
 }

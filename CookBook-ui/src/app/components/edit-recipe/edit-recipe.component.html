@@ -1,7 +1,17 @@
 <div class="min-h-screen bg-background">
   <app-header></app-header>
 
-  <div class="container mx-auto px-4 py-10 md:py-14 max-w-4xl">
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="container mx-auto px-4 py-10 md:py-14 max-w-4xl">
+    <div class="space-y-8 animate-pulse">
+      <div class="h-8 w-48 bg-secondary rounded-xl"></div>
+      <div class="h-64 rounded-2xl bg-card border border-border/60"></div>
+      <div class="h-48 rounded-2xl bg-card border border-border/60"></div>
+      <div class="h-48 rounded-2xl bg-card border border-border/60"></div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading" class="container mx-auto px-4 py-10 md:py-14 max-w-4xl">
     <!-- Header -->
     <div class="mb-10 animate-fade-in">
       <button (click)="goBack()" class="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-all duration-300 mb-5 group">
@@ -9,10 +19,10 @@
         <span class="text-sm font-medium">Zurück</span>
       </button>
       <h1 class="font-display text-3xl md:text-4xl font-bold text-foreground mb-3 tracking-tight">
-        Neues Rezept erstellen
+        Rezept bearbeiten
       </h1>
       <p class="text-muted-foreground leading-relaxed">
-        Teile dein Lieblingsrezept mit der Community
+        Bearbeite dein Rezept und speichere die Änderungen
       </p>
     </div>
 
@@ -21,7 +31,7 @@
       <!-- Basic Information -->
       <div class="p-7 rounded-2xl bg-card border border-border/60 shadow-soft">
         <h2 class="font-display text-xl font-bold text-foreground mb-7 tracking-tight">Grundinformationen</h2>
-        
+
         <div class="space-y-5">
           <!-- Title -->
           <div>
@@ -73,7 +83,7 @@
               (change)="onImageSelected($event)"
             />
 
-            <!-- Drop zone (no image selected) -->
+            <!-- Drop zone (no image) -->
             <div
               *ngIf="!imagePreview"
               (click)="imageInput.click()"
@@ -90,11 +100,11 @@
               </div>
             </div>
 
-            <!-- Preview (image selected) -->
+            <!-- Preview -->
             <div *ngIf="imagePreview" class="relative aspect-video rounded-2xl overflow-hidden border border-border/60">
               <img [src]="imagePreview" alt="Vorschau" class="w-full h-full object-cover" />
 
-              <!-- Uploading spinner (shown during submit) -->
+              <!-- Uploading spinner -->
               <div *ngIf="isUploadingImage" class="absolute inset-0 bg-black/50 flex items-center justify-center gap-2">
                 <svg class="animate-spin h-6 w-6 text-white" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -103,24 +113,34 @@
                 <span class="text-white text-sm font-medium">Wird hochgeladen...</span>
               </div>
 
-              <!-- Ready badge -->
+              <!-- Ready badge (new file selected) -->
               <div *ngIf="!isUploadingImage && selectedImageFile" class="absolute top-3 right-3 bg-accent text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5">
                 <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
                 </svg>
-                Bereit
+                Neues Bild
               </div>
 
-              <!-- Remove button -->
-              <button
-                type="button"
-                (click)="removeImage()"
-                class="absolute top-3 left-3 w-8 h-8 bg-black/60 hover:bg-destructive text-white rounded-full flex items-center justify-center transition-colors duration-300"
-              >
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+              <!-- Change/remove overlay -->
+              <div class="absolute bottom-3 right-3 flex gap-2">
+                <button
+                  type="button"
+                  (click)="imageInput.click()"
+                  class="px-3 py-1.5 bg-black/60 hover:bg-primary text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors duration-300"
+                >
+                  <mat-icon class="text-sm">edit</mat-icon>
+                  Ändern
+                </button>
+                <button
+                  type="button"
+                  (click)="removeImage()"
+                  class="w-8 h-8 bg-black/60 hover:bg-destructive text-white rounded-full flex items-center justify-center transition-colors duration-300"
+                >
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -165,50 +185,22 @@
           <!-- Time & Servings -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div>
-              <label class="label block mb-2">
-                Vorbereitungszeit (Min)
-              </label>
-              <input
-                type="number"
-                [(ngModel)]="prepTime"
-                name="prepTime"
-                min="0"
-                class="input"
-              />
+              <label class="label block mb-2">Vorbereitungszeit (Min)</label>
+              <input type="number" [(ngModel)]="prepTime" name="prepTime" min="0" class="input" />
             </div>
-
             <div>
-              <label class="label block mb-2">
-                Kochzeit (Min)
-              </label>
-              <input
-                type="number"
-                [(ngModel)]="cookTime"
-                name="cookTime"
-                min="0"
-                class="input"
-              />
+              <label class="label block mb-2">Kochzeit (Min)</label>
+              <input type="number" [(ngModel)]="cookTime" name="cookTime" min="0" class="input" />
             </div>
-
             <div>
-              <label class="label block mb-2">
-                Portionen
-              </label>
-              <input
-                type="number"
-                [(ngModel)]="servings"
-                name="servings"
-                min="1"
-                class="input"
-              />
+              <label class="label block mb-2">Portionen</label>
+              <input type="number" [(ngModel)]="servings" name="servings" min="1" class="input" />
             </div>
           </div>
 
           <!-- Tags -->
           <div>
-            <label class="label block mb-2">
-              Tags
-            </label>
+            <label class="label block mb-2">Tags</label>
             <div class="flex gap-2.5 mb-3">
               <input
                 type="text"
@@ -341,78 +333,51 @@
       <!-- Nutrition -->
       <div class="p-7 rounded-2xl bg-card border border-border/60 shadow-soft">
         <h2 class="font-display text-xl font-bold text-foreground mb-7 tracking-tight">Nährwerte (pro Portion)</h2>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
           <div>
-            <label class="label block mb-2">
-              Kalorien (kcal)
-            </label>
-            <input
-              type="number"
-              [(ngModel)]="nutrition.calories"
-              name="calories"
-              min="0"
-              class="input"
-            />
+            <label class="label block mb-2">Kalorien (kcal)</label>
+            <input type="number" [(ngModel)]="nutrition.calories" name="calories" min="0" class="input" />
           </div>
-
           <div>
-            <label class="label block mb-2">
-              Protein (g)
-            </label>
-            <input
-              type="number"
-              [(ngModel)]="nutrition.protein"
-              name="protein"
-              min="0"
-              class="input"
-            />
+            <label class="label block mb-2">Protein (g)</label>
+            <input type="number" [(ngModel)]="nutrition.protein" name="protein" min="0" class="input" />
           </div>
-
           <div>
-            <label class="label block mb-2">
-              Kohlenhydrate (g)
-            </label>
-            <input
-              type="number"
-              [(ngModel)]="nutrition.carbs"
-              name="carbs"
-              min="0"
-              class="input"
-            />
+            <label class="label block mb-2">Kohlenhydrate (g)</label>
+            <input type="number" [(ngModel)]="nutrition.carbs" name="carbs" min="0" class="input" />
           </div>
-
           <div>
-            <label class="label block mb-2">
-              Fett (g)
-            </label>
-            <input
-              type="number"
-              [(ngModel)]="nutrition.fat"
-              name="fat"
-              min="0"
-              class="input"
-            />
+            <label class="label block mb-2">Fett (g)</label>
+            <input type="number" [(ngModel)]="nutrition.fat" name="fat" min="0" class="input" />
           </div>
         </div>
       </div>
 
-      <!-- Submit Button -->
+      <!-- Action Buttons -->
       <div class="flex gap-4">
         <div class="flex-1 md:flex-none" (click)="submitted = true">
           <button
             type="submit"
-            [disabled]="!isFormValid || isUploadingImage"
-            [class.opacity-50]="!isFormValid"
-            [class.cursor-not-allowed]="!isFormValid"
-            class="btn btn-cookbook w-full md:px-14 py-3.5 transition-opacity duration-200"
+            [disabled]="!isFormValid || isUploadingImage || isSaving || !hasChanges"
+            [class.opacity-50]="!isFormValid || !hasChanges || isSaving"
+            [class.cursor-not-allowed]="!isFormValid || !hasChanges || isSaving"
+            class="btn btn-cookbook w-full md:px-14 py-3.5 transition-opacity duration-200 inline-flex items-center justify-center gap-2"
           >
-            Rezept veröffentlichen
+            <svg *ngIf="isSaving" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+            {{ isSaving ? 'Wird gespeichert...' : 'Änderungen speichern' }}
           </button>
         </div>
-        <a [routerLink]="['/']" class="btn bg-secondary hover:bg-secondary/70 text-foreground flex-1 md:flex-none md:px-14 py-3.5 text-center rounded-xl transition-all duration-300 font-semibold">
+        <button
+          type="button"
+          (click)="goBack()"
+          class="btn bg-secondary hover:bg-secondary/70 text-foreground flex-1 md:flex-none md:px-14 py-3.5 text-center rounded-xl transition-all duration-300 font-semibold"
+        >
           Abbrechen
-        </a>
+        </button>
       </div>
     </form>
   </div>

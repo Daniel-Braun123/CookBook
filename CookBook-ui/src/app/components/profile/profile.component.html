@@ -34,15 +34,25 @@
         </div>
 
         <!-- Actions -->
-        <div class="mt-10 flex gap-4">
-          <a [routerLink]="['/edit-profile']" class="flex-1">
-            <button class="btn btn-cookbook w-full">
-              Profil bearbeiten
-            </button>
-          </a>
-          <a [routerLink]="['/']" class="flex-1">
-            <button class="btn btn-cookbook-outline w-full">
-              Zurück zur Startseite
+        <div class="mt-10 flex flex-col gap-3">
+          <div class="flex gap-3">
+            <a [routerLink]="['/edit-profile']" class="flex-1">
+              <button class="btn btn-cookbook w-full">
+                Profil bearbeiten
+              </button>
+            </a>
+            <a [routerLink]="['/create-recipe']" class="flex-1">
+              <button class="btn btn-cookbook-outline w-full">
+                Rezept erstellen
+              </button>
+            </a>
+          </div>
+          <a [routerLink]="['/my-recipes']" class="w-full">
+            <button class="btn btn-cookbook-outline w-full flex items-center justify-center gap-2">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              Meine Rezepte
             </button>
           </a>
         </div>

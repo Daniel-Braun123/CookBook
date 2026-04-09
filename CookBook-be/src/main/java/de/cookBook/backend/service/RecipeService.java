@@ -113,6 +113,91 @@ public class RecipeService {
         return RecipeResponseDto.fromEntity(recipe, objectMapper);
     }
     
+    @Transactional
+    public void deleteRecipe(Long recipeId, Users currentUser) {
+        Recipes recipe = recipeRepository.findById(recipeId)
+            .orElseThrow(() -> new RuntimeException("Recipe not found"));
+        if (!recipe.getAuthor().getId().equals(currentUser.getId())) {
+            throw new org.springframework.security.access.AccessDeniedException("Not authorized");
+        }
+        recipeRepository.deleteById(recipeId);
+    }
+
+    @Transactional
+    public RecipeResponseDto updateRecipe(Long recipeId, UpdateRecipeRequestDto request, Users currentUser) {
+        Recipes recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RuntimeException("Recipe not found"));
+        if (!recipe.getAuthor().getId().equals(currentUser.getId())) {
+            throw new org.springframework.security.access.AccessDeniedException("Not authorized");
+        }
+
+        // Update basic fields
+        recipe.setTitle(request.getTitle());
+        recipe.setDescription(request.getDescription());
+        if (request.getImage() != null && !request.getImage().isBlank()) {
+            recipe.setImage(request.getImage());
+        }
+        recipe.setPrepTime(request.getPrepTime());
+        recipe.setCookTime(request.getCookTime());
+        recipe.setDifficulty(request.getDifficulty());
+        recipe.setServings(request.getServings());
+
+        // Update category
+        Categories category = categorieRepository.findByName(request.getCategoryName())
+                .orElseThrow(() -> new RuntimeException("Category not found: " + request.getCategoryName()));
+        recipe.setCategory(category);
+
+        // Update tags
+        try {
+            recipe.setTags(objectMapper.writeValueAsString(request.getTags()));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to serialize tags", e);
+        }
+
+        recipe = recipeRepository.save(recipe);
+
+        // Replace ingredients
+        ingredientsRepository.deleteAll(ingredientsRepository.findByRecipeId(recipe.getId()));
+        if (request.getIngredients() != null) {
+            for (IngredientDto dto : request.getIngredients()) {
+                Ingredients ingredient = new Ingredients();
+                ingredient.setRecipe(recipe);
+                ingredient.setName(dto.getName());
+                ingredient.setAmount(java.math.BigDecimal.valueOf(dto.getAmount()));
+                ingredient.setUnit(dto.getUnit());
+                ingredientsRepository.save(ingredient);
+            }
+        }
+
+        // Replace cooking steps
+        cookingStepsRepository.deleteAll(cookingStepsRepository.findByRecipeIdOrderByStepNumberAsc(recipe.getId()));
+        if (request.getSteps() != null) {
+            for (int i = 0; i < request.getSteps().size(); i++) {
+                CookingStepDto dto = request.getSteps().get(i);
+                CookingSteps step = new CookingSteps();
+                step.setRecipe(recipe);
+                step.setStepNumber(i + 1);
+                step.setInstruction(dto.getInstruction());
+                step.setDuration(dto.getDuration());
+                cookingStepsRepository.save(step);
+            }
+        }
+
+        // Replace nutrition
+        NutritionInfo existing = nutritionInfoRepository.findByRecipeId(recipe.getId());
+        if (request.getNutrition() != null) {
+            NutritionInfo nutrition = existing != null ? existing : new NutritionInfo();
+            nutrition.setRecipe(recipe);
+            nutrition.setCalories(request.getNutrition().getCalories());
+            nutrition.setProtein(request.getNutrition().getProtein());
+            nutrition.setCarbs(request.getNutrition().getCarbs());
+            nutrition.setFat(request.getNutrition().getFat());
+            nutritionInfoRepository.save(nutrition);
+        }
+
+        return RecipeResponseDto.fromEntity(recipe, objectMapper);
+    }
+
     // ================== Saved Recipes Methods ==================
     
     @Transactional
