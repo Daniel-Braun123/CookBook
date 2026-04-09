@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -34,6 +34,11 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   servings: number = 1;
   originalServings: number = 1;
   completedSteps = new Set<string>();
+
+  cookingMode = false;
+  cookingStepIndex = 0;
+  cookingShowIngredients = false;
+  private wakeLock: any = null;
 
   Math = Math;
   readonly today = new Date();
@@ -101,6 +106,22 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.releaseWakeLock();
+    document.body.style.overflow = '';
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onCookingKeyDown(event: KeyboardEvent): void {
+    if (!this.cookingMode) return;
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      event.preventDefault();
+      this.cookingNext();
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      this.cookingPrev();
+    } else if (event.key === 'Escape') {
+      this.exitCookingMode();
+    }
   }
 
   toggleStep(stepId: string): void {
@@ -155,6 +176,56 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
         this.toastService.showError('Fehler beim Speichern');
       }
     });
+  }
+
+  enterCookingMode(): void {
+    this.cookingMode = true;
+    this.cookingStepIndex = 0;
+    this.cookingShowIngredients = false;
+    document.body.style.overflow = 'hidden';
+    void this.requestWakeLock();
+  }
+
+  exitCookingMode(): void {
+    this.cookingMode = false;
+    document.body.style.overflow = '';
+    this.releaseWakeLock();
+  }
+
+  cookingNext(): void {
+    if (this.cookingSteps && this.cookingStepIndex < this.cookingSteps.length) {
+      this.cookingStepIndex++;
+    }
+  }
+
+  cookingPrev(): void {
+    if (this.cookingStepIndex > 0) {
+      this.cookingStepIndex--;
+    }
+  }
+
+  cookingProgress(): number {
+    if (!this.cookingSteps?.length) return 0;
+    return (this.cookingStepIndex / this.cookingSteps.length) * 100;
+  }
+
+  private async requestWakeLock(): Promise<void> {
+    try {
+      if ('wakeLock' in navigator) {
+        this.wakeLock = await (navigator as any).wakeLock.request('screen');
+        // Re-acquire after the user returns from another tab/app
+        this.wakeLock.addEventListener('release', () => {
+          if (this.cookingMode) void this.requestWakeLock();
+        });
+      }
+    } catch { /* silently ignore — browser may deny in background */ }
+  }
+
+  private releaseWakeLock(): void {
+    if (this.wakeLock) {
+      this.wakeLock.release().catch(() => {});
+      this.wakeLock = null;
+    }
   }
 
   printRecipe(): void {
