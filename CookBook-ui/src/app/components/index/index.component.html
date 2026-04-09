@@ -27,12 +27,14 @@
           einfach, lecker und für jeden Anlass.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 animate-fade-in" style="animation-delay: 0.3s">
-          <button class="btn btn-cookbook px-7 py-3.5 text-base">
-            Rezepte entdecken
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+          <a [routerLink]="['/recipes']">
+            <button class="btn btn-cookbook px-7 py-3.5 text-base">
+              Rezepte entdecken
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </a>
           <a [routerLink]="['/create-recipe']">
             <button class="btn border-2 border-white/25 text-white hover:bg-white hover:text-foreground px-7 py-3.5 text-base backdrop-blur-sm bg-white/5 transition-all duration-300">
               Rezept erstellen
@@ -169,7 +171,7 @@
             Die Favoriten unserer Community
           </p>
         </div>
-        <a [routerLink]="['/']" class="hidden md:flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all duration-300 text-sm">
+        <a [routerLink]="['/recipes']" class="hidden md:flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all duration-300 text-sm">
           Alle anzeigen
           <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

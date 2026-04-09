@@ -32,10 +32,8 @@ export class CategoriesComponent implements OnInit {
   }
 
   navigateToCategory(categoryName: string): void {
-    // Navigate to home page with category query parameter and scroll to recipes section
-    this.router.navigate(['/'], { 
-      queryParams: { category: categoryName },
-      fragment: 'recipes'
+    this.router.navigate(['/recipes'], { 
+      queryParams: { category: categoryName }
     });
   }
 }

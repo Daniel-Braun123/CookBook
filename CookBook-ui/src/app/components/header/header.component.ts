@@ -35,6 +35,10 @@ export class HeaderComponent {
     return this.userService.isLoggedIn();
   }
 
+  get isRecipesPage(): boolean {
+    return this.router.url.startsWith('/recipes');
+  }
+
   toggleTheme(): void {
     this.themeService.toggleTheme();
   }

@@ -52,6 +52,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/oauth2-redirect/oauth2-redirect.component').then(m => m.OAuth2RedirectComponent)
   },
   {
+    path: 'recipes',
+    loadComponent: () => import('./components/all-recipes/all-recipes.component').then(m => m.AllRecipesComponent)
+  },
+  {
     path: '**',
     loadComponent: () => import('./components/not-found/not-found.component').then(m => m.NotFoundComponent)
   }

@@ -17,7 +17,7 @@
 
       <!-- Center Group: Search + Nav Links -->
       <div class="hidden md:flex items-center gap-2 shrink-0">
-        <div class="flex max-w-md w-[320px] lg:w-[400px]">
+        <div *ngIf="!isRecipesPage" class="flex max-w-md w-[320px] lg:w-[400px]">
           <div 
             class="relative w-full cursor-pointer group/search"
             (click)="openSearchOverlay()"
@@ -30,7 +30,7 @@
         </div>
 
         <nav class="flex items-center gap-1">
-          <a [routerLink]="['/']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60">Rezepte</a>
+          <a [routerLink]="['/recipes']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60">Rezepte</a>
           <a [routerLink]="['/categories']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60">Kategorien</a>
           <a [routerLink]="['/saved']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60 flex items-center gap-1">
             <mat-icon class="text-lg">favorite_border</mat-icon>
@@ -93,7 +93,7 @@
     </div>
 
     <!-- Mobile Search -->
-    <div class="md:hidden pb-3">
+    <div *ngIf="!isRecipesPage" class="md:hidden pb-3">
       <div class="relative cursor-pointer group/search" (click)="openSearchOverlay()">
         <mat-icon class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">search</mat-icon>
         <div class="search-input pl-12 text-sm flex items-center text-muted-foreground">
@@ -106,7 +106,7 @@
   <!-- Mobile Menu -->
   <div *ngIf="isMenuOpen" class="md:hidden bg-card/95 backdrop-blur-xl border-t border-border/60 animate-fade-in">
     <nav class="container mx-auto py-4 flex flex-col gap-1">
-      <a [routerLink]="['/']" (click)="isMenuOpen = false" 
+      <a [routerLink]="['/recipes']" (click)="isMenuOpen = false" 
          class="py-3 px-4 rounded-xl font-medium text-foreground hover:text-primary hover:bg-secondary/60 transition-all duration-300">
         Rezepte
       </a>
