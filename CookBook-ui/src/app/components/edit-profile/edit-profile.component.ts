@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -39,6 +40,7 @@ export class EditProfileComponent implements OnInit, OnDestroy, PendingChangesCo
     private cloudinaryService: CloudinaryService,
     private fb: FormBuilder,
     private router: Router,
+    private location: Location,
     private toastService: ToastService
   ) {
     this.currentUser$ = this.userService.currentUser$;
@@ -178,6 +180,10 @@ export class EditProfileComponent implements OnInit, OnDestroy, PendingChangesCo
 
   onCancel(): void {
     this.router.navigate(['/profile']);
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
   onFileSelected(event: Event): void {

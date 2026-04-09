@@ -53,26 +53,26 @@ $cookbook-dark-theme: mat.define-dark-theme((
 @layer base {
   :root {
     /* ---- Light Mode: Warm Parchment ---- */
-    --background: 38 45% 96%;
-    --foreground: 16 44% 12%;
+    --background: 38 35% 92%;
+    --foreground: 16 48% 8%;
 
-    --card: 40 33% 99%;
-    --card-foreground: 16 44% 12%;
+    --card: 40 28% 96%;
+    --card-foreground: 16 48% 8%;
 
-    --popover: 40 33% 99%;
-    --popover-foreground: 16 44% 12%;
+    --popover: 40 28% 96%;
+    --popover-foreground: 16 48% 8%;
 
     /* Terracotta — Primary */
     --primary: 14 55% 48%;
     --primary-foreground: 40 50% 97%;
 
     /* Warm Parchment — Secondary */
-    --secondary: 34 28% 91%;
-    --secondary-foreground: 16 30% 25%;
+    --secondary: 34 24% 87%;
+    --secondary-foreground: 16 35% 18%;
 
     /* Muted Warm Tones */
-    --muted: 34 20% 88%;
-    --muted-foreground: 20 12% 46%;
+    --muted: 34 18% 84%;
+    --muted-foreground: 20 15% 36%;
 
     /* Sage Green — Accent */
     --accent: 148 22% 38%;
@@ -81,18 +81,18 @@ $cookbook-dark-theme: mat.define-dark-theme((
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 34 16% 84%;
-    --input: 34 16% 84%;
+    --border: 34 18% 72%;
+    --input: 34 18% 76%;
     --ring: 14 55% 48%;
 
     --radius: 0.875rem;
 
     /* Shadows (using rgba for cross-theme) */
-    --shadow-soft: 0 2px 12px rgba(44, 24, 16, 0.06);
-    --shadow-card: 0 1px 3px rgba(44, 24, 16, 0.04), 0 4px 16px rgba(44, 24, 16, 0.06);
-    --shadow-card-hover: 0 8px 32px rgba(44, 24, 16, 0.10), 0 2px 8px rgba(44, 24, 16, 0.06);
-    --shadow-button: 0 2px 8px rgba(44, 24, 16, 0.12);
-    --shadow-overlay: 0 24px 64px rgba(44, 24, 16, 0.18);
+    --shadow-soft: 0 2px 12px rgba(44, 24, 16, 0.10);
+    --shadow-card: 0 1px 3px rgba(44, 24, 16, 0.07), 0 4px 16px rgba(44, 24, 16, 0.10);
+    --shadow-card-hover: 0 8px 32px rgba(44, 24, 16, 0.15), 0 2px 8px rgba(44, 24, 16, 0.09);
+    --shadow-button: 0 2px 8px rgba(44, 24, 16, 0.16);
+    --shadow-overlay: 0 24px 64px rgba(44, 24, 16, 0.22);
 
     /* CookBook brand tokens */
     --cookbook-terracotta: 14 55% 48%;
@@ -305,6 +305,12 @@ $cookbook-dark-theme: mat.define-dark-theme((
     }
     &:hover::after {
       width: 100%;
+    }
+    &.active {
+      @apply text-primary;
+      &::after {
+        width: 100%;
+      }
     }
   }
 

@@ -30,9 +30,9 @@
         </div>
 
         <nav class="flex items-center gap-1">
-          <a [routerLink]="['/recipes']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60">Rezepte</a>
-          <a [routerLink]="['/categories']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60">Kategorien</a>
-          <a [routerLink]="['/saved']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60 flex items-center gap-1">
+          <a [routerLink]="['/recipes']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60" [class.active]="isRecipesPage">Rezepte</a>
+          <a [routerLink]="['/categories']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60" [class.active]="isCategoriesPage">Kategorien</a>
+          <a [routerLink]="['/saved']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60 flex items-center gap-1" [class.active]="isSavedPage">
             <mat-icon class="text-lg">favorite_border</mat-icon>
           </a>
         </nav>

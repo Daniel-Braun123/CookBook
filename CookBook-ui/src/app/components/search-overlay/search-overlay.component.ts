@@ -5,7 +5,8 @@ import {
   EventEmitter,
   ViewChild,
   ElementRef,
-  AfterViewInit,
+  OnChanges,
+  SimpleChanges,
   HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -21,7 +22,7 @@ import { CookBookLogoComponent } from '../cookbook-logo/cookbook-logo.component'
   templateUrl: './search-overlay.component.html',
   styleUrls: ['./search-overlay.component.scss']
 })
-export class SearchOverlayComponent implements AfterViewInit {
+export class SearchOverlayComponent implements OnChanges {
   @Input() visible = false;
   @Output() closed = new EventEmitter<void>();
 
@@ -32,8 +33,10 @@ export class SearchOverlayComponent implements AfterViewInit {
 
   constructor(private router: Router) {}
 
-  ngAfterViewInit(): void {
-    setTimeout(() => this.searchInput.nativeElement.focus());
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['visible']?.currentValue === true) {
+      setTimeout(() => this.searchInput?.nativeElement?.focus());
+    }
   }
 
   @HostListener('document:keydown.escape')

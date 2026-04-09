@@ -6,6 +6,7 @@ import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { RecipeCardComponent } from '../../components/recipe-card/recipe-card.component';
 import { CategoryPillComponent } from '../../components/category-pill/category-pill.component';
+import { SearchOverlayComponent } from '../../components/search-overlay/search-overlay.component';
 import { RecipeService } from '../../services/recipe.service';
 import { CategorieService } from '../../services/categorie.service';
 import { UserService } from '../../services/user.service';
@@ -21,7 +22,8 @@ import { Category } from '../../models/category';
     HeaderComponent, 
     FooterComponent, 
     RecipeCardComponent,
-    CategoryPillComponent
+    CategoryPillComponent,
+    SearchOverlayComponent
   ],
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss']
@@ -32,6 +34,7 @@ export class IndexComponent implements OnInit, OnDestroy {
   activeCategory: string | number | null = null;
   isLoading = true;
   carouselPage = 0;
+  isSearchOverlayOpen = false;
 
   private destroy$ = new Subject<void>();
 
