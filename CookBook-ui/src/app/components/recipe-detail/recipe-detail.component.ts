@@ -36,6 +36,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   completedSteps = new Set<string>();
 
   Math = Math;
+  readonly today = new Date();
 
   private destroy$ = new Subject<void>();
 
@@ -71,6 +72,13 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(({ recipe, nutrition, ingredients, cookingSteps }) => {
       if (recipe) {
+        // Redirect to edit page if the current user is the author
+        const currentUser = this.userService.getCurrentUserSnapshot();
+        if (currentUser && recipe.author?.id === currentUser.id) {
+          this.router.navigate(['/edit-recipe', recipe.id], { replaceUrl: true });
+          return;
+        }
+
         this.recipe = recipe;
         this.nutritionInfo = nutrition;
         this.ingredients = ingredients;

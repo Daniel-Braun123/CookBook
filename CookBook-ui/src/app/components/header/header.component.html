@@ -32,8 +32,13 @@
         <nav class="flex items-center gap-1">
           <a [routerLink]="['/recipes']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60" [class.active]="isRecipesPage">Rezepte</a>
           <a [routerLink]="['/categories']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60" [class.active]="isCategoriesPage">Kategorien</a>
-          <a [routerLink]="['/saved']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60 flex items-center gap-1" [class.active]="isSavedPage">
+          <a [routerLink]="['/saved']" class="relative nav-link p-2.5 rounded-xl hover:bg-secondary/60" [class.active]="isSavedPage" aria-label="Gespeicherte Rezepte">
             <mat-icon class="text-lg">favorite_border</mat-icon>
+            <ng-container *ngIf="savedCount$ | async as count">
+              <span *ngIf="count > 0" class="absolute -top-0.5 -right-0.5 min-w-[17px] h-[17px] px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-bold leading-[17px] text-center tabular-nums">
+                {{ count > 99 ? '99+' : count }}
+              </span>
+            </ng-container>
           </a>
         </nav>
       </div>
@@ -116,7 +121,14 @@
       </a>
       <a [routerLink]="['/saved']" (click)="isMenuOpen = false" 
          class="py-3 px-4 rounded-xl font-medium text-foreground hover:text-primary hover:bg-secondary/60 transition-all duration-300 flex items-center gap-2">
-        <mat-icon class="text-lg">favorite_border</mat-icon>
+        <span class="relative shrink-0">
+          <mat-icon class="text-lg">favorite_border</mat-icon>
+          <ng-container *ngIf="savedCount$ | async as count">
+            <span *ngIf="count > 0" class="absolute -top-1 -right-1 min-w-[17px] h-[17px] px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-bold leading-[17px] text-center tabular-nums">
+              {{ count > 99 ? '99+' : count }}
+            </span>
+          </ng-container>
+        </span>
         Gespeichert
       </a>
       <!-- Mobile Theme Toggle -->

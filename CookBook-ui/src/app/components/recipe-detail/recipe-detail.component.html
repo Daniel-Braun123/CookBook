@@ -17,7 +17,7 @@
     </a>
   </div>
 
-  <div *ngIf="!isLoading && recipe">
+  <div *ngIf="!isLoading && recipe" class="print-screen-content">
     <!-- Back Button -->
     <div class="container mx-auto px-4 py-5 print:hidden">
       <a [routerLink]="['/']" class="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-all duration-300 group">
@@ -218,6 +218,91 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Print layout — hidden on screen, replaces screen view when printing -->
+  <div *ngIf="!isLoading && recipe" class="print-layout">
+
+    <!-- Branded header -->
+    <div class="print-brand-bar">
+      <div class="print-brand">Cook<span>Book</span></div>
+      <div class="print-meta-date">{{ today | date:'dd. MMMM yyyy' }}</div>
+    </div>
+
+    <!-- Hero: image left, title/meta right -->
+    <div class="print-hero">
+      <img class="print-hero-image"
+           [src]="recipe.image.startsWith('http') ? recipe.image : ('assets/' + recipe.image)"
+           [alt]="recipe.title" />
+      <div class="print-hero-text">
+        <h1>{{ recipe.title }}</h1>
+        <p class="print-description">{{ recipe.description }}</p>
+        <div class="print-stats">
+          <span><strong>{{ getTotalTime() }} Min</strong> Gesamt</span>
+          <span class="print-sep">·</span>
+          <span><strong>{{ recipe.prepTime }} Min</strong> Vorbereitung</span>
+          <span class="print-sep">·</span>
+          <span><strong>{{ recipe.cookTime }} Min</strong> Zubereitung</span>
+          <span class="print-sep">·</span>
+          <span class="print-difficulty-badge">{{ recipe.difficulty }}</span>
+          <ng-container *ngIf="recipe.servings">
+            <span class="print-sep">·</span>
+            <span><strong>{{ servings }}</strong> Portionen</span>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <hr class="print-divider" />
+
+    <!-- Body: ingredients + steps side by side -->
+    <div class="print-body">
+      <div class="print-ingredients">
+        <h2>Zutaten</h2>
+        <ul>
+          <li *ngFor="let ing of ingredients">
+            <span class="ing-amount">{{ adjustAmount(ing.amount) }} {{ ing.unit }}</span>
+            <span class="ing-name">{{ ing.name }}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="print-steps">
+        <h2>Zubereitung</h2>
+        <ol>
+          <li *ngFor="let step of cookingSteps">
+            <span class="step-text">{{ step.instruction }}<span *ngIf="step.duration" class="step-duration"> · {{ step.duration }} Min</span></span>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Nutrition -->
+    <ng-container *ngIf="nutritionInfo">
+      <hr class="print-divider" />
+      <div class="print-nutrition-row">
+        <span class="nut-label">Nährwerte</span>
+        <span class="print-sep">/</span>
+        <span><strong>{{ nutritionInfo.calories }} kcal</strong></span>
+        <span class="print-sep">·</span>
+        <span>Protein <strong>{{ nutritionInfo.protein }} g</strong></span>
+        <span class="print-sep">·</span>
+        <span>Kohlenhydrate <strong>{{ nutritionInfo.carbs }} g</strong></span>
+        <span class="print-sep">·</span>
+        <span>Fett <strong>{{ nutritionInfo.fat }} g</strong></span>
+      </div>
+    </ng-container>
+
+    <!-- Tags -->
+    <div class="print-tags-row" *ngIf="recipe.tags && recipe.tags.length">
+      <span *ngFor="let tag of recipe.tags" class="print-tag">{{ tag }}</span>
+    </div>
+
+    <!-- Footer -->
+    <div class="print-footer">
+      <span class="print-footer-brand">CookBook</span>
+      <span *ngIf="recipe.author">Rezept von {{ recipe.author.name }}</span>
+    </div>
+
   </div>
 
   <app-footer></app-footer>

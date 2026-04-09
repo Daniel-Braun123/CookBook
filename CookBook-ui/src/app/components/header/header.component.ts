@@ -7,8 +7,10 @@ import { CookBookLogoComponent } from '../cookbook-logo/cookbook-logo.component'
 import { SearchOverlayComponent } from '../search-overlay/search-overlay.component';
 import { ThemeService } from '../../services/theme.service';
 import { UserService } from '../../services/user.service';
+import { SavedRecipeService } from '../../services/saved-recipe.service';
 import { User } from '../../models/user';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -22,13 +24,18 @@ export class HeaderComponent {
   isSearchFocused = false;
   isSearchOverlayOpen = false;
   currentUser$: Observable<User | null>;
+  savedCount$: Observable<number>;
 
   constructor(
     public themeService: ThemeService,
     private userService: UserService,
+    private savedRecipeService: SavedRecipeService,
     private router: Router
   ) {
     this.currentUser$ = this.userService.getCurrentUser();
+    this.savedCount$ = this.savedRecipeService.savedRecipeIds$.pipe(
+      map(ids => ids.size)
+    );
   }
 
   get isLoggedIn(): boolean {

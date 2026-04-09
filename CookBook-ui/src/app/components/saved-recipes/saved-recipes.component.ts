@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { HeaderComponent } from '../header/header.component';
@@ -23,7 +23,8 @@ export class SavedRecipesComponent implements OnInit {
 
   constructor(
     private savedRecipeService: SavedRecipeService,
-    private userService: UserService
+    private userService: UserService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -55,4 +56,6 @@ export class SavedRecipesComponent implements OnInit {
     // Reload saved recipes when a recipe is unsaved
     this.loadSavedRecipes();
   }
+
+  goBack(): void { this.location.back(); }
 }
