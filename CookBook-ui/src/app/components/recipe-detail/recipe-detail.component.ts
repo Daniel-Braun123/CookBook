@@ -77,9 +77,12 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(({ recipe, nutrition, ingredients, cookingSteps }) => {
       if (recipe) {
-        // Redirect to edit page if the current user is the author
+        // Redirect to edit page if the current user is the author,
+        // unless ?view=true is set (navigating from my-recipes detail view)
         const currentUser = this.userService.getCurrentUserSnapshot();
-        if (currentUser && recipe.author?.id === currentUser.id) {
+        const viewOnly = this.route.snapshot.queryParamMap.get('view') === 'true';
+        if (currentUser && recipe.author?.id === currentUser.id && !viewOnly) {
+          this.isLoading = false;
           this.router.navigate(['/edit-recipe', recipe.id], { replaceUrl: true });
           return;
         }
