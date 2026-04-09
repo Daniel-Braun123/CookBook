@@ -52,7 +52,7 @@
         >
           <mat-icon class="text-xl">{{ themeService.isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
         </button>
-        
+
         <!-- Auth Buttons -->
         <ng-container *ngIf="!isLoggedIn">
           <a [routerLink]="['/login']">
@@ -128,7 +128,7 @@
         <mat-icon>{{ themeService.isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
         {{ themeService.isDarkMode() ? 'Light Mode' : 'Dark Mode' }}
       </button>
-      
+
       <div class="border-t border-border/60 my-2"></div>
 
       <ng-container *ngIf="!isLoggedIn">

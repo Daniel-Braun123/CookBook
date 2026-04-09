@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ThemeService } from './services/theme.service';
+import { ColorThemeService } from './services/color-theme.service';
 import { ToastComponent } from './components/toast/toast.component';
 
 @Component({
@@ -12,10 +13,13 @@ import { ToastComponent } from './components/toast/toast.component';
 export class AppComponent implements OnInit {
   title = 'CookBook';
 
-  constructor(private themeService: ThemeService) {}
+  constructor(
+    private themeService: ThemeService,
+    private colorThemeService: ColorThemeService,
+  ) {}
 
   ngOnInit(): void {
-    // Initialize theme on app startup
     this.themeService.initializeTheme();
+    this.colorThemeService.initialize();
   }
 }

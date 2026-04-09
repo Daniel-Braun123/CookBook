@@ -1,0 +1,161 @@
+<div class="relative" data-testid="color-theme-picker">
+
+  <!-- Trigger button — always readable via card backdrop -->
+  <button
+    (click)="toggle()"
+    class="flex items-center gap-1.5 pl-1.5 pr-2 py-1.5 rounded-xl bg-card/85 backdrop-blur-sm border border-border/50 hover:bg-card/95 transition-all duration-300 shadow-sm"
+    title="Akzentfarbe wählen"
+    aria-label="Akzentfarbe wählen"
+    data-testid="color-picker-trigger"
+  >
+    <span
+      class="block w-4 h-4 rounded-full ring-1 ring-black/10 transition-transform duration-200"
+      [style.background]="activeColor()"
+    ></span>
+    <mat-icon class="picker-icon-sm text-muted-foreground">palette</mat-icon>
+  </button>
+
+  <!-- Dropdown panel -->
+  <div
+    *ngIf="isOpen()"
+    class="absolute right-0 top-full mt-2 w-72 bg-card border border-border/60 rounded-2xl shadow-overlay z-[200] overflow-hidden animate-scale-in"
+    data-testid="color-picker-panel"
+  >
+    <div class="p-4">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-display font-semibold text-sm text-foreground tracking-tight">Akzentfarbe</h3>
+        <button
+          (click)="reset()"
+          class="text-xs text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center gap-1"
+          data-testid="reset-color-btn"
+          title="Zurücksetzen"
+        >
+          <mat-icon class="picker-icon-sm">restart_alt</mat-icon>
+          Standard
+        </button>
+      </div>
+
+      <!-- Preset swatches -->
+      <div class="grid grid-cols-4 gap-2 mb-4" data-testid="color-presets">
+        <button
+          *ngFor="let preset of presets"
+          (click)="selectPreset(preset.hex)"
+          class="group flex flex-col items-center gap-1.5"
+          [attr.data-testid]="'preset-' + preset.name.toLowerCase()"
+          [attr.title]="preset.name"
+        >
+          <span
+            class="w-10 h-10 rounded-xl ring-2 ring-offset-2 ring-offset-card transition-all duration-200 group-hover:scale-110"
+            [style.background]="preset.hex"
+            [class.ring-foreground]="isActive(preset.hex)"
+            [class.ring-border]="!isActive(preset.hex)"
+          ></span>
+          <span class="text-[10px] text-muted-foreground font-medium leading-none">{{ preset.name }}</span>
+        </button>
+      </div>
+
+      <!-- Saved custom colors -->
+      <ng-container *ngIf="savedColors().length > 0">
+        <div class="border-t border-border/60 mb-3"></div>
+        <div class="mb-3">
+          <p class="text-xs text-muted-foreground font-medium mb-2">Gespeichert</p>
+          <div class="flex gap-2">
+            <div
+              *ngFor="let saved of savedColors()"
+              class="relative group"
+            >
+              <button
+                (click)="selectPreset(saved)"
+                class="w-10 h-10 rounded-xl ring-2 ring-offset-2 ring-offset-card transition-all duration-200 group-hover:scale-105"
+                [style.background]="saved"
+                [class.ring-foreground]="isActive(saved)"
+                [class.ring-border]="!isActive(saved)"
+                [title]="saved"
+                aria-label="Gespeicherte Farbe anwenden"
+                data-testid="saved-color-swatch"
+              ></button>
+              <!-- Remove button -->
+              <button
+                (click)="removeSaved(saved, $event)"
+                class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-muted border border-border/60 text-muted-foreground hover:bg-destructive hover:text-destructive-foreground hover:border-destructive flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-150 z-10"
+                title="Entfernen"
+                aria-label="Farbe entfernen"
+                data-testid="remove-saved-color"
+              >
+                <mat-icon class="picker-icon-xs">close</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Divider -->
+      <div class="border-t border-border/60 mb-4"></div>
+
+      <!-- Custom hex input -->
+      <div>
+        <label class="label block mb-2 text-xs">Eigene Farbe</label>
+        <div class="flex gap-2 items-center">
+          <!-- Native color input -->
+          <label class="relative cursor-pointer shrink-0">
+            <span
+              class="block w-9 h-9 rounded-lg ring-1 ring-border/60 cursor-pointer transition-transform hover:scale-105"
+              [style.background]="customHex() || activeColor()"
+            ></span>
+            <input
+              type="color"
+              class="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+              [value]="customHex() || activeColor()"
+              (input)="onCustomInput($any($event.target).value)"
+              title="Farbe wählen"
+              aria-label="Farbe wählen"
+              data-testid="color-native-input"
+            />
+          </label>
+
+          <!-- Hex text input -->
+          <input
+            type="text"
+            class="input text-sm flex-1 font-mono"
+            [ngModel]="customHex()"
+            (ngModelChange)="onCustomInput($event)"
+            (keydown.enter)="applyCustom()"
+            placeholder="#rrggbb"
+            maxlength="7"
+            data-testid="color-hex-input"
+          />
+
+          <!-- Save button -->
+          <button
+            (click)="saveCustomColor()"
+            [disabled]="!canSaveColor()"
+            class="shrink-0 w-9 h-9 rounded-xl border border-border/60 text-muted-foreground hover:bg-secondary/60 hover:text-primary transition-all duration-200 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed"
+            [title]="savedColors().length >= 3 ? 'Max. 3 Farben speicherbar' : isAlreadySaved(customHex()) ? 'Bereits gespeichert' : 'Farbe speichern'"
+            [attr.aria-label]="savedColors().length >= 3 ? 'Max. 3 Farben speicherbar' : 'Farbe speichern'"
+            data-testid="save-color-btn"
+          >
+            <mat-icon class="picker-icon-md">bookmark_add</mat-icon>
+          </button>
+
+          <!-- Apply button -->
+          <button
+            (click)="applyCustom()"
+            class="shrink-0 px-3 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors duration-200"
+            data-testid="apply-color-btn"
+          >
+            OK
+          </button>
+        </div>
+
+        <!-- Error message -->
+        <p
+          *ngIf="customError()"
+          class="mt-1.5 text-xs text-destructive font-medium"
+          data-testid="color-error"
+        >
+          {{ customError() }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

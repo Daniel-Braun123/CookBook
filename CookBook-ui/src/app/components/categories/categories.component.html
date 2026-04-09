@@ -1,32 +1,18 @@
 <div class="min-h-screen bg-background">
-  <!-- Hero Section -->
-  <section class="hero-gradient py-10 md:py-14 relative overflow-hidden">
-    <!-- Grain texture -->
-    <div class="absolute inset-0 opacity-[0.03] mix-blend-overlay" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%270 0 256 256%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%274%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E');"></div>
-    
-    <!-- Back Button -->
-    <a 
-      [routerLink]="['/']"
-      class="absolute top-6 left-4 md:left-8 flex items-center gap-2 text-white/80 hover:text-white transition-all duration-300 group"
-    >
-      <svg class="h-5 w-5 transform group-hover:-translate-x-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-      </svg>
-      <span class="hidden md:inline font-medium text-sm tracking-wide">Zurück</span>
-    </a>
-    
-    <div class="container mx-auto px-4 text-center relative z-10">
-      <span class="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm text-white/90 text-sm font-medium tracking-wider uppercase mb-6">
-        Alle Kategorien
-      </span>
-      <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 tracking-tight">
-        Rezept-Kategorien
-      </h1>
-      <p class="text-white/80 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-        Entdecke unsere vielfältigen Rezeptkategorien
-      </p>
-    </div>
-  </section>
+  <app-header></app-header>
+
+  <div class="relative container mx-auto px-4 pt-12 pb-4 text-center">
+
+    <!-- Back button — vertically aligned with title -->
+    <button (click)="goBack()" class="absolute left-4 top-1/2 -translate-y-1/2 inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-all duration-300 group">
+      <mat-icon class="text-base transition-transform duration-300 group-hover:-translate-x-1">arrow_back</mat-icon>
+      <span class="text-sm font-medium">Zurück</span>
+    </button>
+
+    <!-- Page Title -->
+    <h1 class="font-display text-3xl md:text-4xl font-bold text-foreground tracking-tight">Kategorien</h1>
+    <p class="text-muted-foreground mt-2">Entdecke unsere vielfältigen Rezeptkategorien</p>
+  </div>
 
   <!-- Categories Grid -->
   <section class="py-14 md:py-20">
@@ -81,18 +67,8 @@
         </article>
       </div>
 
-      <!-- Back to Home -->
-      <div class="mt-14 text-center">
-        <a 
-          [routerLink]="['/']"
-          class="inline-flex items-center gap-2 text-foreground hover:text-primary transition-all duration-300 font-medium group"
-        >
-          <svg class="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          Zurück zur Startseite
-        </a>
-      </div>
     </div>
   </section>
+
+  <app-footer></app-footer>
 </div>
