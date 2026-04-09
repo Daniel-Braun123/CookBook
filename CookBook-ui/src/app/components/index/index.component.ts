@@ -31,6 +31,7 @@ export class IndexComponent implements OnInit, OnDestroy {
   categories: Category[] = [];
   activeCategory: string | number | null = null;
   isLoading = true;
+  carouselPage = 0;
 
   private destroy$ = new Subject<void>();
 
@@ -64,6 +65,7 @@ export class IndexComponent implements OnInit, OnDestroy {
       this.recipes = recipes;
       this.categories = categories;
       this.isLoading = false;
+      this.resetCarousel();
       this.route.queryParams.pipe(
         takeUntil(this.destroy$)
       ).subscribe(params => {
@@ -113,6 +115,23 @@ export class IndexComponent implements OnInit, OnDestroy {
     return this.userService.isLoggedIn();
   }
 
+  get carouselRecipes(): Recipe[] {
+    const start = this.carouselPage * 3;
+    return this.recipes.slice(start, start + 3);
+  }
+
+  get carouselTotal(): number {
+    return Math.ceil(this.recipes.length / 3);
+  }
+
+  setCarouselPage(page: number): void {
+    this.carouselPage = page;
+  }
+
+  private resetCarousel(): void {
+    this.carouselPage = 0;
+  }
+
   private filterByCategory(categoryName: string): void {
     this.recipeService.getRecipesByCategorieFilter(categoryName).pipe(
       switchMap(filtered => filtered.length > 0 
@@ -122,6 +141,7 @@ export class IndexComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(recipes => {
       this.recipes = recipes;
+      this.resetCarousel();
     });
   }
 
