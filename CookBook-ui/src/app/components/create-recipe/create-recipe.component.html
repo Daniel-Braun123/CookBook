@@ -33,9 +33,13 @@
               [(ngModel)]="title"
               name="title"
               required
-              class="input"
+              [class.border-destructive]="submitted && !title.trim()"
+              class="input transition-colors duration-200"
               placeholder="z.B. Spaghetti Carbonara"
             />
+            <p *ngIf="submitted && !title.trim()" class="mt-1.5 text-xs text-destructive font-medium">
+              Bitte gib einen Titel ein.
+            </p>
           </div>
 
           <!-- Description -->
@@ -48,9 +52,76 @@
               name="description"
               required
               rows="4"
-              class="input"
+              [class.border-destructive]="submitted && !description.trim()"
+              class="input transition-colors duration-200"
               placeholder="Beschreibe dein Rezept..."
             ></textarea>
+            <p *ngIf="submitted && !description.trim()" class="mt-1.5 text-xs text-destructive font-medium">
+              Bitte beschreibe dein Rezept.
+            </p>
+          </div>
+
+          <!-- Image Upload -->
+          <div>
+            <label class="label block mb-2">Titelbild</label>
+
+            <input
+              type="file"
+              accept="image/*"
+              class="hidden"
+              #imageInput
+              (change)="onImageSelected($event)"
+            />
+
+            <!-- Drop zone (no image selected) -->
+            <div
+              *ngIf="!imagePreview"
+              (click)="imageInput.click()"
+              class="flex flex-col items-center justify-center gap-3 border-2 border-dashed border-border hover:border-primary/50 rounded-2xl py-10 cursor-pointer transition-all duration-300 hover:bg-primary/5 group"
+            >
+              <div class="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center group-hover:bg-primary/10 transition-colors duration-300">
+                <svg class="h-6 w-6 text-muted-foreground group-hover:text-primary transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div class="text-center">
+                <p class="text-sm font-medium text-foreground">Bild hochladen</p>
+                <p class="text-xs text-muted-foreground mt-1">JPG, PNG oder WebP &middot; max. 5 MB</p>
+              </div>
+            </div>
+
+            <!-- Preview (image selected) -->
+            <div *ngIf="imagePreview" class="relative aspect-video rounded-2xl overflow-hidden border border-border/60">
+              <img [src]="imagePreview" alt="Vorschau" class="w-full h-full object-cover" />
+
+              <!-- Uploading spinner (shown during submit) -->
+              <div *ngIf="isUploadingImage" class="absolute inset-0 bg-black/50 flex items-center justify-center gap-2">
+                <svg class="animate-spin h-6 w-6 text-white" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+                <span class="text-white text-sm font-medium">Wird hochgeladen...</span>
+              </div>
+
+              <!-- Ready badge -->
+              <div *ngIf="!isUploadingImage && selectedImageFile" class="absolute top-3 right-3 bg-accent text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5">
+                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                </svg>
+                Bereit
+              </div>
+
+              <!-- Remove button -->
+              <button
+                type="button"
+                (click)="removeImage()"
+                class="absolute top-3 left-3 w-8 h-8 bg-black/60 hover:bg-destructive text-white rounded-full flex items-center justify-center transition-colors duration-300"
+              >
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </div>
 
           <!-- Category & Difficulty -->
@@ -63,11 +134,15 @@
                 [(ngModel)]="category"
                 name="category"
                 required
-                class="input"
+                [class.border-destructive]="submitted && !category"
+                class="input transition-colors duration-200"
               >
                 <option value="" disabled>Kategorie wählen</option>
-                <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+                <option *ngFor="let cat of categories" [value]="cat.name">{{ cat.name }}</option>
               </select>
+              <p *ngIf="submitted && !category" class="mt-1.5 text-xs text-destructive font-medium">
+                Bitte wähle eine Kategorie.
+              </p>
             </div>
 
             <div>
@@ -324,12 +399,17 @@
 
       <!-- Submit Button -->
       <div class="flex gap-4">
-        <button
-          type="submit"
-          class="btn btn-cookbook flex-1 md:flex-none md:px-14 py-3.5"
-        >
-          Rezept veröffentlichen
-        </button>
+        <div class="flex-1 md:flex-none" (click)="submitted = true">
+          <button
+            type="submit"
+            [disabled]="!isFormValid || isUploadingImage"
+            [class.opacity-50]="!isFormValid"
+            [class.cursor-not-allowed]="!isFormValid"
+            class="btn btn-cookbook w-full md:px-14 py-3.5 transition-opacity duration-200"
+          >
+            Rezept veröffentlichen
+          </button>
+        </div>
         <a [routerLink]="['/']" class="btn bg-secondary hover:bg-secondary/70 text-foreground flex-1 md:flex-none md:px-14 py-3.5 text-center rounded-xl transition-all duration-300 font-semibold">
           Abbrechen
         </a>

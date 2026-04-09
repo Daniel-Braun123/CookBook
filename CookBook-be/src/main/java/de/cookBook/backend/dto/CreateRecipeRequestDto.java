@@ -9,6 +9,7 @@ import java.util.List;
 public class CreateRecipeRequestDto {
     private String title;
     private String description;
+    private String image;
     private String categoryName;
     private Difficulty difficulty;
     private Integer prepTime;

@@ -7,7 +7,7 @@
         [class.hidden]="imageLoaded"
       ></div>
       <img
-        [src]="'assets/' + recipe.image"
+        [src]="recipe.image.startsWith('http') ? recipe.image : ('assets/' + recipe.image)"
         [alt]="recipe.title"
         [class.opacity-0]="!imageLoaded"
         class="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-105"

@@ -51,7 +51,9 @@ public class RecipeService {
         Recipes recipe = new Recipes();
         recipe.setTitle(request.getTitle());
         recipe.setDescription(request.getDescription());
-        recipe.setImage("/recipes/Recipe_Placeholder.png"); // Default placeholder
+        recipe.setImage(request.getImage() != null && !request.getImage().isBlank()
+                ? request.getImage()
+                : "/recipes/Recipe_Placeholder.png"); // Default placeholder
         recipe.setPrepTime(request.getPrepTime());
         recipe.setCookTime(request.getCookTime());
         recipe.setDifficulty(request.getDifficulty());

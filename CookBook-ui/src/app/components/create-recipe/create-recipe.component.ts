@@ -8,6 +8,10 @@ import { FooterComponent } from '../footer/footer.component';
 import { UserService } from '../../services/user.service';
 import { RecipeService } from '../../services/recipe.service';
 import { ToastService } from '../../services/toast.service';
+import { CloudinaryService } from '../../services/cloudinary.service';
+import { switchMap, of } from 'rxjs';
+import { CategorieService } from '../../services/categorie.service';
+import { Category } from '../../models/category';
 
 @Component({
   selector: 'app-create-recipe',
@@ -17,6 +21,18 @@ import { ToastService } from '../../services/toast.service';
   styleUrls: ['./create-recipe.component.scss']
 })
 export class CreateRecipeComponent implements OnInit {
+  // Image upload
+  imageUrl = '';
+  imagePreview: string | null = null;
+  isUploadingImage = false;
+  selectedImageFile: File | null = null;
+
+  submitted = false;
+
+  get isFormValid(): boolean {
+    return !!(this.title.trim() && this.description.trim() && this.category);
+  }
+
   // Form data
   title = '';
   description = '';
@@ -43,20 +59,15 @@ export class CreateRecipeComponent implements OnInit {
     fat: 0
   };
 
-  categories = [
-    'Frühstück',
-    'Pasta',
-    'Vegan',
-    'Fisch',
-    'Dessert',
-    'Suppen'
-  ];
+  categories: Category[] = [];
 
   constructor(
     private userService: UserService,
     private recipeService: RecipeService,
     private router: Router,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private cloudinaryService: CloudinaryService,
+    private categoryService: CategorieService
   ) {}
 
   ngOnInit(): void {
@@ -64,6 +75,8 @@ export class CreateRecipeComponent implements OnInit {
     if (!this.userService.isLoggedIn()) {
       this.router.navigate(['/login']);
     }
+    this.categoryService.getAllCategories().subscribe(cats => this.categories = cats);
+
   }
 
   addIngredient(): void {
@@ -97,7 +110,39 @@ export class CreateRecipeComponent implements OnInit {
     this.tags = this.tags.filter(t => t !== tag);
   }
 
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    const validation = this.cloudinaryService.validateImage(file);
+    if (!validation.valid) {
+      this.toastService.showError(validation.error!);
+      input.value = '';
+      return;
+    }
+
+    // Store file for upload on submit
+    this.selectedImageFile = file;
+
+    // Show preview immediately without uploading
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.imagePreview = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  removeImage(): void {
+    this.imageUrl = '';
+    this.imagePreview = null;
+    this.isUploadingImage = false;
+    this.selectedImageFile = null;
+  }
+
   onSubmit(): void {
+    this.submitted = true;
+
     // Check if user is logged in before submitting
     if (!this.userService.isLoggedIn()) {
       this.router.navigate(['/login']);
@@ -105,36 +150,45 @@ export class CreateRecipeComponent implements OnInit {
     }
 
     // Validate required fields
-    if (!this.title || !this.description || !this.category) {
-      this.toastService.showError('Bitte fülle alle Pflichtfelder aus.');
+    if (!this.isFormValid) {
       return;
     }
 
-    // Prepare recipe data
-    const recipeData = {
-      title: this.title,
-      description: this.description,
-      categoryName: this.category,
-      difficulty: this.difficulty,
-      prepTime: this.prepTime,
-      cookTime: this.cookTime,
-      servings: this.servings,
-      tags: this.tags,
-      ingredients: this.ingredients.filter(i => i.name && i.amount && i.unit),
-      steps: this.steps.filter(s => s.instruction).map((step, index) => ({
-        instruction: step.instruction,
-        duration: step.duration || null
-      })),
-      nutrition: {
-        calories: this.nutrition.calories || 0,
-        protein: this.nutrition.protein || 0,
-        carbs: this.nutrition.carbs || 0,
-        fat: this.nutrition.fat || 0
-      }
-    };
+    // Upload image first if one was selected, then create recipe
+    this.isUploadingImage = !!this.selectedImageFile;
 
-    // Submit to backend
-    this.recipeService.createRecipe(recipeData).subscribe({
+    const upload$ = this.selectedImageFile
+      ? this.cloudinaryService.uploadImage(this.selectedImageFile)
+      : of('');
+
+    upload$.pipe(
+      switchMap((imageUrl) => {
+        this.isUploadingImage = false;
+        const recipeData = {
+          title: this.title,
+          description: this.description,
+          image: imageUrl || undefined,
+          categoryName: this.category,
+          difficulty: this.difficulty,
+          prepTime: this.prepTime,
+          cookTime: this.cookTime,
+          servings: this.servings,
+          tags: this.tags,
+          ingredients: this.ingredients.filter(i => i.name && i.amount && i.unit),
+          steps: this.steps.filter(s => s.instruction).map((step) => ({
+            instruction: step.instruction,
+            duration: step.duration || null
+          })),
+          nutrition: {
+            calories: this.nutrition.calories || 0,
+            protein: this.nutrition.protein || 0,
+            carbs: this.nutrition.carbs || 0,
+            fat: this.nutrition.fat || 0
+          }
+        };
+        return this.recipeService.createRecipe(recipeData);
+      })
+    ).subscribe({
       next: (createdRecipe) => {
         this.toastService.showSuccess('Rezept erfolgreich erstellt! 🎉');
         setTimeout(() => {
@@ -142,6 +196,7 @@ export class CreateRecipeComponent implements OnInit {
         }, 1000);
       },
       error: (error) => {
+        this.isUploadingImage = false;
         console.error('Error creating recipe:', error);
         this.toastService.showError('Fehler beim Erstellen des Rezepts. Bitte versuche es erneut.');
       }
