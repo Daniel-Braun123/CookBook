@@ -123,9 +123,14 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
           this.reviewComment = '';
         }
         
-        // Check if recipe is saved
+        // Check if recipe is saved — also re-check when savedIds stream updates (race condition)
         if (this.userService.isLoggedIn()) {
-          this.isSaved = this.savedRecipeService.isRecipeSaved(Number(recipe.id));
+          this.recipe.isSaved = this.savedRecipeService.isRecipeSaved(Number(recipe.id));
+          this.savedRecipeService.savedRecipeIds$.pipe(takeUntil(this.destroy$)).subscribe(ids => {
+            if (this.recipe) {
+              this.recipe.isSaved = ids.has(Number(this.recipe.id));
+            }
+          });
         }
       }
       this.isLoading = false;
@@ -193,7 +198,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     // Toggle save state via service
     this.savedRecipeService.toggleSaveRecipe(Number(this.recipe.id)).subscribe({
       next: (response) => {
-        this.isSaved = response.saved;
+        this.recipe!.isSaved = response.saved;
         if (response.saved) {
           this.toastService.showSuccess('Rezept gespeichert! ❤️');
         } else {
