@@ -32,6 +32,7 @@
         <nav class="flex items-center gap-1">
           <a [routerLink]="['/recipes']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60" [class.active]="isRecipesPage">Rezepte</a>
           <a [routerLink]="['/categories']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60" [class.active]="isCategoriesPage">Kategorien</a>
+          <a *ngIf="isAdmin" [routerLink]="['/admin']" class="nav-link px-3 py-2 rounded-xl hover:bg-secondary/60">Admin</a>
           <a [routerLink]="['/saved']" class="relative nav-link flex items-center p-2.5 rounded-xl hover:bg-secondary/60" [class.active]="isSavedPage" aria-label="Gespeicherte Rezepte">
             <mat-icon class="text-lg leading-none">favorite_border</mat-icon>
             <ng-container *ngIf="savedCount$ | async as count">
@@ -118,6 +119,11 @@
       <a [routerLink]="['/categories']" (click)="isMenuOpen = false" 
          class="py-3 px-4 rounded-xl font-medium text-foreground hover:text-primary hover:bg-secondary/60 transition-all duration-300">
         Kategorien
+      </a>
+      <a *ngIf="isAdmin" [routerLink]="['/admin']" (click)="isMenuOpen = false" 
+         class="py-3 px-4 rounded-xl font-medium text-primary hover:bg-secondary/60 transition-all duration-300 flex items-center gap-2">
+        <mat-icon class="text-lg">admin_panel_settings</mat-icon>
+        Admin
       </a>
       <a [routerLink]="['/saved']" (click)="isMenuOpen = false" 
          class="py-3 px-4 rounded-xl font-medium text-foreground hover:text-primary hover:bg-secondary/60 transition-all duration-300 flex items-center gap-2">

@@ -9,7 +9,8 @@ import { FooterComponent } from '../footer/footer.component';
 import { UserService } from '../../services/user.service';
 import { CloudinaryService } from '../../services/cloudinary.service';
 import { ToastService } from '../../services/toast.service';
-import { finalize, Observable, of, Subject, switchMap, take, takeUntil } from 'rxjs';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
+import { finalize, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { User } from '../../models/user';
 import { PendingChangesComponent } from '../../guards/pending-changes.guard';
 
@@ -29,11 +30,9 @@ export class EditProfileComponent implements OnInit, OnDestroy, PendingChangesCo
   selectedFile: File | null = null;
   uploadedImageUrl: string | null = null;
   previewUrl: string | null = null;
-  showLeaveConfirmModal = false;
   private destroy$ = new Subject<void>();
   private originalUserData: any = null;
   private isSaving = false;
-  private pendingLeaveDecision: Subject<boolean> | null = null;
 
   constructor(
     private userService: UserService,
@@ -41,7 +40,8 @@ export class EditProfileComponent implements OnInit, OnDestroy, PendingChangesCo
     private fb: FormBuilder,
     private router: Router,
     private location: Location,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private confirmDialog: ConfirmDialogService
   ) {
     this.currentUser$ = this.userService.currentUser$;
   }
@@ -97,28 +97,18 @@ export class EditProfileComponent implements OnInit, OnDestroy, PendingChangesCo
     );
   }
 
-  canDeactivate(): boolean | Observable<boolean> {
+  canDeactivate(): Promise<boolean> {
     if (!this.hasChanges || this.isSaving) {
-      return true;
+      return Promise.resolve(true);
     }
 
-    this.showLeaveConfirmModal = true;
-    this.pendingLeaveDecision = new Subject<boolean>();
-    return this.pendingLeaveDecision.asObservable().pipe(take(1));
-  }
-
-  confirmLeaveWithoutSaving(): void {
-    this.showLeaveConfirmModal = false;
-    this.pendingLeaveDecision?.next(true);
-    this.pendingLeaveDecision?.complete();
-    this.pendingLeaveDecision = null;
-  }
-
-  stayOnEditPage(): void {
-    this.showLeaveConfirmModal = false;
-    this.pendingLeaveDecision?.next(false);
-    this.pendingLeaveDecision?.complete();
-    this.pendingLeaveDecision = null;
+    return this.confirmDialog.confirm({
+      title: 'Änderungen verwerfen?',
+      message: 'Du hast ungespeicherte Änderungen. Möchtest du die Seite wirklich verlassen?',
+      confirmLabel: 'Verlassen',
+      cancelLabel: 'Abbrechen',
+      danger: false,
+    });
   }
 
   onSubmit(): void {

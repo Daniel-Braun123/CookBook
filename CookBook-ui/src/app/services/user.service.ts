@@ -111,4 +111,8 @@ export class UserService {
   isLoggedIn(): boolean {
     return this.tokenStorage.hasToken();
   }
+
+  isAdmin(): boolean {
+    return this.getCurrentUserSnapshot()?.role === 'ADMIN';
+  }
 }

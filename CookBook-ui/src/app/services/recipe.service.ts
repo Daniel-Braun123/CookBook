@@ -26,6 +26,10 @@ export class RecipeService {
   }
 
   getAllRecipes(): Observable<Recipe[]> {
+    return this.http.get<Recipe[]>(this.API_URL + "/getAll");
+  }
+
+  getAllRecipesExludeOwn(): Observable<Recipe[]> {
     return this.excludeOwn(this.http.get<Recipe[]>(this.API_URL + "/getAll"));
   }
 

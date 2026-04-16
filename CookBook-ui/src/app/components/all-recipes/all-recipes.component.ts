@@ -8,13 +8,14 @@ import { FooterComponent } from '../footer/footer.component';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 import { RecipeService } from '../../services/recipe.service';
 import { CategorieService } from '../../services/categorie.service';
+import { UserService } from '../../services/user.service';
 import { Recipe } from '../../models/recipe';
 import { Category } from '../../models/category';
 
 @Component({
   selector: 'app-all-recipes',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, HeaderComponent, FooterComponent, RecipeCardComponent],
+  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent, RecipeCardComponent],
   templateUrl: './all-recipes.component.html',
   styleUrls: ['./all-recipes.component.scss']
 })
@@ -29,12 +30,18 @@ export class AllRecipesComponent implements OnInit, OnDestroy {
   selectedCategory = '';
   selectedDifficulty = '';
   sortBy = 'rating';
+  showOwnRecipes = false;
+
+  // Own recipes
+  hasOwnRecipes = false;
+  private currentUserId: string | null = null;
 
   private destroy$ = new Subject<void>();
 
   constructor(
     private recipeService: RecipeService,
     private categorieService: CategorieService,
+    private userService: UserService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -45,6 +52,9 @@ export class AllRecipesComponent implements OnInit, OnDestroy {
       recipes: this.recipeService.getAllRecipes(),
       categories: this.categorieService.getAllCategories()
     }).pipe(takeUntil(this.destroy$)).subscribe(({ recipes, categories }) => {
+      const me = this.userService.getCurrentUserSnapshot();
+      this.currentUserId = me?.id ?? null;
+      this.hasOwnRecipes = !!me && recipes.some(r => r.author?.id === me.id);
       this.allRecipes = recipes;
       this.categories = categories;
       this.isLoading = false;
@@ -74,7 +84,10 @@ export class AllRecipesComponent implements OnInit, OnDestroy {
       replaceUrl: true
     });
 
-    let result = [...this.allRecipes];
+    const base = this.showOwnRecipes
+      ? this.allRecipes
+      : this.allRecipes.filter(r => r.author?.id !== this.currentUserId);
+    let result = [...base];
 
     if (this.searchQuery.trim()) {
       const q = this.searchQuery.toLowerCase();
@@ -109,6 +122,7 @@ export class AllRecipesComponent implements OnInit, OnDestroy {
     this.selectedCategory = '';
     this.selectedDifficulty = '';
     this.sortBy = 'rating';
+    this.showOwnRecipes = false;
     this.applyFilters();
   }
 

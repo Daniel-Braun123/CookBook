@@ -7,6 +7,7 @@ import { FooterComponent } from '../footer/footer.component';
 import { RecipeService } from '../../services/recipe.service';
 import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { Recipe } from '../../models/recipe';
 import { filter, take, switchMap } from 'rxjs/operators';
 
@@ -20,13 +21,13 @@ import { filter, take, switchMap } from 'rxjs/operators';
 export class MyRecipesComponent implements OnInit {
   recipes: Recipe[] = [];
   isLoading = true;
-  recipeToDelete: Recipe | null = null;
 
   constructor(
     private recipeService: RecipeService,
     private userService: UserService,
     private location: Location,
     private toastService: ToastService,
+    private confirmDialog: ConfirmDialogService,
     private router: Router
   ) {}
 
@@ -48,16 +49,15 @@ export class MyRecipesComponent implements OnInit {
     });
   }
 
-  deleteRecipe(recipe: Recipe): void {
+  async deleteRecipe(recipe: Recipe): Promise<void> {
     const currentUser = this.userService.getCurrentUserSnapshot();
     if (recipe.author.id !== currentUser?.id) return;
-    this.recipeToDelete = recipe;
-  }
 
-  confirmDelete(): void {
-    if (!this.recipeToDelete) return;
-    const recipe = this.recipeToDelete;
-    this.recipeToDelete = null;
+    const ok = await this.confirmDialog.confirm({
+      message: `"${recipe.title}" wird unwiderruflich gelöscht.`,
+    });
+    if (!ok) return;
+
     this.recipeService.deleteRecipe(recipe.id).subscribe({
       next: () => {
         this.recipes = this.recipes.filter(r => r.id !== recipe.id);
@@ -67,10 +67,6 @@ export class MyRecipesComponent implements OnInit {
         this.toastService.showError('Rezept konnte nicht gelöscht werden.');
       }
     });
-  }
-
-  cancelDelete(): void {
-    this.recipeToDelete = null;
   }
 
   editRecipe(recipe: Recipe): void {

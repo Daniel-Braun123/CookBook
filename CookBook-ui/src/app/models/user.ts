@@ -4,6 +4,7 @@ export interface User {
   email: string;
   profilePicture: string;
   bio?: string;
+  role: 'USER' | 'ADMIN';
   savedRecipes: string[];
   ownRecipes: string[];
   joinedAt: string;

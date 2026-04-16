@@ -30,7 +30,7 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody RegisterRequestDto request) {
         try {
             Users user = authService.register(request);
-            String token = jwtTokenProvider.generateToken(user.getEmail(), user.getId());
+            String token = jwtTokenProvider.generateToken(user.getEmail(), user.getId(), user.getRole().name());
             
             UserDTO userDTO = convertToDTO(user);
             AuthResponseDto response = new AuthResponseDto(token, userDTO);
@@ -47,7 +47,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequestDto request) {
         try {
             Users user = authService.authenticate(request.getEmail(), request.getPassword());
-            String token = jwtTokenProvider.generateToken(user.getEmail(), user.getId());
+            String token = jwtTokenProvider.generateToken(user.getEmail(), user.getId(), user.getRole().name());
             
             UserDTO userDTO = convertToDTO(user);
             AuthResponseDto response = new AuthResponseDto(token, userDTO);
@@ -96,6 +96,7 @@ public class AuthController {
         dto.setEmail(user.getEmail());
         dto.setProfilePicture(user.getProfilePicture());
         dto.setBio(user.getBio());
+        dto.setRole(user.getRole().name());
         dto.setJoinedAt(user.getJoinedAt());
         return dto;
     }

@@ -50,6 +50,10 @@ export class HeaderComponent {
     return this.router.url.startsWith('/categories');
   }
 
+  get isAdmin(): boolean {
+    return this.userService.isAdmin();
+  }
+
   get isSavedPage(): boolean {
     return this.router.url.startsWith('/saved');
   }

@@ -68,6 +68,10 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     private reviewService: ReviewService
   ) {}
 
+  goBack(): void {
+    window.history.back();
+  }
+
   ngOnInit(): void {
     window.scrollTo(0, 0);
     

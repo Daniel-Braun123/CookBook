@@ -15,5 +15,6 @@ public class UserDTO {
     private String email;
     private String profilePicture;
     private String bio;
+    private String role;
     private LocalDateTime joinedAt;
 }

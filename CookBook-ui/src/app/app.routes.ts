@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { adminGuard } from './guards/admin.guard';
+import { guestGuard } from './guards/guest.guard';
 import { pendingChangesGuard } from './guards/pending-changes.guard';
 
 export const routes: Routes = [
@@ -13,11 +15,13 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent)
+    loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent),
+    canActivate: [guestGuard]
   },
   {
     path: 'register',
-    loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent)
+    loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent),
+    canActivate: [guestGuard]
   },
   {
     path: 'profile',
@@ -64,6 +68,11 @@ export const routes: Routes = [
     path: 'edit-recipe/:id',
     loadComponent: () => import('./components/edit-recipe/edit-recipe.component').then(m => m.EditRecipeComponent),
     canActivate: [authGuard]
+  },
+  {
+    path: 'admin',
+    loadComponent: () => import('./components/admin/admin.component').then(m => m.AdminComponent),
+    canActivate: [authGuard, adminGuard]
   },
   {
     path: '**',
