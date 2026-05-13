@@ -9,12 +9,13 @@ import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
 import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { Recipe } from '../../models/recipe';
+import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
 import { filter, take, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-my-recipes',
   standalone: true,
-  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent],
+  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent, ScrollRevealDirective],
   templateUrl: './my-recipes.component.html',
   styleUrls: ['./my-recipes.component.scss']
 })

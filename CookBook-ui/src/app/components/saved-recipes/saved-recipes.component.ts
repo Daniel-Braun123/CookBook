@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
+import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
 import { SavedRecipeService } from '../../services/saved-recipe.service';
 import { UserService } from '../../services/user.service';
 import { Recipe } from '../../models/recipe';
@@ -12,7 +13,7 @@ import { Recipe } from '../../models/recipe';
 @Component({
   selector: 'app-saved-recipes',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatIconModule, HeaderComponent, FooterComponent, RecipeCardComponent],
+  imports: [CommonModule, RouterLink, MatIconModule, HeaderComponent, FooterComponent, RecipeCardComponent, ScrollRevealDirective],
   templateUrl: './saved-recipes.component.html',
   styleUrls: ['./saved-recipes.component.scss']
 })

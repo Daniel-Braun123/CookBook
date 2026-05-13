@@ -22,7 +22,7 @@
 
   <!-- Results -->
   <ng-container *ngIf="!isLoading">
-    <p class="text-muted-foreground mb-10 text-sm tracking-wide">{{ recipes.length }} Rezepte gefunden</p>
+    <p class="text-muted-foreground mb-6 text-sm tracking-wide">{{ recipes.length }} Rezepte gefunden</p>
 
     <!-- Empty state -->
     <div *ngIf="recipes.length === 0" class="text-center py-20 animate-fade-in">
@@ -32,7 +32,9 @@
 
     <!-- Recipe grid -->
     <div *ngIf="recipes.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
-      <div *ngFor="let recipe of recipes" class="animate-fade-in-up">
+      <div *ngFor="let recipe of recipes; let i = index"
+           scrollReveal="fade-in-up"
+           [revealDelay]="(i % 3) * 80">
         <app-recipe-card [recipe]="recipe"></app-recipe-card>
       </div>
     </div>

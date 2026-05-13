@@ -7,11 +7,12 @@ import { Category } from '../../models/category';
 import { CategorieService } from '@app/services/categorie.service';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
+import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, MatIconModule, HeaderComponent, FooterComponent],
+  imports: [CommonModule, MatIconModule, HeaderComponent, FooterComponent, ScrollRevealDirective],
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })

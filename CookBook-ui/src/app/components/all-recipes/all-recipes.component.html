@@ -14,7 +14,7 @@
           <input
             type="text"
             [(ngModel)]="searchQuery"
-            (ngModelChange)="applyFilters()"
+            (ngModelChange)="searchInput$.next($event)"
             placeholder="Rezepte durchsuchen..."
             class="input pl-10 w-full"
           />
@@ -79,7 +79,7 @@
   </section>
 
   <!-- Results -->
-  <section class="py-10 md:py-14">
+  <section class="py-8 md:py-10">
     <div class="container mx-auto">
 
       <!-- Loading shimmer -->
@@ -95,7 +95,7 @@
       </div>
 
       <!-- Results count + active filter tags -->
-      <div *ngIf="!isLoading" class="flex flex-wrap items-center gap-3 mb-8">
+      <div *ngIf="!isLoading" class="flex flex-wrap items-center gap-3 mb-5">
         <span class="text-sm text-muted-foreground font-medium">
           {{ filteredRecipes.length }} {{ filteredRecipes.length === 1 ? 'Rezept' : 'Rezepte' }} gefunden
         </span>
@@ -122,8 +122,8 @@
            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-start">
         <div
           *ngFor="let recipe of filteredRecipes; trackBy: trackByRecipeId; let i = index"
-          class="animate-fade-in"
-          [style.animation-delay]="(i * 40) + 'ms'"
+          scrollReveal="fade-in-up"
+          [revealDelay]="(i % 4) * 60"
         >
           <app-recipe-card [recipe]="recipe"></app-recipe-card>
         </div>
@@ -137,9 +137,16 @@
           </svg>
         </div>
         <h3 class="font-display text-xl font-bold text-foreground mb-2">Keine Rezepte gefunden</h3>
-        <p class="text-muted-foreground mb-6 max-w-sm">Versuche andere Filter oder setze sie zurück.</p>
+        <p class="text-muted-foreground mb-6 max-w-sm">Versuche andere Filter oder entdecke beliebte Kategorien:</p>
+        <div class="flex flex-wrap items-center justify-center gap-2 mb-6">
+          <button *ngFor="let cat of categories | slice:0:5"
+                  (click)="selectedCategory = cat.name; applyFilters()"
+                  class="px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 transition-colors duration-200">
+            {{ cat.name }}
+          </button>
+        </div>
         <button (click)="clearFilters()" class="btn btn-cookbook px-6 py-2.5">
-          Filter zurücksetzen
+          Alle Filter zurücksetzen
         </button>
       </div>
 

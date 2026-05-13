@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
@@ -96,6 +96,18 @@ export class ConfirmDialogComponent implements OnInit, OnDestroy {
   onCancel(): void {
     if (this.dialog) {
       this.confirmDialogService.respond(false, this.dialog.resolve);
+    }
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent): void {
+    if (!this.dialog || !this.visible) return;
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.onConfirm();
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      this.onCancel();
     }
   }
 }

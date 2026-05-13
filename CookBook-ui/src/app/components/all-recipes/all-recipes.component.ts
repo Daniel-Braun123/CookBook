@@ -6,6 +6,7 @@ import { Subject, takeUntil, forkJoin, debounceTime, distinctUntilChanged } from
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
+import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
 import { RecipeService } from '../../services/recipe.service';
 import { CategorieService } from '../../services/categorie.service';
 import { UserService } from '../../services/user.service';
@@ -15,7 +16,7 @@ import { Category } from '../../models/category';
 @Component({
   selector: 'app-all-recipes',
   standalone: true,
-  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent, RecipeCardComponent],
+  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent, RecipeCardComponent, ScrollRevealDirective],
   templateUrl: './all-recipes.component.html',
   styleUrls: ['./all-recipes.component.scss']
 })
@@ -37,6 +38,7 @@ export class AllRecipesComponent implements OnInit, OnDestroy {
   private currentUserId: string | null = null;
 
   private destroy$ = new Subject<void>();
+  searchInput$ = new Subject<string>();
 
   constructor(
     private recipeService: RecipeService,
@@ -48,6 +50,17 @@ export class AllRecipesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
+
+    // Debounce search input
+    this.searchInput$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntil(this.destroy$)
+    ).subscribe(query => {
+      this.searchQuery = query;
+      this.applyFilters();
+    });
+
     forkJoin({
       recipes: this.recipeService.getAllRecipes(),
       categories: this.categorieService.getAllCategories()

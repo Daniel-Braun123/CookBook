@@ -32,8 +32,10 @@
               placeholder="deine@email.de"
               [(ngModel)]="email"
               name="email"
+              (blur)="validate()"
               [class.border-destructive]="errors.email"
               class="input pl-11"
+              autofocus
             />
           </div>
           <p *ngIf="errors.email" class="text-sm text-destructive">{{ errors.email }}</p>
@@ -53,6 +55,7 @@
               placeholder="••••••••"
               [(ngModel)]="password"
               name="password"
+              (blur)="validate()"
               [class.border-destructive]="errors.password"
               class="input pl-11 pr-11"
             />

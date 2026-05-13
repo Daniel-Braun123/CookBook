@@ -10,6 +10,7 @@
         [src]="recipe.image && recipe.image.startsWith('http') ? recipe.image : recipe.image ? ('assets/' + recipe.image) : 'assets/recipes/Recipe_Placeholder.png'"
         [alt]="recipe.title"
         [class.opacity-0]="!imageLoaded"
+        loading="lazy"
         class="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-105"
         (load)="imageLoaded = true"
       />

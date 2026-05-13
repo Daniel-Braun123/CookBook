@@ -34,8 +34,9 @@
         <article
           *ngFor="let category of categories; let i = index"
           (click)="navigateToCategory(category.name)"
-          class="bg-card rounded-2xl p-7 border border-border/60 transition-all duration-500 ease-out cursor-pointer group hover:shadow-card-hover hover:-translate-y-1.5 animate-fade-in-up"
-          [style.animation-delay]="i * 0.08 + 's'"
+          scrollReveal="scale-in"
+          [revealDelay]="(i % 3) * 80"
+          class="bg-card rounded-2xl p-7 border border-border/60 transition-all duration-500 ease-out cursor-pointer group hover:shadow-card-hover hover:-translate-y-1.5"
         >
           <!-- Icon -->
           <div class="w-16 h-16 bg-primary/8 rounded-2xl flex items-center justify-center mb-5 text-4xl transition-all duration-500 group-hover:scale-110 group-hover:bg-primary/12 group-hover:rounded-xl">

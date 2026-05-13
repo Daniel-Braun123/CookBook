@@ -1,5 +1,5 @@
-<footer class="bg-secondary/40 border-t border-border/60 mt-20">
-  <div class="container mx-auto py-16">
+<footer class="bg-secondary/40 border-t border-border/60 mt-12">
+  <div class="container mx-auto py-10">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8">
       <!-- Brand -->
       <div class="md:col-span-4">
@@ -18,20 +18,20 @@
       <div class="md:col-span-2">
         <h4 class="font-display text-sm font-bold text-foreground mb-4 uppercase tracking-wider">Rezepte</h4>
         <ul class="space-y-2.5 text-sm text-muted-foreground">
-          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors duration-300">Alle Rezepte</a></li>
-          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors duration-300">Neue Rezepte</a></li>
-          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors duration-300">Beliebte Rezepte</a></li>
-          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors duration-300">Saisonal</a></li>
+          <li><a [routerLink]="['/recipes']" class="hover:text-primary transition-colors duration-300">Alle Rezepte</a></li>
+          <li><a [routerLink]="['/recipes']" [queryParams]="{sort: 'newest'}" class="hover:text-primary transition-colors duration-300">Neue Rezepte</a></li>
+          <li><a [routerLink]="['/recipes']" [queryParams]="{sort: 'rating'}" class="hover:text-primary transition-colors duration-300">Beliebte Rezepte</a></li>
+          <li><a [routerLink]="['/categories']" class="hover:text-primary transition-colors duration-300">Kategorien</a></li>
         </ul>
       </div>
 
       <div class="md:col-span-3">
         <h4 class="font-display text-sm font-bold text-foreground mb-4 uppercase tracking-wider">Kategorien</h4>
         <ul class="space-y-2.5 text-sm text-muted-foreground">
-          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors duration-300">Frühstück</a></li>
-          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors duration-300">Mittagessen</a></li>
-          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors duration-300">Abendessen</a></li>
-          <li><a [routerLink]="['/']" class="hover:text-primary transition-colors duration-300">Desserts</a></li>
+          <li><a [routerLink]="['/recipes']" [queryParams]="{category: 'Frühstück'}" class="hover:text-primary transition-colors duration-300">Frühstück</a></li>
+          <li><a [routerLink]="['/recipes']" [queryParams]="{category: 'Mittagessen'}" class="hover:text-primary transition-colors duration-300">Mittagessen</a></li>
+          <li><a [routerLink]="['/recipes']" [queryParams]="{category: 'Abendessen'}" class="hover:text-primary transition-colors duration-300">Abendessen</a></li>
+          <li><a [routerLink]="['/recipes']" [queryParams]="{category: 'Desserts'}" class="hover:text-primary transition-colors duration-300">Desserts</a></li>
         </ul>
       </div>
 
@@ -46,9 +46,8 @@
       </div>
     </div>
 
-    <div class="mt-14 pt-8 border-t border-border/60 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+    <div class="mt-8 pt-6 border-t border-border/60 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
       <p>© {{ currentYear }} CookBook. Alle Rechte vorbehalten.</p>
-      <p class="text-xs">Handcrafted with love for food lovers.</p>
     </div>
   </div>
 </footer>

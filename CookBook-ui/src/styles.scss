@@ -461,3 +461,102 @@ $cookbook-dark-theme: mat.define-dark-theme((
     @apply border-t border-border/60;
   }
 }
+
+// ============================================================
+// Scroll-Reveal Animations (IntersectionObserver-driven)
+// ============================================================
+.scroll-reveal {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scroll-reveal--fade-in-up {
+  transform: translateY(32px);
+}
+
+.scroll-reveal--fade-in {
+  transform: translateY(0);
+}
+
+.scroll-reveal--slide-in-left {
+  transform: translateX(-48px);
+}
+
+.scroll-reveal--slide-in-right {
+  transform: translateX(48px);
+}
+
+.scroll-reveal--scale-in {
+  transform: scale(0.9);
+}
+
+.scroll-reveal.is-revealed {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+}
+
+// No-motion fallback: content visible immediately
+.scroll-reveal--no-motion {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+// ============================================================
+// CSS Scroll-Driven Animations (Progressive Enhancement)
+// Only supported in Chrome 115+/Edge 115+/Safari 26+
+// ============================================================
+@supports (animation-timeline: view()) {
+  .hero-parallax-image {
+    animation: hero-parallax linear both;
+    animation-timeline: scroll();
+    animation-range: 0% 50%;
+  }
+
+  @keyframes hero-parallax {
+    from { transform: scale(1.05) translateY(0); }
+    to { transform: scale(1.05) translateY(12%); }
+  }
+}
+
+// ============================================================
+// Carousel Transition
+// ============================================================
+.carousel-container {
+  transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.carousel-container--transitioning {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+// ============================================================
+// Accessibility: prefers-reduced-motion
+// ============================================================
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .scroll-reveal,
+  .animate-fade-in,
+  .animate-fade-in-up,
+  .animate-scale-in {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .carousel-container--transitioning {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

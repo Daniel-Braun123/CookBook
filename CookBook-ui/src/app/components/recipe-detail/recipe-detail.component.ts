@@ -50,6 +50,22 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   cookingShowIngredients = false;
   private wakeLock: any = null;
 
+  // Cooking mode — timer
+  timerSeconds = 0;
+  timerRunning = false;
+  timerFinished = false;
+  private timerInterval: any = null;
+
+  // Cooking mode — transitions & swipe
+  stepDirection: 'next' | 'prev' | null = null;
+  stepAnimating = false;
+  private touchStartX = 0;
+  private touchStartY = 0;
+
+  // Cooking mode — keyboard hint
+  showKeyboardHint = false;
+  private keyboardHintShown = false;
+
   Math = Math;
   readonly today = new Date();
 
@@ -145,6 +161,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
     this.releaseWakeLock();
+    this.stopTimer();
     document.body.style.overflow = '';
   }
 
@@ -162,17 +179,35 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleStep(stepId: string): void {
-    if (this.completedSteps.has(stepId)) {
-      this.completedSteps.delete(stepId);
-    } else {
-      this.completedSteps.add(stepId);
-    }
+  adjustAmount(amount: number): string {
+    if (!this.originalServings) return this.formatAmount(amount);
+    const scaled = amount * this.servings / this.originalServings;
+    return this.formatAmount(scaled);
   }
 
-  adjustAmount(amount: number): number {
-    if (!this.originalServings) return amount;
-    return Math.round((amount * this.servings / this.originalServings) * 100) / 100;
+  private formatAmount(value: number): string {
+    if (value === 0) return '0';
+    const whole = Math.floor(value);
+    const frac = value - whole;
+
+    const fractions: [number, string][] = [
+      [0.25, '¼'], [0.33, '⅓'], [0.5, '½'], [0.67, '⅔'], [0.75, '¾']
+    ];
+
+    let fracStr = '';
+    for (const [threshold, symbol] of fractions) {
+      if (Math.abs(frac - threshold) < 0.05) {
+        fracStr = symbol;
+        break;
+      }
+    }
+
+    if (fracStr) {
+      return whole > 0 ? `${whole}${fracStr}` : fracStr;
+    }
+    // No matching fraction — round to 1 decimal if not whole
+    const rounded = Math.round(value * 10) / 10;
+    return rounded % 1 === 0 ? rounded.toString() : rounded.toFixed(1);
   }
 
   getTotalTime(): number {
@@ -218,33 +253,222 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
 
   enterCookingMode(): void {
     this.cookingMode = true;
-    this.cookingStepIndex = 0;
     this.cookingShowIngredients = false;
     document.body.style.overflow = 'hidden';
     void this.requestWakeLock();
+
+    // Restore progress from sessionStorage if same recipe
+    const saved = sessionStorage.getItem('cookingProgress');
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        if (data.recipeId === this.recipe?.id) {
+          this.cookingStepIndex = data.stepIndex ?? 0;
+          this.completedSteps = new Set(data.completedSteps ?? []);
+          this.servings = data.servings ?? this.servings;
+        } else {
+          this.cookingStepIndex = 0;
+        }
+      } catch {
+        this.cookingStepIndex = 0;
+      }
+    } else {
+      this.cookingStepIndex = 0;
+    }
+
+    this.startTimerForCurrentStep();
+
+    // Show keyboard hint once
+    if (!this.keyboardHintShown) {
+      this.keyboardHintShown = true;
+      this.showKeyboardHint = true;
+      setTimeout(() => this.showKeyboardHint = false, 3500);
+    }
   }
 
   exitCookingMode(): void {
     this.cookingMode = false;
     document.body.style.overflow = '';
     this.releaseWakeLock();
+    this.stopTimer();
+    sessionStorage.removeItem('cookingProgress');
   }
 
   cookingNext(): void {
     if (this.cookingSteps && this.cookingStepIndex < this.cookingSteps.length) {
-      this.cookingStepIndex++;
+      this.stepDirection = 'next';
+      this.stepAnimating = true;
+      setTimeout(() => {
+        this.cookingStepIndex++;
+        this.stepAnimating = false;
+        this.startTimerForCurrentStep();
+        this.saveCookingProgress();
+      }, 180);
     }
   }
 
   cookingPrev(): void {
     if (this.cookingStepIndex > 0) {
-      this.cookingStepIndex--;
+      this.stepDirection = 'prev';
+      this.stepAnimating = true;
+      setTimeout(() => {
+        this.cookingStepIndex--;
+        this.stepAnimating = false;
+        this.startTimerForCurrentStep();
+        this.saveCookingProgress();
+      }, 180);
     }
+  }
+
+  cookingGoToStep(index: number): void {
+    if (index === this.cookingStepIndex) return;
+    this.stepDirection = index > this.cookingStepIndex ? 'next' : 'prev';
+    this.stepAnimating = true;
+    setTimeout(() => {
+      this.cookingStepIndex = index;
+      this.stepAnimating = false;
+      this.startTimerForCurrentStep();
+      this.saveCookingProgress();
+    }, 180);
   }
 
   cookingProgress(): number {
     if (!this.cookingSteps?.length) return 0;
     return (this.cookingStepIndex / this.cookingSteps.length) * 100;
+  }
+
+  toggleStep(stepId: string): void {
+    if (this.completedSteps.has(stepId)) {
+      this.completedSteps.delete(stepId);
+    } else {
+      this.completedSteps.add(stepId);
+      // Auto-advance after marking done (unless last step)
+      if (this.cookingSteps && this.cookingStepIndex < this.cookingSteps.length - 1) {
+        setTimeout(() => this.cookingNext(), 400);
+      }
+    }
+    this.saveCookingProgress();
+  }
+
+  // ── Timer ──────────────────────────────────────────────────────────────
+  startTimerForCurrentStep(): void {
+    this.stopTimer();
+    this.timerFinished = false;
+    if (this.cookingSteps && this.cookingStepIndex < this.cookingSteps.length) {
+      const step = this.cookingSteps[this.cookingStepIndex];
+      if (step.duration && step.duration > 0) {
+        this.timerSeconds = step.duration * 60;
+        this.timerRunning = false; // Paused by default — user starts manually
+      } else {
+        this.timerSeconds = 0;
+      }
+    }
+  }
+
+  toggleTimer(): void {
+    if (this.timerFinished) {
+      this.resetTimer();
+      return;
+    }
+    if (this.timerRunning) {
+      this.pauseTimer();
+    } else {
+      this.resumeTimer();
+    }
+  }
+
+  private resumeTimer(): void {
+    if (this.timerSeconds <= 0) return;
+    this.timerRunning = true;
+    this.timerInterval = setInterval(() => {
+      this.timerSeconds--;
+      if (this.timerSeconds <= 0) {
+        this.timerSeconds = 0;
+        this.timerRunning = false;
+        this.timerFinished = true;
+        this.stopTimer();
+        this.playTimerBeep();
+      }
+    }, 1000);
+  }
+
+  private pauseTimer(): void {
+    this.timerRunning = false;
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+  }
+
+  private stopTimer(): void {
+    this.timerRunning = false;
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+  }
+
+  resetTimer(): void {
+    this.stopTimer();
+    this.timerFinished = false;
+    if (this.cookingSteps && this.cookingStepIndex < this.cookingSteps.length) {
+      const step = this.cookingSteps[this.cookingStepIndex];
+      if (step.duration) {
+        this.timerSeconds = step.duration * 60;
+      }
+    }
+  }
+
+  formatTimer(seconds: number): string {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  }
+
+  private playTimerBeep(): void {
+    try {
+      // Short beep using AudioContext
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = 880;
+      gain.gain.value = 0.3;
+      osc.start();
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+      osc.stop(ctx.currentTime + 0.5);
+    } catch { /* audio not available */ }
+  }
+
+  // ── Swipe ──────────────────────────────────────────────────────────────
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.touches[0].clientX;
+    this.touchStartY = event.touches[0].clientY;
+  }
+
+  onTouchEnd(event: TouchEvent): void {
+    const dx = event.changedTouches[0].clientX - this.touchStartX;
+    const dy = event.changedTouches[0].clientY - this.touchStartY;
+    // Only trigger if horizontal swipe > 50px and more horizontal than vertical
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0) {
+        this.cookingNext();
+      } else {
+        this.cookingPrev();
+      }
+    }
+  }
+
+  // ── Persistence ────────────────────────────────────────────────────────
+  private saveCookingProgress(): void {
+    if (!this.recipe) return;
+    sessionStorage.setItem('cookingProgress', JSON.stringify({
+      recipeId: this.recipe.id,
+      stepIndex: this.cookingStepIndex,
+      completedSteps: Array.from(this.completedSteps),
+      servings: this.servings
+    }));
   }
 
   private async requestWakeLock(): Promise<void> {
@@ -268,6 +492,10 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
 
   printRecipe(): void {
     window.print();
+  }
+
+  scrollToReviews(): void {
+    document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth' });
   }
 
   onSubmitReview(): void {

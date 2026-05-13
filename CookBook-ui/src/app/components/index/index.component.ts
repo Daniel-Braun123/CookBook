@@ -7,6 +7,8 @@ import { FooterComponent } from '../../components/footer/footer.component';
 import { RecipeCardComponent } from '../../components/recipe-card/recipe-card.component';
 import { CategoryPillComponent } from '../../components/category-pill/category-pill.component';
 import { SearchOverlayComponent } from '../../components/search-overlay/search-overlay.component';
+import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
+import { CountUpDirective } from '../../directives/count-up.directive';
 import { RecipeService } from '../../services/recipe.service';
 import { CategorieService } from '../../services/categorie.service';
 import { UserService } from '../../services/user.service';
@@ -23,7 +25,9 @@ import { Category } from '../../models/category';
     FooterComponent, 
     RecipeCardComponent,
     CategoryPillComponent,
-    SearchOverlayComponent
+    SearchOverlayComponent,
+    ScrollRevealDirective,
+    CountUpDirective
   ],
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss']
@@ -34,6 +38,7 @@ export class IndexComponent implements OnInit, OnDestroy {
   activeCategory: string | number | null = null;
   isLoading = true;
   carouselPage = 0;
+  carouselTransitioning = false;
   isSearchOverlayOpen = false;
 
   private destroy$ = new Subject<void>();
@@ -128,7 +133,12 @@ export class IndexComponent implements OnInit, OnDestroy {
   }
 
   setCarouselPage(page: number): void {
-    this.carouselPage = page;
+    if (page === this.carouselPage) return;
+    this.carouselTransitioning = true;
+    setTimeout(() => {
+      this.carouselPage = page;
+      this.carouselTransitioning = false;
+    }, 200);
   }
 
   private resetCarousel(): void {
