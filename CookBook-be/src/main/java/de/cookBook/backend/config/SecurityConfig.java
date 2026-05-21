@@ -78,6 +78,10 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/ingridients/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/cooking-steps/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()
+                // Chat - conversations require auth
+                .requestMatchers("/api/chat/conversations/**").authenticated()
+                // Public endpoints - Chat stream
+                .requestMatchers("/api/chat/**").permitAll()
                 // Admin endpoints
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 // All other API endpoints require authentication

@@ -1,0 +1,121 @@
+<div class="chat-widget">
+  <!-- Toggle Button -->
+  <button
+    (click)="toggleChat()"
+    class="chat-toggle-btn"
+    [class.chat-open]="isOpen"
+    aria-label="Chat öffnen"
+    title="CookBook Assistent"
+  >
+    <svg *ngIf="!isOpen" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+    </svg>
+    <svg *ngIf="isOpen" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+
+  <!-- Backdrop -->
+  <div *ngIf="isOpen" class="chat-backdrop" (click)="toggleChat()"></div>
+
+  <!-- Chat Panel -->
+  <div *ngIf="isOpen" class="chat-panel" @panelAnimation>
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <!-- Back button when in conversation view (logged-in only) -->
+        <button *ngIf="!showConversationList && isLoggedIn" (click)="backToList()" class="chat-back-btn" title="Zurück zur Liste">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <svg *ngIf="showConversationList || !isLoggedIn" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+        <span class="font-display font-semibold">{{ (showConversationList && isLoggedIn) ? 'CookBook Assistent' : 'Chat' }}</span>
+      </div>
+      <button (click)="clearChat()" class="chat-clear-btn" title="Chat löschen" *ngIf="!showConversationList || !isLoggedIn">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Conversation List View (logged-in only) -->
+    <div *ngIf="showConversationList && isLoggedIn" class="chat-conversation-list">
+      <div *ngIf="conversations.length === 0" class="chat-empty-history">
+        <p class="text-sm text-muted-foreground">Noch keine Gespräche vorhanden.</p>
+      </div>
+
+      <div
+        *ngFor="let conv of conversations"
+        class="chat-conversation-item"
+        (click)="openConversation(conv)"
+      >
+        <div class="chat-conversation-info">
+          <span class="chat-conversation-title">{{ conv.title }}</span>
+          <span class="chat-conversation-date">{{ conv.updatedAt | date:'dd.MM.yy HH:mm' }}</span>
+        </div>
+        <button class="chat-conversation-delete" (click)="deleteConversation($event, conv)" title="Löschen">
+          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Messages View -->
+    <ng-container *ngIf="!showConversationList || !isLoggedIn">
+      <div class="chat-messages" #messagesContainer>
+        <div *ngIf="messages.length === 0" class="chat-empty">
+          <p class="text-sm text-muted-foreground">Frag mich alles rund ums Kochen! 👋</p>
+        </div>
+
+        <div
+          *ngFor="let msg of messages"
+          class="chat-message"
+          [class.chat-message-user]="msg.role === 'user'"
+          [class.chat-message-assistant]="msg.role === 'assistant'"
+        >
+          <div class="chat-bubble" [innerHTML]="msg.role === 'assistant' ? renderMarkdown(msg.content) : msg.content"></div>
+        </div>
+
+        <div *ngIf="isLoading" class="chat-message chat-message-assistant">
+          <div class="chat-bubble chat-typing">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Input (always visible) -->
+    <div class="chat-input-area">
+      <input
+        #chatInput
+        type="text"
+        [(ngModel)]="userInput"
+        (keydown.enter)="send()"
+        [placeholder]="showConversationList && isLoggedIn ? 'Neues Gespräch starten...' : 'Nachricht eingeben...'"
+        class="chat-input"
+        [disabled]="isStreaming"
+        autocomplete="off"
+      />
+      <button
+        (click)="send()"
+        class="chat-send-btn"
+        [disabled]="!userInput.trim() || isStreaming"
+        title="Senden"
+      >
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>

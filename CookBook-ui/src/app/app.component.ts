@@ -6,11 +6,12 @@ import { ColorThemeService } from './services/color-theme.service';
 import { ToastComponent } from './components/toast/toast.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { BackToTopComponent } from './components/back-to-top/back-to-top.component';
+import { ChatWidgetComponent } from './components/chat-widget/chat-widget.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ToastComponent, ConfirmDialogComponent, BackToTopComponent],
+  imports: [RouterOutlet, ToastComponent, ConfirmDialogComponent, BackToTopComponent, ChatWidgetComponent],
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {

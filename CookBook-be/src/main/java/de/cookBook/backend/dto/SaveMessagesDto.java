@@ -1,0 +1,13 @@
+package de.cookBook.backend.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class SaveMessagesDto {
+    private String userMessage;
+    private String assistantMessage;
+}
