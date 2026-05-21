@@ -35,10 +35,6 @@ export const routes: Routes = [
     canDeactivate: [pendingChangesGuard]
   },
   {
-    path: 'categories',
-    loadComponent: () => import('./components/categories/categories.component').then(m => m.CategoriesComponent)
-  },
-  {
     path: 'create-recipe',
     loadComponent: () => import('./components/create-recipe/create-recipe.component').then(m => m.CreateRecipeComponent),
     canActivate: [authGuard]

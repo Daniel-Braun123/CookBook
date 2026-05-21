@@ -46,10 +46,6 @@ export class HeaderComponent {
     return this.router.url.startsWith('/recipes');
   }
 
-  get isCategoriesPage(): boolean {
-    return this.router.url.startsWith('/categories');
-  }
-
   get isAdmin(): boolean {
     return this.userService.isAdmin();
   }
