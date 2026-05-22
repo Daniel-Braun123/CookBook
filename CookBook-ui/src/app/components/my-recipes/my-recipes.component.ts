@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Location } from '@angular/common';
+import { Subject, takeUntil } from 'rxjs';
+import { filter, take, switchMap } from 'rxjs/operators';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { RecipeService } from '../../services/recipe.service';
 import { UserService } from '../../services/user.service';
 import { ToastService } from '../../services/toast.service';
 import { ConfirmDialogService } from '../../services/confirm-dialog.service';
+import { RecipeEventService } from '../../services/recipe-event.service';
 import { Recipe } from '../../models/recipe';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
-import { filter, take, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-my-recipes',
@@ -19,9 +21,10 @@ import { filter, take, switchMap } from 'rxjs/operators';
   templateUrl: './my-recipes.component.html',
   styleUrls: ['./my-recipes.component.scss']
 })
-export class MyRecipesComponent implements OnInit {
+export class MyRecipesComponent implements OnInit, OnDestroy {
   recipes: Recipe[] = [];
   isLoading = true;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private recipeService: RecipeService,
@@ -29,6 +32,7 @@ export class MyRecipesComponent implements OnInit {
     private location: Location,
     private toastService: ToastService,
     private confirmDialog: ConfirmDialogService,
+    private recipeEventService: RecipeEventService,
     private router: Router
   ) {}
 
@@ -48,6 +52,27 @@ export class MyRecipesComponent implements OnInit {
         this.isLoading = false;
       }
     });
+
+    // Live sync
+    this.recipeEventService.recipeDeleted$.pipe(takeUntil(this.destroy$)).subscribe(id => {
+      this.recipes = this.recipes.filter(r => r.id !== String(id));
+    });
+
+    this.recipeEventService.recipeCreated$.pipe(takeUntil(this.destroy$)).subscribe(() => this.reloadRecipes());
+    this.recipeEventService.recipeUpdated$.pipe(takeUntil(this.destroy$)).subscribe(() => this.reloadRecipes());
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private reloadRecipes(): void {
+    this.userService.getCurrentUser().pipe(
+      filter(user => user !== null),
+      take(1),
+      switchMap(user => this.recipeService.getMyRecipes(user!.id))
+    ).subscribe(recipes => this.recipes = recipes);
   }
 
   async deleteRecipe(recipe: Recipe): Promise<void> {

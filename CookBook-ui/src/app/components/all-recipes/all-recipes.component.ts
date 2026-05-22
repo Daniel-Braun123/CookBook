@@ -10,6 +10,7 @@ import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive'
 import { RecipeService } from '../../services/recipe.service';
 import { CategorieService } from '../../services/categorie.service';
 import { UserService } from '../../services/user.service';
+import { RecipeEventService } from '../../services/recipe-event.service';
 import { Recipe } from '../../models/recipe';
 import { Category } from '../../models/category';
 
@@ -44,6 +45,7 @@ export class AllRecipesComponent implements OnInit, OnDestroy {
     private recipeService: RecipeService,
     private categorieService: CategorieService,
     private userService: UserService,
+    private recipeEventService: RecipeEventService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -77,6 +79,26 @@ export class AllRecipesComponent implements OnInit, OnDestroy {
         if (params['category']) {
           this.selectedCategory = params['category'];
         }
+        this.applyFilters();
+      });
+    });
+
+    // Live sync: remove deleted recipes, refetch on create/update
+    this.recipeEventService.recipeDeleted$.pipe(takeUntil(this.destroy$)).subscribe(id => {
+      this.allRecipes = this.allRecipes.filter(r => r.id !== String(id));
+      this.applyFilters();
+    });
+
+    this.recipeEventService.recipeCreated$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.recipeService.getAllRecipes().pipe(takeUntil(this.destroy$)).subscribe(recipes => {
+        this.allRecipes = recipes;
+        this.applyFilters();
+      });
+    });
+
+    this.recipeEventService.recipeUpdated$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.recipeService.getAllRecipes().pipe(takeUntil(this.destroy$)).subscribe(recipes => {
+        this.allRecipes = recipes;
         this.applyFilters();
       });
     });

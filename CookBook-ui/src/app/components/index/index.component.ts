@@ -12,6 +12,7 @@ import { CountUpDirective } from '../../directives/count-up.directive';
 import { RecipeService } from '../../services/recipe.service';
 import { CategorieService } from '../../services/categorie.service';
 import { UserService } from '../../services/user.service';
+import { RecipeEventService } from '../../services/recipe-event.service';
 import { Recipe } from '../../models/recipe';
 import { Category } from '../../models/category';
 
@@ -49,11 +50,17 @@ export class IndexComponent implements OnInit, OnDestroy {
     private recipeService: RecipeService,
     private categorieService: CategorieService,
     private userService: UserService,
+    private recipeEventService: RecipeEventService,
     private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
     this.loadData();
+
+    // Live sync: refetch on any recipe change
+    this.recipeEventService.recipeCreated$.pipe(takeUntil(this.destroy$)).subscribe(() => this.loadData());
+    this.recipeEventService.recipeUpdated$.pipe(takeUntil(this.destroy$)).subscribe(() => this.loadData());
+    this.recipeEventService.recipeDeleted$.pipe(takeUntil(this.destroy$)).subscribe(() => this.loadData());
   }
 
   ngOnDestroy(): void {

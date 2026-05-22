@@ -18,6 +18,7 @@ import { NutritionInfo } from '../../models/nutrition-info';
 import { IngridientsService } from '@app/services/ingredients.service';
 import { CookingStepsService } from '@app/services/cookingSteps.service';
 import { ReviewService } from '../../services/review.service';
+import { RecipeEventService } from '../../services/recipe-event.service';
 import { Review } from '../../models/review';
 
 @Component({
@@ -81,7 +82,8 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     private nutritionInfoService: NutritionInfoService,
     private ingridientService: IngridientsService,
     private cookingStepsService: CookingStepsService,
-    private reviewService: ReviewService
+    private reviewService: ReviewService,
+    private recipeEventService: RecipeEventService
   ) {}
 
   goBack(): void {
@@ -154,6 +156,22 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
         }
       }
       this.isLoading = false;
+    });
+
+    // Live sync: react to changes from other tabs/devices
+    this.recipeEventService.recipeDeleted$.pipe(takeUntil(this.destroy$)).subscribe(id => {
+      if (this.recipe && this.recipe.id === String(id)) {
+        this.toastService.showError('Dieses Rezept wurde gelöscht.');
+        this.router.navigate(['/recipes']);
+      }
+    });
+
+    this.recipeEventService.recipeUpdated$.pipe(takeUntil(this.destroy$)).subscribe(id => {
+      if (this.recipe && this.recipe.id === String(id)) {
+        this.recipeService.getRecipeById(String(id)).pipe(takeUntil(this.destroy$)).subscribe(recipe => {
+          this.recipe = recipe;
+        });
+      }
     });
   }
 

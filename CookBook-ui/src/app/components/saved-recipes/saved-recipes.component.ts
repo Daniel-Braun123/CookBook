@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
@@ -8,6 +9,7 @@ import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
 import { SavedRecipeService } from '../../services/saved-recipe.service';
 import { UserService } from '../../services/user.service';
+import { RecipeEventService } from '../../services/recipe-event.service';
 import { Recipe } from '../../models/recipe';
 
 @Component({
@@ -17,14 +19,16 @@ import { Recipe } from '../../models/recipe';
   templateUrl: './saved-recipes.component.html',
   styleUrls: ['./saved-recipes.component.scss']
 })
-export class SavedRecipesComponent implements OnInit {
+export class SavedRecipesComponent implements OnInit, OnDestroy {
   savedRecipes: Recipe[] = [];
   isLoading = true;
   isLoggedIn = false;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private savedRecipeService: SavedRecipeService,
     private userService: UserService,
+    private recipeEventService: RecipeEventService,
     private location: Location
   ) {}
 
@@ -37,6 +41,19 @@ export class SavedRecipesComponent implements OnInit {
     } else {
       this.isLoading = false;
     }
+
+    // Live sync
+    this.recipeEventService.recipeDeleted$.pipe(takeUntil(this.destroy$)).subscribe(id => {
+      this.savedRecipes = this.savedRecipes.filter(r => r.id !== String(id));
+    });
+    this.recipeEventService.recipeUpdated$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      if (this.isLoggedIn) this.loadSavedRecipes();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadSavedRecipes(): void {

@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { Subject, takeUntil } from 'rxjs';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { AdminService, AdminUser } from '../../services/admin.service';
 import { ToastService } from '../../services/toast.service';
 import { ConfirmDialogService } from '../../services/confirm-dialog.service';
 import { RecipeService } from '@app/services/recipe.service';
+import { RecipeEventService } from '../../services/recipe-event.service';
 import { Recipe } from '@app/models/recipe';
 import { Router } from '@angular/router';
 
@@ -18,10 +20,11 @@ import { Router } from '@angular/router';
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
-export class AdminComponent implements OnInit {
+export class AdminComponent implements OnInit, OnDestroy {
   users: AdminUser[] = [];
   recipes: Recipe[] = [];
   isLoading = true;
+  private destroy$ = new Subject<void>();
 
   // Collapsible sections
   usersOpen = true;
@@ -39,6 +42,7 @@ export class AdminComponent implements OnInit {
   constructor(
     private adminService: AdminService,
     private recipeService: RecipeService,
+    private recipeEventService: RecipeEventService,
     private toastService: ToastService,
     private confirmDialog: ConfirmDialogService,
     private router: Router
@@ -47,6 +51,22 @@ export class AdminComponent implements OnInit {
   ngOnInit(): void {
     this.loadUsers();
     this.loadRecipes();
+
+    // Live sync
+    this.recipeEventService.recipeDeleted$.pipe(takeUntil(this.destroy$)).subscribe(id => {
+      this.recipes = this.recipes.filter(r => r.id !== String(id));
+    });
+    this.recipeEventService.recipeCreated$.pipe(takeUntil(this.destroy$)).subscribe(() => this.loadRecipes());
+    this.recipeEventService.recipeUpdated$.pipe(takeUntil(this.destroy$)).subscribe(() => this.loadRecipes());
+
+    this.recipeEventService.userDeleted$.pipe(takeUntil(this.destroy$)).subscribe(id => {
+      this.users = this.users.filter(u => u.id !== id);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   // ── Data loading ─────────────────────────────────────────────────────

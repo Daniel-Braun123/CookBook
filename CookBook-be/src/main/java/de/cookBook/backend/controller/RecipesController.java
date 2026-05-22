@@ -13,7 +13,11 @@ import de.cookBook.backend.dto.RecipeResponseDto;
 import de.cookBook.backend.dto.UpdateRecipeRequestDto;
 import de.cookBook.backend.entities.Users;
 import de.cookBook.backend.repository.RecipeRepository;
+import de.cookBook.backend.service.RecipeEventService;
 import de.cookBook.backend.service.RecipeService;
+
+import org.springframework.http.MediaType;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,10 +33,17 @@ public class RecipesController {
 
     private final RecipeRepository recipeRepository;
     private final RecipeService recipeService;
+    private final RecipeEventService recipeEventService;
 
-    public RecipesController(RecipeRepository recipeRepository, RecipeService recipeService) {
+    public RecipesController(RecipeRepository recipeRepository, RecipeService recipeService, RecipeEventService recipeEventService) {
         this.recipeRepository = recipeRepository;
         this.recipeService = recipeService;
+        this.recipeEventService = recipeEventService;
+    }
+
+    @GetMapping(value = "/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter recipeEvents() {
+        return recipeEventService.subscribe();
     }
 
     @GetMapping("/getAll")

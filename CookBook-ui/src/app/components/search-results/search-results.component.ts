@@ -7,6 +7,7 @@ import { FooterComponent } from '../footer/footer.component';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
 import { RecipeService } from '../../services/recipe.service';
+import { RecipeEventService } from '../../services/recipe-event.service';
 import { Recipe } from '../../models/recipe';
 
 @Component({
@@ -24,7 +25,8 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private recipeService: RecipeService
+    private recipeService: RecipeService,
+    private recipeEventService: RecipeEventService
   ) {}
 
   ngOnInit(): void {
@@ -41,6 +43,23 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
         this.recipes = recipes;
         this.isLoading = false;
       });
+
+    // Live sync
+    this.recipeEventService.recipeDeleted$.pipe(takeUntil(this.destroy$)).subscribe(id => {
+      this.recipes = this.recipes.filter(r => r.id !== String(id));
+    });
+
+    this.recipeEventService.recipeCreated$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      if (this.query) {
+        this.recipeService.searchRecipes(this.query).pipe(takeUntil(this.destroy$)).subscribe(r => this.recipes = r);
+      }
+    });
+
+    this.recipeEventService.recipeUpdated$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      if (this.query) {
+        this.recipeService.searchRecipes(this.query).pipe(takeUntil(this.destroy$)).subscribe(r => this.recipes = r);
+      }
+    });
   }
 
   ngOnDestroy(): void {
