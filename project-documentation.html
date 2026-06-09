@@ -3,606 +3,1124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CookBook — Technische Projektdokumentation</title>
+<title>CookBook — Backend Präsentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--card:#1c2333;--border:#30363d;--text:#e6edf3;--text2:#8b949e;--accent:#e94560;--accent2:#53d8fb;--green:#3fb950;--yellow:#fdcb6e;--orange:#f0883e;--code-bg:#0d1117;--nav-w:260px;--radius:10px}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:24px}
-body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;display:flex;min-height:100vh}
-a{color:var(--accent2);text-decoration:none}a:hover{text-decoration:underline}
-/* ── NAV ── */
-nav{position:fixed;top:0;left:0;width:var(--nav-w);height:100vh;background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;padding:20px 0;z-index:100}
-nav .logo{text-align:center;padding:10px 16px 20px;font-size:1.4rem;font-weight:800;color:var(--accent);letter-spacing:1px;border-bottom:1px solid var(--border);margin-bottom:12px}
-nav a{display:block;padding:8px 20px;font-size:.88rem;color:var(--text2);transition:.2s}
-nav a:hover,nav a.active{color:var(--text);background:rgba(233,69,96,.08);text-decoration:none;border-left:3px solid var(--accent);padding-left:17px}
-nav .sub{padding-left:34px;font-size:.82rem}
-/* ── MAIN ── */
-main{margin-left:var(--nav-w);flex:1;max-width:1100px;padding:40px 48px 80px}
-h1{font-size:2.2rem;margin-bottom:8px;color:var(--accent)}
-h2{font-size:1.6rem;margin:56px 0 16px;padding-bottom:8px;border-bottom:2px solid var(--accent);color:var(--text)}
-h3{font-size:1.2rem;margin:32px 0 12px;color:var(--accent2)}
-h4{font-size:1rem;margin:20px 0 8px;color:var(--yellow)}
-p,li{color:var(--text);font-size:.95rem}
-ul,ol{padding-left:22px;margin-bottom:12px}
-li{margin-bottom:4px}
-.subtitle{color:var(--text2);font-size:1.05rem;margin-bottom:32px}
-/* ── CARDS ── */
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px}
-.card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:.75rem;font-weight:700;text-transform:uppercase}
-.badge-get{background:#1a4d2e;color:#3fb950}.badge-post{background:#4d3a1a;color:#f0883e}.badge-put{background:#1a3a4d;color:#53d8fb}.badge-delete{background:#4d1a1a;color:#e94560}.badge-patch{background:#3a1a4d;color:#bc8cff}
-/* ── TABLE ── */
-table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:.9rem}
-th{background:var(--bg2);color:var(--accent2);text-align:left;padding:10px 14px;border-bottom:2px solid var(--border);font-weight:600}
-td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
-tr:hover td{background:rgba(83,216,251,.03)}
-/* ── CODE ── */
-pre{background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:10px 0 16px;font-size:.85rem;line-height:1.6}
-code{font-family:'Cascadia Code','Fira Code',Consolas,monospace;font-size:.85rem}
-p code,li code,td code{background:var(--bg2);padding:2px 6px;border-radius:4px;color:var(--accent2)}
-.kw{color:#ff7b72}.str{color:#a5d6ff}.cm{color:#8b949e}.fn{color:#d2a8ff}.num{color:#79c0ff}.ann{color:#ffa657}
-/* ── ENDPOINT CARD ── */
-.endpoint{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:16px;overflow:hidden}
-.endpoint-head{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border);cursor:pointer}
-.endpoint-head:hover{background:rgba(233,69,96,.04)}
-.endpoint-url{font-family:'Cascadia Code',monospace;font-size:.92rem;color:var(--text)}
-.endpoint-desc{color:var(--text2);font-size:.85rem;margin-left:auto}
-.endpoint-body{padding:20px;display:none}
-.endpoint.open .endpoint-body{display:block}
-.endpoint.open .endpoint-head{background:rgba(233,69,96,.06)}
-/* ── TECH GRID ── */
-.tech-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
-.tech-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
-.tech-card h4{margin:0 0 6px;color:var(--accent)}
-.tech-card p{font-size:.88rem;color:var(--text2);margin:0}
-/* ── FLOW ── */
-.flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin:16px 0 24px;justify-content:center}
-.flow-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 20px;text-align:center;min-width:130px}
-.flow-box strong{display:block;color:var(--accent);font-size:.95rem}
-.flow-box span{font-size:.8rem;color:var(--text2)}
-.flow-arrow{font-size:1.4rem;color:var(--accent2);padding:0 6px}
-/* ── SVG DIAGRAM ── */
-.diagram-wrapper{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin:16px 0;text-align:center;overflow-x:auto}
-/* ── RESPONSIVE ── */
-@media(max-width:900px){
-  nav{position:relative;width:100%;height:auto;border-right:none;border-bottom:1px solid var(--border)}
-  body{flex-direction:column}
-  main{margin-left:0;padding:24px 16px 60px}
-  .tech-grid{grid-template-columns:1fr}
+/* ═══════════════════════════════════════════════
+   DESIGN SYSTEM — Cinematic Tech Keynote
+   ═══════════════════════════════════════════════ */
+:root {
+  --bg: #08090d;
+  --surface: #0e1016;
+  --surface2: #14161e;
+  --surface3: #1a1d28;
+  --border: #252835;
+  --text: #e8ecf4;
+  --text2: #7c8194;
+  --text3: #4a4f64;
+  --accent: #ff6b35;
+  --accent-glow: rgba(255, 107, 53, .12);
+  --accent2: #35c7ff;
+  --green: #3ddc84;
+  --red: #ff4757;
+  --yellow: #ffc233;
+  --code-bg: #0a0c12;
+  --font-display: 'Sora', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Space Mono', monospace;
+  --font-body: 'Sora', sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  cursor: default;
+}
+
+/* ═══ SLIDE ENGINE ═══ */
+.deck {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 44px 72px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(30px);
+  transition: opacity .55s cubic-bezier(.22, 1, .36, 1),
+              transform .55s cubic-bezier(.22, 1, .36, 1),
+              visibility 0s .55s;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity .55s cubic-bezier(.22, 1, .36, 1),
+              transform .55s cubic-bezier(.22, 1, .36, 1),
+              visibility 0s 0s;
+}
+.slide.prev {
+  transform: translateY(-30px);
+}
+
+/* ═══ BACKGROUNDS ═══ */
+.slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.slide > * { position: relative; z-index: 1; }
+
+.bg-grain::before {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+.bg-glow-left::after {
+  content: '';
+  position: absolute;
+  left: -20%;
+  top: 10%;
+  width: 50vw;
+  height: 60vh;
+  background: radial-gradient(ellipse, rgba(255,107,53,.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-glow-right::after {
+  content: '';
+  position: absolute;
+  right: -15%;
+  bottom: 5%;
+  width: 45vw;
+  height: 50vh;
+  background: radial-gradient(ellipse, rgba(53,199,255,.05) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══ TYPOGRAPHY ═══ */
+.slide-tag {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+h1 {
+  font-family: var(--font-display);
+  font-size: 4.2rem;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -2px;
+  color: var(--text);
+}
+h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--accent), #ff9f6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+h2 {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  line-height: 1.12;
+  margin-bottom: 28px;
+}
+h2 em {
+  font-style: normal;
+  color: var(--accent);
+}
+h3 {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 600;
+  color: var(--accent2);
+  margin-bottom: 14px;
+}
+p, li {
+  font-size: 1.08rem;
+  line-height: 1.75;
+  color: var(--text2);
+}
+p strong, li strong { color: var(--text); }
+.big-p {
+  font-size: 1.32rem;
+  max-width: 780px;
+  color: var(--text2);
+  line-height: 1.8;
+}
+a { color: var(--accent2); text-decoration: none; }
+ul, ol { padding-left: 20px; }
+li { margin-bottom: 6px; }
+
+/* ═══ COMPONENTS ═══ */
+.pill {
+  display: inline-block;
+  padding: 5px 16px;
+  border-radius: 100px;
+  font-size: .78rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.pill-get { background: rgba(61,220,132,.12); color: var(--green); border: 1px solid rgba(61,220,132,.2); }
+.pill-post { background: rgba(255,107,53,.12); color: var(--accent); border: 1px solid rgba(255,107,53,.2); }
+.pill-put { background: rgba(53,199,255,.12); color: var(--accent2); border: 1px solid rgba(53,199,255,.2); }
+.pill-del { background: rgba(255,71,87,.12); color: var(--red); border: 1px solid rgba(255,71,87,.2); }
+
+.card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 26px 30px;
+  margin-bottom: 16px;
+}
+.card-sm {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 22px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .95rem;
+}
+th {
+  text-align: left;
+  padding: 10px 16px;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text3);
+  border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(37,40,53,.6);
+  color: var(--text2);
+  vertical-align: top;
+}
+td:first-child { color: var(--text); font-weight: 500; }
+tr:hover td { background: rgba(255,107,53,.02); }
+
+code {
+  font-family: var(--font-mono);
+  font-size: .82rem;
+}
+p code, li code, td code {
+  background: var(--surface3);
+  padding: 2px 8px;
+  border-radius: 5px;
+  color: var(--accent2);
+  font-size: .8rem;
+}
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+  overflow-x: auto;
+  font-size: .88rem;
+  line-height: 1.7;
+}
+.kw{color:#ff7b72}.str{color:#a5d6ff}.cm{color:#6e7491}.fn{color:#d2a8ff}.num{color:#79c0ff}.ann{color:#ffa657}
+
+/* ═══ LAYOUTS ═══ */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  align-items: start;
+}
+.three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+.center { text-align: center; }
+.mt-auto { margin-top: auto; }
+.gap-sm { gap: 14px; }
+.gap-xs { gap: 10px; }
+.flex-col { display: flex; flex-direction: column; }
+.stack > * + * { margin-top: 14px; }
+
+/* ═══ ENDPOINT TABLE (compact for slides) ═══ */
+.ep-row {
+  display: grid;
+  grid-template-columns: 78px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 13px 20px;
+  border-bottom: 1px solid rgba(37,40,53,.5);
+  font-size: .95rem;
+  transition: background .2s;
+}
+.ep-row:hover { background: rgba(255,107,53,.03); }
+.ep-url {
+  font-family: var(--font-mono);
+  font-size: .9rem;
+  color: var(--text);
+}
+.ep-desc { color: var(--text3); font-size: .84rem; }
+.ep-auth {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  color: var(--text3);
+  letter-spacing: .5px;
+}
+
+/* ═══ PROGRESS BAR ═══ */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width .4s cubic-bezier(.22, 1, .36, 1);
+  z-index: 999;
+}
+
+/* ═══ NAV CONTROLS ═══ */
+.controls {
+  position: fixed;
+  bottom: 28px;
+  right: 36px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 100;
+}
+.controls button {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface2);
+  color: var(--text2);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.controls button:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.slide-counter {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  color: var(--text3);
+  letter-spacing: 1px;
+  min-width: 50px;
+  text-align: center;
+}
+
+/* ═══ SLIDE-SPECIFIC ═══ */
+.title-slide {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.title-slide h1 { font-size: 6.5rem; letter-spacing: -4px; margin-bottom: 24px; }
+.title-slide .subtitle {
+  font-size: 1.35rem;
+  color: var(--text3);
+  font-weight: 300;
+  letter-spacing: .5px;
+  margin-bottom: 40px;
+}
+.title-slide .meta {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  color: var(--text3);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 24px;
+}
+.stat-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 34px 22px;
+  text-align: center;
+}
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 3.6rem;
+  font-weight: 800;
+  letter-spacing: -2px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat-label {
+  font-size: .88rem;
+  color: var(--text3);
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.tech-pill-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.tech-pill {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 24px;
+  font-size: .95rem;
+  color: var(--text);
+  font-weight: 500;
+  transition: all .2s;
+}
+.tech-pill:hover { border-color: var(--accent); transform: translateY(-2px); }
+.tech-pill span { display: block; font-size: .78rem; color: var(--text3); margin-top: 3px; font-weight: 400; }
+
+/* architecture svg */
+.arch-svg { max-width: 100%; width: 100%; margin: 0 auto; display: block; }
+
+/* ER diagram */
+.er-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  overflow-x: auto;
+  text-align: center;
+}
+
+/* Scrollable content slide */
+.slide.scrollable { justify-content: flex-start; padding-top: 40px; padding-bottom: 70px; }
+
+/* Full-bleed slide (ER diagram etc.) */
+.slide.full-bleed { padding: 30px 40px; }
+.slide.full-bleed .er-wrap { padding: 16px; height: calc(100vh - 140px); display:flex; align-items:center; justify-content:center; }
+.slide.full-bleed .er-wrap svg { max-height: 100%; width: auto; max-width: 100%; }
+
+/* ═══════════════════════════════════════════════
+   LIVE DEMO BUTTON — PRO MAX CINEMATIC ENGINE
+   ═══════════════════════════════════════════════ */
+
+/* ── CUSTOM PROPERTIES ── */
+@property --border-angle {
+  syntax:'<angle>';initial-value:0deg;inherits:false;
+}
+@property --shimmer-x {
+  syntax:'<percentage>';initial-value:-100%;inherits:false;
+}
+@property --glow-intensity {
+  syntax:'<number>';initial-value:0;inherits:false;
+}
+@property --shake-x {
+  syntax:'<length>';initial-value:0px;inherits:false;
+}
+@property --shake-y {
+  syntax:'<length>';initial-value:0px;inherits:false;
+}
+
+/* ── IDLE STATE — Breathing Glow ── */
+.demo-btn {
+  display:inline-flex;align-items:center;gap:20px;
+  background:linear-gradient(135deg,rgba(255,107,53,.08),rgba(53,199,255,.04),rgba(61,220,132,.03));
+  border:2px solid rgba(255,107,53,.25);border-radius:20px;
+  padding:30px 56px;cursor:pointer;
+  position:relative;overflow:visible;text-decoration:none;
+  animation:breathe 3.5s cubic-bezier(.4,0,.6,1) infinite;
+  transition:transform .5s cubic-bezier(.22,1,.36,1),
+             border-color .4s ease,
+             box-shadow .4s ease;
+  isolation:isolate;
+}
+
+@keyframes breathe {
+  0%,100% {
+    box-shadow:
+      0 0 20px rgba(255,107,53,.08),
+      0 0 60px rgba(255,107,53,.04),
+      0 4px 30px rgba(0,0,0,.3);
+  }
+  50% {
+    box-shadow:
+      0 0 30px rgba(255,107,53,.15),
+      0 0 80px rgba(255,107,53,.08),
+      0 0 120px rgba(53,199,255,.04),
+      0 4px 30px rgba(0,0,0,.3);
+  }
+}
+
+/* ── Animated Gradient Border (conic) ── */
+.demo-btn::before {
+  content:'';position:absolute;inset:-2px;z-index:-2;
+  background:conic-gradient(from var(--border-angle,0deg),
+    var(--accent),var(--accent2),var(--green),var(--yellow),var(--accent));
+  border-radius:22px;
+  opacity:0;transition:opacity .6s cubic-bezier(.22,1,.36,1);
+  animation:borderSpin 4s linear infinite;
+}
+/* Inner fill to mask the border gradient */
+.demo-btn::after {
+  content:'';position:absolute;inset:2px;z-index:-1;
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border-radius:18px;
+}
+
+@keyframes borderSpin {
+  to { --border-angle:360deg; }
+}
+
+/* ── Holographic Shimmer Layer ── */
+.demo-shimmer {
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  border-radius:18px;overflow:hidden;
+}
+.demo-shimmer::before {
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,
+    transparent 30%,
+    rgba(255,107,53,.06) 38%,
+    rgba(53,199,255,.08) 42%,
+    rgba(255,194,51,.06) 46%,
+    transparent 54%
+  );
+  background-size:250% 100%;
+  animation:shimmerSlide 4s ease-in-out infinite;
+}
+@keyframes shimmerSlide {
+  0%,100% { background-position:250% 0; }
+  50% { background-position:-50% 0; }
+}
+
+/* ── HOVER ── */
+.demo-btn:hover {
+  transform:translateY(-4px) scale(1.04);
+  border-color:transparent;
+  box-shadow:
+    0 0 40px rgba(255,107,53,.18),
+    0 0 80px rgba(255,107,53,.08),
+    0 8px 40px rgba(0,0,0,.4);
+}
+.demo-btn:hover::before { opacity:1; }
+
+/* ── Rocket Icon ── */
+.demo-btn .demo-icon {
+  font-size:2.8rem;display:inline-block;
+  transition:transform .6s cubic-bezier(.34,1.56,.64,1),filter .4s ease;
+  filter:drop-shadow(0 0 0 transparent);
+  transform-origin:center center;
+}
+.demo-btn:hover .demo-icon {
+  animation:rocketEager 1.2s ease-in-out infinite;
+  filter:drop-shadow(0 0 16px rgba(255,107,53,.5));
+}
+@keyframes rocketEager {
+  0%,100% { transform:rotate(-8deg) scale(1.12); }
+  25% { transform:rotate(-12deg) scale(1.15) translateY(-2px); }
+  75% { transform:rotate(-5deg) scale(1.1) translateY(1px); }
+}
+
+/* ── Text Glow on Hover ── */
+.demo-btn:hover .demo-title {
+  text-shadow:0 0 20px rgba(255,107,53,.3);
+}
+
+/* ── Arrow Nudge ── */
+.demo-btn .demo-arrow {
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .3s;
+}
+.demo-btn:hover .demo-arrow {
+  transform:translate(4px,-4px);
+  opacity:1;
+}
+
+/* ── Ambient Floating Orbs (idle) ── */
+.demo-orb {
+  position:absolute;border-radius:50%;pointer-events:none;
+  opacity:.25;filter:blur(1px);
+  animation:orbFloat var(--dur,5s) ease-in-out infinite alternate;
+}
+@keyframes orbFloat {
+  0% { transform:translate(0,0) scale(1); }
+  100% { transform:translate(var(--dx,10px),var(--dy,-15px)) scale(var(--s2,1.3)); }
+}
+
+/* ═══ LAUNCHING STATE ═══ */
+.demo-btn.launching {
+  animation:none !important;
+  pointer-events:none;
+}
+.demo-btn.launching::before { opacity:1; }
+
+/* ── Phase 1: Charge-up (button contracts + trembles) ── */
+.demo-btn.charging {
+  animation:chargeUp .4s cubic-bezier(.4,0,.2,1) forwards !important;
+}
+@keyframes chargeUp {
+  0% { transform:scale(1); }
+  30% { transform:scale(.96); }
+  60% { transform:scale(.94) rotate(-.5deg); }
+  80% { transform:scale(.93) rotate(.5deg); }
+  100% { transform:scale(.92); filter:brightness(1.15); }
+}
+
+/* ── Phase 2: Rumble ── */
+.demo-btn.rumbling {
+  animation:rumble .15s linear infinite !important;
+}
+@keyframes rumble {
+  0% { transform:scale(.92) translate(0,0); }
+  25% { transform:scale(.92) translate(-2px,1px); }
+  50% { transform:scale(.92) translate(2px,-1px); }
+  75% { transform:scale(.92) translate(-1px,-2px); }
+  100% { transform:scale(.92) translate(1px,2px); }
+}
+
+/* ── Phase 3: Blast (expand + flash) ── */
+.demo-btn.blasting {
+  animation:blast .3s cubic-bezier(.16,1,.3,1) forwards !important;
+}
+@keyframes blast {
+  0% { transform:scale(.92); filter:brightness(1.15); }
+  40% { transform:scale(1.08); filter:brightness(1.4); }
+  100% { transform:scale(1.02); filter:brightness(1); }
+}
+
+/* ── Rocket Launch Animation ── */
+.demo-btn.launching .demo-icon {
+  animation:rocketLaunch 1.1s cubic-bezier(.16,1,.3,1) forwards;
+}
+@keyframes rocketLaunch {
+  0%   { transform:scale(1) translate(0,0) rotate(0deg);opacity:1;
+         filter:drop-shadow(0 0 0 transparent); }
+  15%  { transform:scale(1.4) translate(0,6px) rotate(-12deg);opacity:1;
+         filter:drop-shadow(0 0 24px rgba(255,107,53,.9)); }
+  35%  { transform:scale(1.2) translate(0,3px) rotate(-18deg);opacity:1;
+         filter:drop-shadow(0 0 36px rgba(255,107,53,1))
+                drop-shadow(0 0 60px rgba(255,194,51,.5)); }
+  55%  { transform:scale(1) translate(20px,-30px) rotate(-30deg);opacity:1;
+         filter:drop-shadow(0 0 40px rgba(255,107,53,.8))
+                drop-shadow(0 20px 30px rgba(255,71,87,.4)); }
+  100% { transform:scale(.4) translate(180px,-180px) rotate(-45deg);opacity:0;
+         filter:drop-shadow(0 0 80px rgba(255,107,53,.6))
+                drop-shadow(0 30px 50px rgba(255,71,87,.3)); }
+}
+
+/* ── Shockwave Rings (multiple) ── */
+.demo-shockwave {
+  position:absolute;border-radius:50%;pointer-events:none;z-index:2;
+  border:2px solid rgba(255,107,53,.5);
+  box-shadow:0 0 20px rgba(255,107,53,.25),
+             inset 0 0 20px rgba(255,107,53,.08);
+  transform:scale(0);opacity:1;
+}
+.demo-shockwave--primary {
+  animation:shockwave .9s cubic-bezier(.16,1,.3,1) forwards;
+}
+.demo-shockwave--secondary {
+  border-color:rgba(53,199,255,.3);
+  box-shadow:0 0 30px rgba(53,199,255,.15),
+             inset 0 0 15px rgba(53,199,255,.05);
+  animation:shockwave 1.1s cubic-bezier(.16,1,.3,1) .1s forwards;
+}
+.demo-shockwave--tertiary {
+  border-width:1px;
+  border-color:rgba(255,194,51,.2);
+  box-shadow:0 0 15px rgba(255,194,51,.1);
+  animation:shockwave 1.4s cubic-bezier(.16,1,.3,1) .2s forwards;
+}
+@keyframes shockwave {
+  0%   { transform:scale(0);opacity:1; }
+  60%  { opacity:.6; }
+  100% { transform:scale(8);opacity:0; }
+}
+
+/* ── Particles (upgraded with trails) ── */
+.demo-particle {
+  position:absolute;border-radius:50%;pointer-events:none;z-index:3;
+  animation:particleFly var(--dur,.9s) cubic-bezier(.12,.8,.2,1) forwards;
+}
+.demo-particle--trail {
+  border-radius:20px;
+  animation:particleTrail var(--dur,.7s) cubic-bezier(.12,.8,.2,1) forwards;
+}
+@keyframes particleFly {
+  0%   { transform:translate(0,0) scale(1);opacity:1; }
+  70%  { opacity:.8; }
+  100% { transform:translate(var(--tx,0),var(--ty,0)) scale(0);opacity:0; }
+}
+@keyframes particleTrail {
+  0%   { transform:translate(0,0) scaleX(1) rotate(var(--angle,0deg));opacity:.8;width:var(--w,4px); }
+  40%  { opacity:.6;width:calc(var(--w,4px) * 2.5); }
+  100% { transform:translate(var(--tx,0),var(--ty,0)) scaleX(.3) rotate(var(--angle,0deg));opacity:0;width:var(--w,4px); }
+}
+
+/* ── Plasma Trail (behind rocket) ── */
+.demo-plasma-trail {
+  position:absolute;pointer-events:none;z-index:1;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(255,107,53,.5),rgba(255,71,87,.3),transparent 70%);
+  filter:blur(8px);
+  animation:plasmaFade var(--dur,.6s) ease-out forwards;
+}
+@keyframes plasmaFade {
+  0%   { transform:scale(1);opacity:.7; }
+  100% { transform:scale(2.5);opacity:0; }
+}
+
+/* ── Energy Beams (radiate from center) ── */
+.demo-beam {
+  position:absolute;pointer-events:none;z-index:2;
+  height:2px;
+  background:linear-gradient(90deg,var(--beam-color,var(--accent)),transparent);
+  transform-origin:left center;
+  border-radius:2px;
+  animation:beamShoot var(--dur,.5s) cubic-bezier(.16,1,.3,1) forwards;
+}
+@keyframes beamShoot {
+  0%   { transform:rotate(var(--angle,0deg)) scaleX(0);opacity:0; }
+  20%  { opacity:1; }
+  100% { transform:rotate(var(--angle,0deg)) scaleX(1) translateX(var(--dist,100px));opacity:0; }
+}
+
+/* ── Speed Lines (warp) ── */
+.demo-warp-line {
+  position:absolute;height:2px;border-radius:2px;pointer-events:none;z-index:2;
+  background:linear-gradient(90deg,transparent,var(--accent),rgba(53,199,255,.6),transparent);
+  animation:warpLine var(--dur,.5s) ease-out forwards;
+  transform-origin:left center;
+}
+@keyframes warpLine {
+  0%   { transform:scaleX(0) translateX(0);opacity:0; }
+  25%  { opacity:1; }
+  100% { transform:scaleX(1.5) translateX(var(--tx,100px));opacity:0; }
+}
+
+/* ── Screen Flash (layered radial) ── */
+.demo-flash {
+  position:fixed;inset:0;z-index:9999;pointer-events:none;
+  animation:flashPulse .8s ease-out forwards;
+}
+.demo-flash::before {
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at var(--cx,50%) var(--cy,50%),
+    rgba(255,107,53,.3) 0%,
+    rgba(255,107,53,.15) 20%,
+    rgba(53,199,255,.06) 40%,
+    transparent 70%);
+}
+.demo-flash::after {
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at var(--cx,50%) var(--cy,50%),
+    rgba(255,255,255,.08) 0%,
+    transparent 30%);
+}
+@keyframes flashPulse {
+  0%   { opacity:1; }
+  40%  { opacity:.7; }
+  100% { opacity:0; }
+}
+
+/* ── Screen Ripple / Gravitational Lens ── */
+.demo-ripple {
+  position:fixed;pointer-events:none;z-index:9998;
+  border-radius:50%;
+  border:1px solid rgba(255,107,53,.15);
+  box-shadow:0 0 40px rgba(255,107,53,.06),
+             inset 0 0 40px rgba(53,199,255,.03);
+  animation:rippleExpand 1.2s cubic-bezier(.16,1,.3,1) forwards;
+}
+@keyframes rippleExpand {
+  0%   { transform:scale(0);opacity:.8; }
+  50%  { opacity:.4; }
+  100% { transform:scale(1);opacity:0; }
+}
+
+/* ── Aurora Afterglow ── */
+.demo-aurora {
+  position:fixed;inset:0;pointer-events:none;z-index:9997;
+  background:linear-gradient(
+    135deg,
+    rgba(255,107,53,.04) 0%,
+    rgba(53,199,255,.03) 30%,
+    rgba(61,220,132,.02) 60%,
+    transparent 100%
+  );
+  animation:auroraGlow 1.5s ease-out forwards;
+}
+@keyframes auroraGlow {
+  0%   { opacity:0; }
+  30%  { opacity:1; }
+  100% { opacity:0; }
+}
+
+/* ── Countdown Ring (border fill before launch) ── */
+.demo-countdown-ring {
+  position:absolute;inset:-4px;border-radius:24px;pointer-events:none;z-index:5;
+  border:3px solid transparent;
+  border-top-color:var(--accent);
+  animation:countdownSpin .4s linear forwards;
+}
+@keyframes countdownSpin {
+  0%   { transform:rotate(0deg); border-top-color:var(--accent); }
+  33%  { border-right-color:var(--accent2); }
+  66%  { border-bottom-color:var(--green); }
+  100% { transform:rotate(360deg); border-color:var(--accent); }
+}
+
+/* ── Status Text Morph ── */
+.demo-status-text {
+  position:absolute;bottom:-32px;left:50%;transform:translateX(-50%);
+  font-family:var(--font-mono);font-size:.7rem;letter-spacing:2px;
+  text-transform:uppercase;white-space:nowrap;
+  color:var(--accent);opacity:0;
+  animation:statusFade .8s ease forwards;
+}
+@keyframes statusFade {
+  0%   { opacity:0;transform:translateX(-50%) translateY(6px); }
+  20%  { opacity:1;transform:translateX(-50%) translateY(0); }
+  80%  { opacity:1; }
+  100% { opacity:0;transform:translateX(-50%) translateY(-4px); }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .slide { padding: 30px 40px; }
+  h1 { font-size: 2.6rem; }
+  .title-slide h1 { font-size: 3.2rem; }
+  h2 { font-size: 1.8rem; }
+  .two-col, .three-col { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .slide { padding: 20px 24px; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════ NAVIGATION ═══════════════════ -->
-<nav>
-  <div class="logo">🍳 CookBook</div>
-  <a href="#overview">1. Projektübersicht</a>
-  <a href="#architecture">2. Systemarchitektur</a>
-  <a href="#technologies">3. Technologien</a>
-  <a href="#backend">4. Backend Analyse</a>
-  <a href="#api" style="color:var(--accent);font-weight:700">5. API / Endpoints</a>
-  <a href="#api-auth" class="sub">Auth</a>
-  <a href="#api-recipes" class="sub">Recipes</a>
-  <a href="#api-reviews" class="sub">Reviews</a>
-  <a href="#api-admin" class="sub">Admin</a>
-  <a href="#api-categories" class="sub">Categories</a>
-  <a href="#api-ingredients" class="sub">Ingredients</a>
-  <a href="#api-nutrition" class="sub">Nutrition</a>
-  <a href="#api-steps" class="sub">Cooking Steps</a>
-  <a href="#database">6. Datenbank</a>
-  <a href="#frontend">7. Frontend</a>
-  <a href="#security">8. Sicherheit</a>
-  <a href="#improvements">9. Verbesserungen</a>
-  <a href="#structure">10. Projektstruktur</a>
-  <a href="#conclusion">11. Fazit</a>
-</nav>
+<div class="progress-bar" id="progress"></div>
 
-<!-- ═══════════════════ MAIN CONTENT ═══════════════════ -->
-<main>
+<div class="deck" id="deck">
 
-<!-- ────────────── 1. PROJEKTÜBERSICHT ────────────── -->
-<section id="overview">
-<h1>CookBook</h1>
-<p class="subtitle">Technische Projektdokumentation — Full-Stack Rezeptverwaltung</p>
-
-<div class="card">
-<h3>Projektname</h3>
-<p><strong>CookBook</strong> — Eine moderne Webanwendung zur Verwaltung, Entdeckung und Bewertung von Rezepten.</p>
-
-<h3>Zweck</h3>
-<p>CookBook ermöglicht es Benutzern, Rezepte zu erstellen, zu durchsuchen, zu bewerten und zu speichern. Die Anwendung bietet sowohl eine lokale Registrierung als auch Google OAuth2 Login. Administratoren können Benutzer und Inhalte verwalten.</p>
-
-<h3>Hauptfunktionen</h3>
-<ul>
-  <li><strong>Rezeptverwaltung</strong> — Erstellen, Bearbeiten, Löschen von Rezepten mit Zutaten, Kochschritten und Nährwertinformationen</li>
-  <li><strong>Bewertungssystem</strong> — 1–5 Sterne Bewertungen mit Kommentaren und aggregiertem Rating</li>
-  <li><strong>Rezeptsuche</strong> — Volltextsuche über Titel und Beschreibung</li>
-  <li><strong>Kategoriefilter</strong> — Rezepte nach Kategorien filtern</li>
-  <li><strong>Gespeicherte Rezepte</strong> — Benutzer können Rezepte als Favoriten speichern</li>
-  <li><strong>Benutzerverwaltung</strong> — Registrierung, Login (lokal + Google OAuth2), Profilbearbeitung</li>
-  <li><strong>Admin-Panel</strong> — Benutzerverwaltung, Rollenzuweisung, Inhaltsmoderation</li>
-</ul>
-
-<h3>Technische Zusammenfassung</h3>
-<table>
-  <tr><td><strong>Frontend</strong></td><td>Angular 17.3 (Standalone Components) + Tailwind CSS + Angular Material</td></tr>
-  <tr><td><strong>Backend</strong></td><td>Spring Boot 4.0.1 (Java 17) — RESTful API</td></tr>
-  <tr><td><strong>Datenbank</strong></td><td>PostgreSQL mit Flyway Migrations (8 Tabellen)</td></tr>
-  <tr><td><strong>Authentifizierung</strong></td><td>JWT + Google OAuth2</td></tr>
-  <tr><td><strong>Build</strong></td><td>Gradle (Backend), Angular CLI / Bun (Frontend)</td></tr>
-</table>
-</div>
+<!-- ══════════════════════════════════════════════════
+     SLIDE 0 — TITLE
+     ══════════════════════════════════════════════════ -->
+<section class="slide title-slide bg-grain active" data-slide="0">
+  <div class="slide-tag">Technische Präsentation</div>
+  <h1><em>CookBook</em></h1>
+  <p class="subtitle">Backend-Architektur einer Full-Stack Rezeptverwaltung</p>
+  <div style="display:flex;gap:24px;justify-content:center;margin:28px 0">
+    <div class="tech-pill">Spring Boot 4.0.1</div>
+    <div class="tech-pill">PostgreSQL</div>
+    <div class="tech-pill">JWT + OAuth2</div>
+    <div class="tech-pill">Java 17</div>
+  </div>
+  <p class="meta">Juni 2026</p>
 </section>
 
-<!-- ────────────── 2. SYSTEMARCHITEKTUR ────────────── -->
-<section id="architecture">
-<h2>2. Systemarchitektur</h2>
-
-<p>Das Projekt folgt einer klassischen <strong>3-Schichten-Architektur</strong> mit strikter Trennung zwischen Frontend (SPA), Backend (REST API) und Datenbank.</p>
-
-<div class="diagram-wrapper">
-<svg viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg" style="max-width:860px;width:100%">
-  <!-- Background -->
-  <defs>
-    <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e94560"/><stop offset="1" stop-color="#b8344a"/></linearGradient>
-    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#53d8fb"/><stop offset="1" stop-color="#2a9bc0"/></linearGradient>
-    <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3fb950"/><stop offset="1" stop-color="#2d8a3e"/></linearGradient>
-    <linearGradient id="g4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdcb6e"/><stop offset="1" stop-color="#d4a84e"/></linearGradient>
-  </defs>
-
-  <!-- Browser / User -->
-  <rect x="20" y="30" width="180" height="80" rx="12" fill="url(#g1)" opacity=".9"/>
-  <text x="110" y="62" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Browser</text>
-  <text x="110" y="82" text-anchor="middle" fill="#ffd6dd" font-size="11">User / Client</text>
-
-  <!-- Angular Frontend -->
-  <rect x="20" y="150" width="180" height="100" rx="12" fill="#1c2333" stroke="#e94560" stroke-width="2"/>
-  <text x="110" y="178" text-anchor="middle" fill="#e94560" font-size="14" font-weight="700">Angular 17</text>
-  <text x="110" y="198" text-anchor="middle" fill="#8b949e" font-size="10">Standalone Components</text>
-  <text x="110" y="215" text-anchor="middle" fill="#8b949e" font-size="10">Tailwind CSS + Material</text>
-  <text x="110" y="232" text-anchor="middle" fill="#8b949e" font-size="10">Port 4200</text>
-
-  <!-- Arrow Browser→Angular -->
-  <line x1="110" y1="110" x2="110" y2="150" stroke="#e94560" stroke-width="2" marker-end="url(#arrowR)"/>
-
-  <!-- Spring Boot Backend -->
-  <rect x="340" y="30" width="220" height="360" rx="12" fill="#1c2333" stroke="#53d8fb" stroke-width="2"/>
-  <text x="450" y="58" text-anchor="middle" fill="#53d8fb" font-size="14" font-weight="700">Spring Boot 4.0.1</text>
-  <text x="450" y="78" text-anchor="middle" fill="#8b949e" font-size="10">Port 8080</text>
-
-  <!-- Controller Layer -->
-  <rect x="360" y="95" width="180" height="44" rx="8" fill="rgba(233,69,96,.15)" stroke="#e94560" stroke-width="1"/>
-  <text x="450" y="122" text-anchor="middle" fill="#e94560" font-size="12" font-weight="600">Controller Layer (9)</text>
-
-  <!-- Service Layer -->
-  <rect x="360" y="155" width="180" height="44" rx="8" fill="rgba(83,216,251,.12)" stroke="#53d8fb" stroke-width="1"/>
-  <text x="450" y="182" text-anchor="middle" fill="#53d8fb" font-size="12" font-weight="600">Service Layer (4)</text>
-
-  <!-- Repository Layer -->
-  <rect x="360" y="215" width="180" height="44" rx="8" fill="rgba(63,185,80,.12)" stroke="#3fb950" stroke-width="1"/>
-  <text x="450" y="242" text-anchor="middle" fill="#3fb950" font-size="12" font-weight="600">Repository Layer (8)</text>
-
-  <!-- Security / JWT -->
-  <rect x="360" y="275" width="180" height="44" rx="8" fill="rgba(253,203,110,.12)" stroke="#fdcb6e" stroke-width="1"/>
-  <text x="450" y="302" text-anchor="middle" fill="#fdcb6e" font-size="12" font-weight="600">Security / JWT Filter</text>
-
-  <!-- Config -->
-  <rect x="360" y="335" width="180" height="36" rx="8" fill="rgba(139,148,158,.1)" stroke="#8b949e" stroke-width="1"/>
-  <text x="450" y="358" text-anchor="middle" fill="#8b949e" font-size="11">Config (CORS, Jackson)</text>
-
-  <!-- PostgreSQL -->
-  <rect x="700" y="140" width="180" height="130" rx="12" fill="#1c2333" stroke="#3fb950" stroke-width="2"/>
-  <text x="790" y="178" text-anchor="middle" fill="#3fb950" font-size="14" font-weight="700">PostgreSQL</text>
-  <text x="790" y="198" text-anchor="middle" fill="#8b949e" font-size="10">8 Tabellen</text>
-  <text x="790" y="215" text-anchor="middle" fill="#8b949e" font-size="10">Flyway Migrations</text>
-  <text x="790" y="232" text-anchor="middle" fill="#8b949e" font-size="10">Port 5433</text>
-
-  <!-- Google OAuth -->
-  <rect x="700" y="310" width="180" height="60" rx="12" fill="#1c2333" stroke="#fdcb6e" stroke-width="2"/>
-  <text x="790" y="338" text-anchor="middle" fill="#fdcb6e" font-size="12" font-weight="600">Google OAuth2</text>
-  <text x="790" y="355" text-anchor="middle" fill="#8b949e" font-size="10">Identity Provider</text>
-
-  <!-- Cloudinary -->
-  <rect x="700" y="30" width="180" height="60" rx="12" fill="#1c2333" stroke="#f0883e" stroke-width="2"/>
-  <text x="790" y="55" text-anchor="middle" fill="#f0883e" font-size="12" font-weight="600">Cloudinary</text>
-  <text x="790" y="72" text-anchor="middle" fill="#8b949e" font-size="10">Image Upload</text>
-
-  <!-- Arrows -->
-  <defs><marker id="arrowR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#53d8fb"/></marker></defs>
-  <!-- Angular → Backend -->
-  <line x1="200" y1="200" x2="340" y2="200" stroke="#53d8fb" stroke-width="2" marker-end="url(#arrowR)"/>
-  <text x="270" y="192" text-anchor="middle" fill="#53d8fb" font-size="10" font-weight="600">REST / JSON</text>
-
-  <!-- Backend → DB -->
-  <line x1="560" y1="230" x2="700" y2="210" stroke="#3fb950" stroke-width="2" marker-end="url(#arrowR)"/>
-  <text x="630" y="210" text-anchor="middle" fill="#3fb950" font-size="10" font-weight="600">JPA / Hibernate</text>
-
-  <!-- Backend → Google -->
-  <line x1="560" y1="310" x2="700" y2="335" stroke="#fdcb6e" stroke-width="2" marker-end="url(#arrowR)"/>
-
-  <!-- Angular → Cloudinary -->
-  <path d="M200,170 Q280,60 700,60" stroke="#f0883e" stroke-width="1.5" fill="none" stroke-dasharray="6,4" marker-end="url(#arrowR)"/>
-  <text x="400" y="48" text-anchor="middle" fill="#f0883e" font-size="9">Image Upload (Frontend)</text>
-</svg>
-</div>
-
-<h3>Kommunikationsfluss</h3>
-<div class="flow">
-  <div class="flow-box"><strong>Angular SPA</strong><span>:4200</span></div>
-  <div class="flow-arrow">→ HTTP/JSON →</div>
-  <div class="flow-box"><strong>Spring Boot API</strong><span>:8080</span></div>
-  <div class="flow-arrow">→ JPA →</div>
-  <div class="flow-box"><strong>PostgreSQL</strong><span>:5433</span></div>
-</div>
-<p>Das Frontend kommuniziert ausschließlich über REST-API-Aufrufe mit dem Backend. JWT-Tokens werden im <code>Authorization</code> Header als Bearer-Token mitgesendet. Bild-Uploads gehen direkt vom Frontend zu Cloudinary.</p>
+<!-- ══════════════════════════════════════════════════
+     SLIDE 1 — PROJEKTÜBERSICHT
+     ══════════════════════════════════════════════════ -->
+<section class="slide bg-grain bg-glow-left" data-slide="1">
+  <div class="slide-tag">01 — Projektübersicht</div>
+  <h2>Was ist <em>CookBook</em>?</h2>
+  <div class="two-col">
+    <div>
+      <p class="big-p" style="margin-bottom:24px">Eine moderne Webanwendung zum <strong>Erstellen, Durchsuchen, Bewerten und Speichern</strong> von Rezepten — mit lokalem Login und Google OAuth2.</p>
+      <ul>
+        <li><strong>Rezeptverwaltung</strong> — CRUD mit Zutaten, Kochschritten & Nährwerten</li>
+        <li><strong>Bewertungssystem</strong> — 1–5 Sterne mit aggregiertem Rating</li>
+        <li><strong>Volltextsuche</strong> — Titel & Beschreibung</li>
+        <li><strong>Kategoriefilter</strong> — Rezepte nach Kategorie</li>
+        <li><strong>Favoriten</strong> — Rezepte speichern / unspeichern</li>
+        <li><strong>Admin-Panel</strong> — Benutzerverwaltung & Moderation</li>
+      </ul>
+    </div>
+    <div>
+      <div class="stat-grid" style="grid-template-columns:1fr 1fr">
+        <div class="stat-card"><div class="stat-num">27</div><div class="stat-label">REST Endpoints</div></div>
+        <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">DB Tabellen</div></div>
+        <div class="stat-card"><div class="stat-num">9</div><div class="stat-label">Controller</div></div>
+        <div class="stat-card"><div class="stat-num">7</div><div class="stat-label">Migrations</div></div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ────────────── 3. TECHNOLOGIEN ────────────── -->
-<section id="technologies">
-<h2>3. Verwendete Technologien</h2>
+<!-- ══════════════════════════════════════════════════
+     SLIDE 2 — ARCHITEKTUR
+     ══════════════════════════════════════════════════ -->
+<section class="slide bg-grain bg-glow-right" data-slide="2">
+  <div class="slide-tag">02 — Systemarchitektur</div>
+  <h2>3-Schichten <em>Architektur</em></h2>
+  <svg class="arch-svg" viewBox="0 0 820 370" xmlns="http://www.w3.org/2000/svg" style="max-height:72vh">
+    <defs>
+      <marker id="a1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#ff6b35"/></marker>
+      <marker id="a2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#35c7ff"/></marker>
+      <marker id="a3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#3ddc84"/></marker>
+    </defs>
+    <!-- Frontend -->
+    <rect x="10" y="40" width="160" height="90" rx="14" fill="#14161e" stroke="#252835" stroke-width="1.5"/>
+    <text x="90" y="72" text-anchor="middle" fill="#7c8194" font-family="Sora" font-size="11" font-weight="600">Frontend</text>
+    <text x="90" y="94" text-anchor="middle" fill="#ff6b35" font-family="Sora" font-size="14" font-weight="700">Angular 17</text>
+    <text x="90" y="114" text-anchor="middle" fill="#4a4f64" font-family="JetBrains Mono" font-size="9">:4200</text>
 
-<div class="tech-grid">
-  <div class="tech-card"><h4>Spring Boot 4.0.1</h4><p>Java-basiertes Backend-Framework. Stellt die REST API bereit, verwaltet Dependency Injection, Security und Datenbankanbindung.</p></div>
-  <div class="tech-card"><h4>Angular 17.3</h4><p>TypeScript-basiertes Frontend-Framework mit Standalone Components. Verantwortlich für die gesamte UI und Client-seitige Logik.</p></div>
-  <div class="tech-card"><h4>PostgreSQL</h4><p>Relationale Datenbank. Speichert alle Benutzer-, Rezept-, Bewertungs- und Kategorie-Daten in 8 Tabellen.</p></div>
-  <div class="tech-card"><h4>Hibernate / JPA</h4><p>ORM-Framework für die Datenbankabstraktion. Entity-Mapping, Lazy Loading, Query-Derivation und native Queries.</p></div>
-  <div class="tech-card"><h4>Flyway</h4><p>Datenbankmigrationen (V0.0 – V0.7). Versioniert Schema-Änderungen und ermöglicht reproduzierbare Deployments.</p></div>
-  <div class="tech-card"><h4>JWT (jjwt 0.12.5)</h4><p>JSON Web Tokens für zustandslose Authentifizierung. HMAC-SHA256-Signierung, 24h Gültigkeit.</p></div>
-  <div class="tech-card"><h4>Spring Security + OAuth2</h4><p>Absicherung aller Endpunkte. Google OAuth2 Login mit Custom Success/Failure Handlers.</p></div>
-  <div class="tech-card"><h4>Gradle</h4><p>Build-Tool für das Backend. Dependency-Management, Kompilierung, Tests und JAR-Erstellung.</p></div>
-  <div class="tech-card"><h4>Tailwind CSS</h4><p>Utility-First CSS Framework. Responsives Design mit Custom Color Palette (Terracotta, Sage, Ivory).</p></div>
-  <div class="tech-card"><h4>Angular Material</h4><p>UI-Komponenten-Bibliothek. Dialoge, Icons und Buttons für konsistente UX.</p></div>
-  <div class="tech-card"><h4>Cloudinary</h4><p>Cloud-basierter Bild-Upload-Service. Validierung auf 5MB Dateigröße im Frontend.</p></div>
-  <div class="tech-card"><h4>BCrypt</h4><p>Passwort-Hashing-Algorithmus. Sicheres Speichern von Benutzerpasswörtern mit konfigurierbarer Stärke.</p></div>
-</div>
+    <!-- Backend box -->
+    <rect x="260" y="10" width="300" height="340" rx="16" fill="#0e1016" stroke="#ff6b35" stroke-width="1.5" stroke-opacity=".3"/>
+    <text x="410" y="40" text-anchor="middle" fill="#ff6b35" font-family="Sora" font-size="15" font-weight="700">Spring Boot Backend</text>
+    <text x="410" y="58" text-anchor="middle" fill="#4a4f64" font-family="JetBrains Mono" font-size="9">:8080</text>
+
+    <!-- Layers -->
+    <rect x="285" y="75" width="250" height="42" rx="8" fill="rgba(255,107,53,.08)" stroke="rgba(255,107,53,.2)" stroke-width="1"/>
+    <text x="410" y="101" text-anchor="middle" fill="#ff6b35" font-family="Sora" font-size="12" font-weight="600">Controller (9)</text>
+    <rect x="285" y="130" width="250" height="42" rx="8" fill="rgba(53,199,255,.08)" stroke="rgba(53,199,255,.2)" stroke-width="1"/>
+    <text x="410" y="156" text-anchor="middle" fill="#35c7ff" font-family="Sora" font-size="12" font-weight="600">Service (4)</text>
+    <rect x="285" y="185" width="250" height="42" rx="8" fill="rgba(61,220,132,.08)" stroke="rgba(61,220,132,.2)" stroke-width="1"/>
+    <text x="410" y="211" text-anchor="middle" fill="#3ddc84" font-family="Sora" font-size="12" font-weight="600">Repository (8)</text>
+    <rect x="285" y="245" width="250" height="36" rx="8" fill="rgba(255,194,51,.06)" stroke="rgba(255,194,51,.15)" stroke-width="1"/>
+    <text x="410" y="268" text-anchor="middle" fill="#ffc233" font-family="Sora" font-size="11" font-weight="600">JWT Security + OAuth2</text>
+    <rect x="285" y="296" width="250" height="34" rx="8" fill="rgba(124,129,148,.06)" stroke="rgba(124,129,148,.12)" stroke-width="1"/>
+    <text x="410" y="318" text-anchor="middle" fill="#4a4f64" font-family="Sora" font-size="10">Config · CORS · Jackson</text>
+
+    <!-- Database -->
+    <rect x="650" y="100" width="160" height="100" rx="14" fill="#14161e" stroke="#252835" stroke-width="1.5"/>
+    <text x="730" y="132" text-anchor="middle" fill="#7c8194" font-family="Sora" font-size="11" font-weight="600">Datenbank</text>
+    <text x="730" y="156" text-anchor="middle" fill="#3ddc84" font-family="Sora" font-size="14" font-weight="700">PostgreSQL</text>
+    <text x="730" y="176" text-anchor="middle" fill="#4a4f64" font-family="JetBrains Mono" font-size="9">8 Tabellen · Flyway</text>
+
+    <!-- Google -->
+    <rect x="650" y="250" width="160" height="60" rx="14" fill="#14161e" stroke="#252835" stroke-width="1.5"/>
+    <text x="730" y="278" text-anchor="middle" fill="#ffc233" font-family="Sora" font-size="12" font-weight="600">Google OAuth2</text>
+    <text x="730" y="296" text-anchor="middle" fill="#4a4f64" font-family="Sora" font-size="9">Identity Provider</text>
+
+    <!-- Arrows -->
+    <line x1="170" y1="85" x2="260" y2="96" stroke="#ff6b35" stroke-width="2" marker-end="url(#a1)"/>
+    <text x="210" y="80" fill="#ff6b35" font-family="JetBrains Mono" font-size="9" font-weight="600">REST</text>
+    <line x1="535" y1="200" x2="650" y2="155" stroke="#3ddc84" stroke-width="2" marker-end="url(#a3)"/>
+    <text x="585" y="168" fill="#3ddc84" font-family="JetBrains Mono" font-size="9" font-weight="600">JPA</text>
+    <line x1="535" y1="264" x2="650" y2="275" stroke="#ffc233" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#a1)"/>
+  </svg>
 </section>
 
-<!-- ────────────── 4. BACKEND ANALYSE ────────────── -->
-<section id="backend">
-<h2>4. Backend Analyse</h2>
-
-<h3>Schichtenarchitektur</h3>
-<p>Das Backend folgt der klassischen <strong>Controller → Service → Repository</strong> Architektur von Spring Boot:</p>
-
-<div class="card">
-<h4>Controller-Schicht (9 Controller)</h4>
-<p>Empfangen HTTP-Requests, validieren Eingaben und delegieren an Services. Jeder Controller ist für eine fachliche Domäne zuständig:</p>
-<table>
-  <tr><th>Controller</th><th>Basis-Pfad</th><th>Endpunkte</th><th>Beschreibung</th></tr>
-  <tr><td><code>AuthController</code></td><td><code>/api/auth</code></td><td>4</td><td>Registrierung, Login, Profil</td></tr>
-  <tr><td><code>RecipesController</code></td><td><code>/api/recipes</code></td><td>11</td><td>CRUD, Suche, Favoriten</td></tr>
-  <tr><td><code>ReviewController</code></td><td><code>/api/reviews</code></td><td>3</td><td>Bewertungen</td></tr>
-  <tr><td><code>AdminController</code></td><td><code>/api/admin</code></td><td>4</td><td>Benutzerverwaltung</td></tr>
-  <tr><td><code>CategorieController</code></td><td><code>/api/categories</code></td><td>1</td><td>Kategorien auflisten</td></tr>
-  <tr><td><code>IngredientsController</code></td><td><code>/api/ingridients</code></td><td>1</td><td>Zutaten laden</td></tr>
-  <tr><td><code>NutritionInfoController</code></td><td><code>/api/nutritionInfo</code></td><td>1</td><td>Nährwerte laden</td></tr>
-  <tr><td><code>CookingStepsController</code></td><td><code>/api/cooking-steps</code></td><td>1</td><td>Kochschritte laden</td></tr>
-  <tr><td><code>HomeController</code></td><td><code>/</code></td><td>1</td><td>Health Check</td></tr>
-</table>
-</div>
-
-<div class="card">
-<h4>Service-Schicht (4 Services)</h4>
-<p>Enthält die gesamte Business-Logik. Services sind transaktional und kapseln komplexe Operationen.</p>
-
-<table>
-  <tr><th>Service</th><th>Verantwortung</th><th>Wichtige Methoden</th></tr>
-  <tr>
-    <td><code>RecipeService</code></td>
-    <td>Rezept-CRUD mit allen Unterentitäten (Zutaten, Schritte, Nährwerte), Suche, Favoriten-Toggle</td>
-    <td><code>createRecipe()</code>, <code>updateRecipe()</code>, <code>deleteRecipe()</code>, <code>toggleSaveRecipe()</code>, <code>searchRecipes()</code></td>
-  </tr>
-  <tr>
-    <td><code>AuthService</code></td>
-    <td>Registrierung mit BCrypt-Hashing, Login-Validierung, Profil-Update</td>
-    <td><code>register()</code>, <code>authenticate()</code>, <code>updateProfile()</code></td>
-  </tr>
-  <tr>
-    <td><code>ReviewService</code></td>
-    <td>Bewertungen erstellen/löschen, aggregiertes Rating berechnen</td>
-    <td><code>submitReview()</code>, <code>deleteReview()</code>, <code>updateRecipeAggregate()</code></td>
-  </tr>
-  <tr>
-    <td><code>JwtTokenProvider</code></td>
-    <td>JWT-Erzeugung und -Validierung mit HMAC-SHA256</td>
-    <td><code>generateToken()</code>, <code>validateToken()</code>, <code>getEmailFromToken()</code></td>
-  </tr>
-</table>
-</div>
-
-<div class="card">
-<h4>Repository-Schicht (8 Repositories)</h4>
-<p>Alle Repositories erweitern <code>JpaRepository</code> und nutzen Spring Data Query Derivation sowie Custom <code>@Query</code>-Annotationen:</p>
-
-<table>
-  <tr><th>Repository</th><th>Entity</th><th>Custom Queries</th></tr>
-  <tr><td><code>RecipeRepository</code></td><td><code>Recipes</code></td><td><code>findTop6ByOrderByRatingDesc()</code>, <code>findByCategoryName()</code>, Volltextsuche</td></tr>
-  <tr><td><code>UserRepository</code></td><td><code>Users</code></td><td><code>findByEmail()</code>, <code>findByAuthProviderAndProviderId()</code></td></tr>
-  <tr><td><code>ReviewRepository</code></td><td><code>Review</code></td><td><code>calculateAverageRating()</code> (@Query), <code>countByRecipeId()</code></td></tr>
-  <tr><td><code>SavedRecipesRepository</code></td><td><code>SavedRecipes</code></td><td><code>findRecipeIdsByUserId()</code> (@Query), <code>findRecipesByUserId()</code></td></tr>
-  <tr><td><code>IngredientsRepository</code></td><td><code>Ingredients</code></td><td><code>findByRecipeId()</code></td></tr>
-  <tr><td><code>CookingStepsRepository</code></td><td><code>CookingSteps</code></td><td><code>findByRecipeIdOrderByStepNumberAsc()</code></td></tr>
-  <tr><td><code>NutritionInfoRepository</code></td><td><code>NutritionInfo</code></td><td><code>findByRecipeId()</code></td></tr>
-  <tr><td><code>CategorieRepository</code></td><td><code>Categories</code></td><td><code>findByName()</code></td></tr>
-</table>
-</div>
-
-<div class="card">
-<h4>Datenfluss: Rezept erstellen</h4>
-<pre><code><span class="cm">// POST /api/recipes/create</span>
-<span class="ann">@AuthenticationPrincipal</span> Users currentUser
-    → RecipeService.createRecipe(request, currentUser)
-        → categorieRepository.findByName(categoryName)   <span class="cm">// Kategorie auflösen</span>
-        → recipeRepository.save(recipe)                    <span class="cm">// Rezept speichern</span>
-        → ingredientsRepository.saveAll(ingredients)       <span class="cm">// Zutaten speichern</span>
-        → cookingStepsRepository.saveAll(steps)            <span class="cm">// Schritte speichern</span>
-        → nutritionInfoRepository.save(nutrition)          <span class="cm">// Nährwerte speichern</span>
-    → RecipeResponseDto.fromEntity(recipe)                <span class="cm">// Entity → DTO</span></code></pre>
-
-<h4>Datenfluss: Bewertung abgeben</h4>
-<pre><code><span class="cm">// POST /api/reviews/recipe/{recipeId}</span>
-    → ReviewService.submitReview(recipeId, user, request)
-        → Validierung: Rezept existiert, Selbstbewertung verhindert, Sterne 1-5
-        → Review erstellen <span class="kw">oder</span> aktualisieren (Upsert)
-        → updateRecipeAggregate(recipe)                   <span class="cm">// AVG + COUNT berechnen</span>
-            → reviewRepository.calculateAverageRating()
-            → reviewRepository.countByRecipeId()
-            → recipe.setRating() + recipe.setReviewCount()
-    → ReviewResponseDto.fromEntity(review)</code></pre>
-</div>
-
-<div class="card">
-<h4>Dependency Injection</h4>
-<p>Alle Abhängigkeiten werden per <strong>Constructor Injection</strong> aufgelöst — der empfohlene Ansatz in Spring Boot. Die Injection-Kette verläuft strikt top-down:</p>
-<pre><code>Controller → Service → Repository → JPA EntityManager → DataSource</code></pre>
-
-<h4>Exception Handling</h4>
-<p>Das Projekt verwendet <strong>try-catch-Blöcke</strong> in den Controllern mit manueller <code>ResponseEntity</code>-Erstellung. Es gibt <strong>keinen globalen <code>@ControllerAdvice</code></strong> — ein Verbesserungspotenzial (siehe Abschnitt 9).</p>
-</div>
+<!-- ══════════════════════════════════════════════════
+     SLIDE 3 — TECH STACK
+     ══════════════════════════════════════════════════ -->
+<section class="slide bg-grain bg-glow-left" data-slide="3">
+  <div class="slide-tag">03 — Tech Stack</div>
+  <h2>Verwendete <em>Technologien</em></h2>
+  <div class="three-col" style="margin-top:20px;gap:28px">
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:28px 24px;border-top:3px solid var(--accent)">
+      <h3 style="font-size:1.2rem;margin-bottom:18px;display:flex;align-items:center;gap:10px"><span style="font-size:1.6rem">⚙</span> Backend</h3>
+      <div class="flex-col gap-sm">
+        <div class="tech-pill" style="border-left:3px solid var(--accent)">Spring Boot 4.0.1<span>REST API Framework</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--accent)">Java 17<span>Programmiersprache</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--accent)">Hibernate / JPA<span>ORM & Datenbankabstraktion</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--accent)">Spring Security<span>Auth-Framework</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--accent)">Spring OAuth2 Client<span>Google Login</span></div>
+      </div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:28px 24px;border-top:3px solid var(--green)">
+      <h3 style="font-size:1.2rem;margin-bottom:18px;color:var(--green);display:flex;align-items:center;gap:10px"><span style="font-size:1.6rem">🗄</span> Datenbank & Build</h3>
+      <div class="flex-col gap-sm">
+        <div class="tech-pill" style="border-left:3px solid var(--green)">PostgreSQL<span>Relationale Datenbank</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--green)">Flyway<span>DB Migrations (V0.0–V0.7)</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--green)">Gradle<span>Build-Tool & Dependencies</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--green)">JSONB<span>Tags als JSON in PostgreSQL</span></div>
+      </div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:28px 24px;border-top:3px solid var(--yellow)">
+      <h3 style="font-size:1.2rem;margin-bottom:18px;color:var(--yellow);display:flex;align-items:center;gap:10px"><span style="font-size:1.6rem">🔐</span> Security</h3>
+      <div class="flex-col gap-sm">
+        <div class="tech-pill" style="border-left:3px solid var(--yellow)">JWT (jjwt 0.12.5)<span>HMAC-SHA256, 24h Gültigkeit</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--yellow)">BCrypt<span>Passwort-Hashing</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--yellow)">OAuth2<span>Google Identity Provider</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--yellow)">CORS<span>Cross-Origin Konfiguration</span></div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ════════════════════════════════════════════════════════════════ -->
-<!-- ────────────── 5. API / ENDPOINT DOKUMENTATION ────────────── -->
-<!-- ════════════════════════════════════════════════════════════════ -->
-<section id="api">
-<h2>5. API / Endpoint Dokumentation</h2>
-<p>Alle REST-Endpunkte des CookBook-Backends, gruppiert nach Controller. Klicke auf einen Endpoint für Details.</p>
+<!-- ══════════════════════════════════════════════════
+     SLIDE 4 — API OVERVIEW
+     ══════════════════════════════════════════════════ -->
+<section class="slide bg-grain" data-slide="4">
+  <div class="slide-tag">04 — API Endpoints</div>
+  <h2>27 REST <em>Endpoints</em></h2>
+  <p style="margin-bottom:24px;color:var(--text2);font-size:1.1rem">Gruppiert nach Controller — alle unter <code style="font-size:1rem">/api/</code></p>
+  <div class="stat-grid" style="grid-template-columns:repeat(5,1fr);gap:24px">
+    <div class="stat-card" style="border-top:3px solid var(--accent);padding:38px 22px">
+      <div class="stat-num" style="font-size:3.4rem">11</div>
+      <div class="stat-label" style="font-size:.95rem;margin-top:10px">Recipes</div>
+      <div style="font-size:.72rem;color:var(--text3);margin-top:6px;font-family:var(--font-mono)">CRUD · Suche · Favoriten</div>
+    </div>
+    <div class="stat-card" style="border-top:3px solid var(--yellow);padding:38px 22px">
+      <div class="stat-num" style="font-size:3.4rem">4</div>
+      <div class="stat-label" style="font-size:.95rem;margin-top:10px">Auth</div>
+      <div style="font-size:.72rem;color:var(--text3);margin-top:6px;font-family:var(--font-mono)">Register · Login · Profil</div>
+    </div>
+    <div class="stat-card" style="border-top:3px solid var(--red);padding:38px 22px">
+      <div class="stat-num" style="font-size:3.4rem">4</div>
+      <div class="stat-label" style="font-size:.95rem;margin-top:10px">Admin</div>
+      <div style="font-size:.72rem;color:var(--text3);margin-top:6px;font-family:var(--font-mono)">User · Rollen · Moderation</div>
+    </div>
+    <div class="stat-card" style="border-top:3px solid var(--accent2);padding:38px 22px">
+      <div class="stat-num" style="font-size:3.4rem">3</div>
+      <div class="stat-label" style="font-size:.95rem;margin-top:10px">Reviews</div>
+      <div style="font-size:.72rem;color:var(--text3);margin-top:6px;font-family:var(--font-mono)">Bewertungen · Upsert</div>
+    </div>
+    <div class="stat-card" style="border-top:3px solid var(--green);padding:38px 22px">
+      <div class="stat-num" style="font-size:3.4rem">5</div>
+      <div class="stat-label" style="font-size:.95rem;margin-top:10px">Sonstige</div>
+      <div style="font-size:.72rem;color:var(--text3);margin-top:6px;font-family:var(--font-mono)">Kategorien · Zutaten · etc.</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:18px;margin-top:32px;flex-wrap:wrap;align-items:center">
+    <span class="pill pill-get" style="font-size:.82rem;padding:8px 20px">GET — Lesen</span>
+    <span class="pill pill-post" style="font-size:.82rem;padding:8px 20px">POST — Erstellen</span>
+    <span class="pill pill-put" style="font-size:.82rem;padding:8px 20px">PUT — Aktualisieren</span>
+    <span class="pill pill-del" style="font-size:.82rem;padding:8px 20px">DELETE — Löschen</span>
+    <span style="margin-left:auto;font-family:var(--font-mono);font-size:.75rem;color:var(--text3);align-self:center;background:var(--surface2);padding:8px 16px;border-radius:8px;border:1px solid var(--border)">Auth: — = öffentlich · JWT = Token · ADMIN = Rolle</span>
+  </div>
+</section>
 
-<!-- ═══ AUTH ═══ -->
-<h3 id="api-auth">AuthController — <code>/api/auth</code></h3>
+<!-- ══════════════════════════════════════════════════
+     SLIDE 5 — AUTH ENDPOINTS
+     ══════════════════════════════════════════════════ -->
+<section class="slide scrollable bg-grain bg-glow-right" data-slide="5">
+  <div class="slide-tag">05 — Auth Endpoints</div>
+  <h2><em>AuthController</em> — /api/auth</h2>
 
-<div class="endpoint open">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-post">POST</span>
-  <span class="endpoint-url">/api/auth/register</span>
-  <span class="endpoint-desc">Neuen Benutzer registrieren</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><th style="width:140px">Eigenschaft</th><th>Wert</th></tr>
-  <tr><td>Authentifizierung</td><td>Keine (öffentlich)</td></tr>
-  <tr><td>Request Body</td><td><code>RegisterRequestDto</code></td></tr>
-  <tr><td>Response</td><td><code>AuthResponseDto</code> (Token + User)</td></tr>
-  <tr><td>Status 201</td><td>Erfolgreich registriert</td></tr>
-  <tr><td>Status 409</td><td>Email bereits vergeben</td></tr>
-  <tr><td>Status 500</td><td>Interner Fehler</td></tr>
-</table>
-<h4>Beispiel Request</h4>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ep-row" style="border:none;padding:0">
+      <span class="pill pill-post">POST</span>
+      <div><span class="ep-url">/api/auth/register</span><br><span class="ep-desc">Neuen Benutzer registrieren</span></div>
+      <span class="ep-auth">PUBLIC</span>
+    </div>
+    <div style="margin-top:14px">
+      <div class="two-col" style="gap:16px">
+        <div>
+          <h3 style="font-size:.85rem">Request Body</h3>
 <pre><code>{
   "<span class="str">name</span>": "<span class="str">Max Mustermann</span>",
   "<span class="str">email</span>": "<span class="str">max@example.com</span>",
   "<span class="str">password</span>": "<span class="str">sicheresPasswort123</span>"
 }</code></pre>
-<h4>Beispiel Response (201)</h4>
+        </div>
+        <div>
+          <h3 style="font-size:.85rem">Response 201</h3>
 <pre><code>{
-  "<span class="str">token</span>": "<span class="str">eyJhbGciOiJIUzI1NiIs...</span>",
+  "<span class="str">token</span>": "<span class="str">eyJhbGciOi...</span>",
   "<span class="str">user</span>": {
     "<span class="str">id</span>": <span class="num">1</span>,
     "<span class="str">name</span>": "<span class="str">Max Mustermann</span>",
-    "<span class="str">email</span>": "<span class="str">max@example.com</span>",
-    "<span class="str">profilePicture</span>": <span class="kw">null</span>,
-    "<span class="str">bio</span>": <span class="kw">null</span>,
-    "<span class="str">role</span>": "<span class="str">USER</span>",
-    "<span class="str">joinedAt</span>": "<span class="str">2026-05-13T12:00:00</span>"
+    "<span class="str">role</span>": "<span class="str">USER</span>"
   }
 }</code></pre>
-</div>
-</div>
+        </div>
+      </div>
+      <p style="margin-top:10px;font-size:.8rem"><strong>Status:</strong> <code>201</code> Erstellt · <code>409</code> Email belegt · <code>500</code> Fehler</p>
+    </div>
+  </div>
 
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-post">POST</span>
-  <span class="endpoint-url">/api/auth/login</span>
-  <span class="endpoint-desc">Benutzer anmelden</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><th style="width:140px">Eigenschaft</th><th>Wert</th></tr>
-  <tr><td>Authentifizierung</td><td>Keine (öffentlich)</td></tr>
-  <tr><td>Request Body</td><td><code>LoginRequestDto</code></td></tr>
-  <tr><td>Response</td><td><code>AuthResponseDto</code></td></tr>
-  <tr><td>Status 200</td><td>Erfolgreich angemeldet</td></tr>
-  <tr><td>Status 401</td><td>Ungültige Anmeldedaten</td></tr>
-</table>
-<h4>Beispiel Request</h4>
-<pre><code>{
-  "<span class="str">email</span>": "<span class="str">max@example.com</span>",
-  "<span class="str">password</span>": "<span class="str">sicheresPasswort123</span>"
-}</code></pre>
-<h4>Beispiel Response (200)</h4>
-<pre><code>{
-  "<span class="str">token</span>": "<span class="str">eyJhbGciOiJIUzI1NiIs...</span>",
-  "<span class="str">user</span>": { <span class="cm">/* UserDTO */</span> }
-}</code></pre>
-</div>
-</div>
+  <div class="card" style="padding:18px 28px">
+    <div class="ep-row" style="border:none;padding:0">
+      <span class="pill pill-post">POST</span>
+      <div><span class="ep-url">/api/auth/login</span><br><span class="ep-desc">Benutzer anmelden → JWT Token zurück</span></div>
+      <span class="ep-auth">PUBLIC</span>
+    </div>
+  </div>
 
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-get">GET</span>
-  <span class="endpoint-url">/api/auth/me</span>
-  <span class="endpoint-desc">Aktuellen Benutzer abrufen</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><th style="width:140px">Eigenschaft</th><th>Wert</th></tr>
-  <tr><td>Authentifizierung</td><td>Bearer Token (JWT)</td></tr>
-  <tr><td>Response</td><td><code>UserDTO</code></td></tr>
-  <tr><td>Status 200</td><td>Benutzer gefunden</td></tr>
-  <tr><td>Status 401</td><td>Nicht authentifiziert</td></tr>
-</table>
-<h4>Beispiel Response</h4>
-<pre><code>{
-  "<span class="str">id</span>": <span class="num">1</span>,
-  "<span class="str">name</span>": "<span class="str">Max Mustermann</span>",
-  "<span class="str">email</span>": "<span class="str">max@example.com</span>",
-  "<span class="str">profilePicture</span>": "<span class="str">https://res.cloudinary.com/.../pic.jpg</span>",
-  "<span class="str">bio</span>": "<span class="str">Hobbykoch aus Berlin</span>",
-  "<span class="str">role</span>": "<span class="str">USER</span>",
-  "<span class="str">joinedAt</span>": "<span class="str">2026-05-13T12:00:00</span>"
-}</code></pre>
-</div>
-</div>
+  <div class="card" style="padding:18px 28px">
+    <div class="ep-row" style="border:none;padding:0">
+      <span class="pill pill-get">GET</span>
+      <div><span class="ep-url">/api/auth/me</span><br><span class="ep-desc">Aktuellen Benutzer abrufen</span></div>
+      <span class="ep-auth">JWT</span>
+    </div>
+  </div>
 
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-put">PUT</span>
-  <span class="endpoint-url">/api/auth/update</span>
-  <span class="endpoint-desc">Profil aktualisieren</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><th style="width:140px">Eigenschaft</th><th>Wert</th></tr>
-  <tr><td>Authentifizierung</td><td>Bearer Token</td></tr>
-  <tr><td>Request Body</td><td><code>UpdateProfileRequestDto</code></td></tr>
-  <tr><td>Response</td><td><code>UserDTO</code></td></tr>
-  <tr><td>Status 200 / 409 / 401</td><td>Erfolg / Email belegt / Nicht auth.</td></tr>
-</table>
-<h4>Beispiel Request</h4>
-<pre><code>{
-  "<span class="str">name</span>": "<span class="str">Max M.</span>",
-  "<span class="str">email</span>": "<span class="str">max@example.com</span>",
-  "<span class="str">bio</span>": "<span class="str">Leidenschaftlicher Koch</span>",
-  "<span class="str">profilePicture</span>": "<span class="str">https://res.cloudinary.com/.../new.jpg</span>"
-}</code></pre>
-</div>
-</div>
+  <div class="card" style="padding:18px 28px">
+    <div class="ep-row" style="border:none;padding:0">
+      <span class="pill pill-put">PUT</span>
+      <div><span class="ep-url">/api/auth/update</span><br><span class="ep-desc">Profil aktualisieren (Name, Email, Bio, Bild)</span></div>
+      <span class="ep-auth">JWT</span>
+    </div>
+  </div>
+</section>
 
-<!-- ═══ RECIPES ═══ -->
-<h3 id="api-recipes">RecipesController — <code>/api/recipes</code></h3>
+<!-- ══════════════════════════════════════════════════
+     SLIDE 6 — RECIPE ENDPOINTS (Teil 1)
+     ══════════════════════════════════════════════════ -->
+<section class="slide scrollable bg-grain bg-glow-left" data-slide="6">
+  <div class="slide-tag">06 — Recipe Endpoints</div>
+  <h2><em>RecipesController</em> — /api/recipes</h2>
 
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-get">GET</span>
-  <span class="endpoint-url">/api/recipes/getAll</span>
-  <span class="endpoint-desc">Alle Rezepte abrufen</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><th style="width:140px">Eigenschaft</th><th>Wert</th></tr>
-  <tr><td>Authentifizierung</td><td>Keine (öffentlich)</td></tr>
-  <tr><td>Response</td><td><code>List&lt;RecipeResponseDto&gt;</code></td></tr>
-  <tr><td>Status 200</td><td>Liste aller Rezepte</td></tr>
-</table>
-<h4>Beispiel Response (200)</h4>
-<pre><code>[
-  {
-    "<span class="str">id</span>": <span class="num">1</span>,
-    "<span class="str">title</span>": "<span class="str">Spaghetti Carbonara</span>",
-    "<span class="str">description</span>": "<span class="str">Klassische italienische Pasta...</span>",
-    "<span class="str">image</span>": "<span class="str">https://res.cloudinary.com/.../carbonara.jpg</span>",
-    "<span class="str">rating</span>": <span class="num">4.5</span>,
-    "<span class="str">reviewCount</span>": <span class="num">12</span>,
-    "<span class="str">prepTime</span>": <span class="num">15</span>,
-    "<span class="str">cookTime</span>": <span class="num">20</span>,
-    "<span class="str">difficulty</span>": "<span class="str">MITTEL</span>",
-    "<span class="str">servings</span>": <span class="num">4</span>,
-    "<span class="str">category</span>": { "<span class="str">id</span>": <span class="num">1</span>, "<span class="str">name</span>": "<span class="str">Pasta</span>", "<span class="str">icon</span>": "<span class="str">🍝</span>", "<span class="str">count</span>": <span class="num">5</span> },
-    "<span class="str">tags</span>": ["<span class="str">italienisch</span>", "<span class="str">schnell</span>"],
-    "<span class="str">author</span>": { "<span class="str">id</span>": <span class="num">1</span>, "<span class="str">name</span>": "<span class="str">Max</span>", "<span class="str">profilePicture</span>": <span class="kw">null</span> },
-    "<span class="str">createdAt</span>": "<span class="str">2026-05-01T10:30:00</span>"
-  }
-]</code></pre>
-</div>
-</div>
+  <div class="card" style="padding:0;overflow:hidden">
+    <div class="ep-row"><span class="pill pill-get">GET</span><span class="ep-url">/api/recipes/getAll</span><span class="ep-auth">PUBLIC</span></div>
+    <div class="ep-row"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/recipes/getSixBestRated</span><br><span class="ep-desc">Top 6 nach Rating absteigend</span></div><span class="ep-auth">PUBLIC</span></div>
+    <div class="ep-row"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/recipes/getByCategorieFilter<span style="color:var(--text3)">?categoryName=</span></span></div><span class="ep-auth">PUBLIC</span></div>
+    <div class="ep-row"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/recipes/getRecipeById<span style="color:var(--text3)">?recipeId=</span></span></div><span class="ep-auth">PUBLIC</span></div>
+    <div class="ep-row"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/recipes/search<span style="color:var(--text3)">?query=</span></span><br><span class="ep-desc">Volltextsuche in Titel & Beschreibung</span></div><span class="ep-auth">PUBLIC</span></div>
+    <div class="ep-row"><span class="pill pill-post">POST</span><div><span class="ep-url">/api/recipes/create</span><br><span class="ep-desc">Neues Rezept mit Zutaten, Schritten, Nährwerten</span></div><span class="ep-auth">JWT</span></div>
+    <div class="ep-row"><span class="pill pill-put">PUT</span><div><span class="ep-url">/api/recipes/update/{id}</span><br><span class="ep-desc">Nur Author darf bearbeiten</span></div><span class="ep-auth">JWT ✦ Author</span></div>
+    <div class="ep-row"><span class="pill pill-del">DEL</span><div><span class="ep-url">/api/recipes/delete/{id}</span></div><span class="ep-auth">JWT ✦ Author</span></div>
+    <div class="ep-row"><span class="pill pill-post">POST</span><div><span class="ep-url">/api/recipes/{id}/toggle-save</span><br><span class="ep-desc">Rezept speichern / unspeichern (Toggle)</span></div><span class="ep-auth">JWT</span></div>
+    <div class="ep-row"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/recipes/saved</span><br><span class="ep-desc">Alle gespeicherten Rezepte des Users</span></div><span class="ep-auth">JWT</span></div>
+    <div class="ep-row" style="border:none"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/recipes/saved-ids</span><br><span class="ep-desc">Nur IDs → effizient für Frontend-Check</span></div><span class="ep-auth">JWT</span></div>
+  </div>
+</section>
 
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-get">GET</span>
-  <span class="endpoint-url">/api/recipes/getSixBestRated</span>
-  <span class="endpoint-desc">Top 6 bestbewertete Rezepte</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Authentifizierung</td><td>Keine</td></tr>
-  <tr><td>Response</td><td><code>List&lt;RecipeResponseDto&gt;</code> (max. 6)</td></tr>
-  <tr><td>Sortierung</td><td>Nach Rating absteigend</td></tr>
-</table>
-</div>
-</div>
+<!-- ══════════════════════════════════════════════════
+     SLIDE 7 — RECIPE CREATE EXAMPLE
+     ══════════════════════════════════════════════════ -->
+<section class="slide scrollable bg-grain" data-slide="7">
+  <div class="slide-tag">07 — Beispiel: Rezept erstellen</div>
+  <h2><em>POST</em> /api/recipes/create</h2>
 
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-get">GET</span>
-  <span class="endpoint-url">/api/recipes/getByCategorieFilter?categoryName=Pasta</span>
-  <span class="endpoint-desc">Rezepte nach Kategorie filtern</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Parameter</td><td><code>categoryName</code> (String, required)</td></tr>
-  <tr><td>Response</td><td><code>List&lt;RecipeResponseDto&gt;</code></td></tr>
-</table>
-</div>
-</div>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-get">GET</span>
-  <span class="endpoint-url">/api/recipes/getRecipeById?recipeId=1</span>
-  <span class="endpoint-desc">Einzelnes Rezept laden</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Parameter</td><td><code>recipeId</code> (Long, required)</td></tr>
-  <tr><td>Response</td><td><code>RecipeResponseDto</code></td></tr>
-  <tr><td>Status 404</td><td>Rezept nicht gefunden</td></tr>
-</table>
-</div>
-</div>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-get">GET</span>
-  <span class="endpoint-url">/api/recipes/search?query=pasta</span>
-  <span class="endpoint-desc">Volltextsuche in Titel und Beschreibung</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Parameter</td><td><code>query</code> (String, required)</td></tr>
-  <tr><td>Suchlogik</td><td>Case-insensitive LIKE auf <code>title</code> und <code>description</code></td></tr>
-  <tr><td>Response</td><td><code>List&lt;RecipeResponseDto&gt;</code></td></tr>
-</table>
-</div>
-</div>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-post">POST</span>
-  <span class="endpoint-url">/api/recipes/create</span>
-  <span class="endpoint-desc">Neues Rezept erstellen</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Authentifizierung</td><td>Bearer Token (wird als Author gesetzt)</td></tr>
-  <tr><td>Request Body</td><td><code>CreateRecipeRequestDto</code></td></tr>
-  <tr><td>Response</td><td><code>RecipeResponseDto</code></td></tr>
-  <tr><td>Status 200</td><td>Rezept erstellt</td></tr>
-</table>
-<h4>Beispiel Request</h4>
+  <div class="two-col" style="gap:24px;margin-top:8px">
+    <div>
+      <h3 style="font-size:.9rem">Request Body</h3>
 <pre><code>{
   "<span class="str">title</span>": "<span class="str">Spaghetti Carbonara</span>",
-  "<span class="str">description</span>": "<span class="str">Klassisch italienisch mit Guanciale...</span>",
+  "<span class="str">description</span>": "<span class="str">Klassisch italienisch...</span>",
   "<span class="str">image</span>": "<span class="str">https://res.cloudinary.com/.../img.jpg</span>",
   "<span class="str">categoryName</span>": "<span class="str">Pasta</span>",
   "<span class="str">difficulty</span>": "<span class="str">MITTEL</span>",
@@ -612,713 +1130,593 @@ p code,li code,td code{background:var(--bg2);padding:2px 6px;border-radius:4px;c
   "<span class="str">tags</span>": ["<span class="str">italienisch</span>", "<span class="str">schnell</span>"],
   "<span class="str">ingredients</span>": [
     { "<span class="str">name</span>": "<span class="str">Spaghetti</span>", "<span class="str">amount</span>": <span class="num">400</span>, "<span class="str">unit</span>": "<span class="str">g</span>" },
-    { "<span class="str">name</span>": "<span class="str">Guanciale</span>", "<span class="str">amount</span>": <span class="num">200</span>, "<span class="str">unit</span>": "<span class="str">g</span>" },
-    { "<span class="str">name</span>": "<span class="str">Eigelb</span>", "<span class="str">amount</span>": <span class="num">4</span>, "<span class="str">unit</span>": "<span class="str">Stück</span>" }
+    { "<span class="str">name</span>": "<span class="str">Guanciale</span>", "<span class="str">amount</span>": <span class="num">200</span>, "<span class="str">unit</span>": "<span class="str">g</span>" }
   ],
   "<span class="str">steps</span>": [
-    { "<span class="str">instruction</span>": "<span class="str">Wasser zum Kochen bringen</span>", "<span class="str">duration</span>": <span class="num">10</span> },
-    { "<span class="str">instruction</span>": "<span class="str">Guanciale knusprig braten</span>", "<span class="str">duration</span>": <span class="num">5</span> }
+    { "<span class="str">instruction</span>": "<span class="str">Wasser kochen</span>", "<span class="str">duration</span>": <span class="num">10</span> },
+    { "<span class="str">instruction</span>": "<span class="str">Guanciale braten</span>", "<span class="str">duration</span>": <span class="num">5</span> }
   ],
   "<span class="str">nutrition</span>": {
-    "<span class="str">calories</span>": <span class="num">580</span>,
-    "<span class="str">protein</span>": <span class="num">22</span>,
-    "<span class="str">carbs</span>": <span class="num">65</span>,
-    "<span class="str">fat</span>": <span class="num">24</span>
+    "<span class="str">calories</span>": <span class="num">580</span>, "<span class="str">protein</span>": <span class="num">22</span>,
+    "<span class="str">carbs</span>": <span class="num">65</span>, "<span class="str">fat</span>": <span class="num">24</span>
   }
 }</code></pre>
-</div>
-</div>
+    </div>
+    <div>
+      <h3 style="font-size:.9rem">Datenfluss im Backend</h3>
+<pre style="font-size:.78rem"><code><span class="ann">@PostMapping</span>("/create")
+<span class="kw">public</span> RecipeResponseDto create(
+    <span class="ann">@RequestBody</span> CreateRecipeRequestDto req,
+    <span class="ann">@AuthenticationPrincipal</span> Users user
+) {
+    <span class="kw">return</span> recipeService.createRecipe(req, user);
+}
 
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-put">PUT</span>
-  <span class="endpoint-url">/api/recipes/update/{id}</span>
-  <span class="endpoint-desc">Rezept bearbeiten (nur Author)</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Path Variable</td><td><code>id</code> (Long)</td></tr>
-  <tr><td>Authentifizierung</td><td>Bearer Token (muss Author sein)</td></tr>
-  <tr><td>Request Body</td><td><code>UpdateRecipeRequestDto</code> (gleiche Struktur wie Create)</td></tr>
-  <tr><td>Status 200 / 403</td><td>Erfolg / Nicht der Author</td></tr>
-</table>
-</div>
-</div>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-delete">DELETE</span>
-  <span class="endpoint-url">/api/recipes/delete/{id}</span>
-  <span class="endpoint-desc">Rezept löschen (nur Author)</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Path Variable</td><td><code>id</code> (Long)</td></tr>
-  <tr><td>Authentifizierung</td><td>Bearer Token (muss Author sein)</td></tr>
-  <tr><td>Status 204</td><td>Erfolgreich gelöscht (kein Body)</td></tr>
-</table>
-</div>
-</div>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-post">POST</span>
-  <span class="endpoint-url">/api/recipes/{id}/toggle-save</span>
-  <span class="endpoint-desc">Rezept speichern / unspeichern (Toggle)</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Path Variable</td><td><code>id</code> (Long)</td></tr>
-  <tr><td>Authentifizierung</td><td>Bearer Token</td></tr>
-  <tr><td>Response</td><td><code>{ "saved": true|false }</code></td></tr>
-</table>
-<h4>Beispiel Response</h4>
-<pre><code>{ "<span class="str">saved</span>": <span class="kw">true</span> }</code></pre>
-</div>
-</div>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-get">GET</span>
-  <span class="endpoint-url">/api/recipes/saved</span>
-  <span class="endpoint-desc">Gespeicherte Rezepte des Benutzers</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Authentifizierung</td><td>Bearer Token</td></tr>
-  <tr><td>Response</td><td><code>List&lt;RecipeResponseDto&gt;</code></td></tr>
-</table>
-</div>
-</div>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-get">GET</span>
-  <span class="endpoint-url">/api/recipes/saved-ids</span>
-  <span class="endpoint-desc">IDs der gespeicherten Rezepte</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Authentifizierung</td><td>Bearer Token</td></tr>
-  <tr><td>Response</td><td><code>List&lt;Long&gt;</code></td></tr>
-  <tr><td>Zweck</td><td>Effiziente Prüfung im Frontend, ob ein Rezept gespeichert ist</td></tr>
-</table>
-<h4>Beispiel Response</h4>
-<pre><code>[<span class="num">1</span>, <span class="num">5</span>, <span class="num">12</span>, <span class="num">23</span>]</code></pre>
-</div>
-</div>
-
-<!-- ═══ REVIEWS ═══ -->
-<h3 id="api-reviews">ReviewController — <code>/api/reviews</code></h3>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-post">POST</span>
-  <span class="endpoint-url">/api/reviews/recipe/{recipeId}</span>
-  <span class="endpoint-desc">Bewertung abgeben oder aktualisieren</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Path Variable</td><td><code>recipeId</code> (Long)</td></tr>
-  <tr><td>Authentifizierung</td><td>Bearer Token</td></tr>
-  <tr><td>Request Body</td><td><code>ReviewRequestDto</code></td></tr>
-  <tr><td>Validierung</td><td>Keine Selbstbewertung, Sterne 1–5</td></tr>
-  <tr><td>Status 200</td><td>Bewertung erstellt/aktualisiert</td></tr>
-  <tr><td>Status 403</td><td>Eigenes Rezept kann nicht bewertet werden</td></tr>
-</table>
-<h4>Beispiel Request</h4>
-<pre><code>{
-  "<span class="str">stars</span>": <span class="num">5</span>,
-  "<span class="str">comment</span>": "<span class="str">Absolut fantastisch! Wird mein Standardrezept.</span>"
-}</code></pre>
-<h4>Beispiel Response</h4>
+<span class="cm">// RecipeService.createRecipe():</span>
+→ categorieRepo.findByName(name)
+→ recipeRepo.save(recipe)
+→ ingredientsRepo.saveAll(ingredients)
+→ cookingStepsRepo.saveAll(steps)
+→ nutritionInfoRepo.save(nutrition)
+→ RecipeResponseDto.fromEntity(recipe)</code></pre>
+      <div style="margin-top:18px">
+        <h3 style="font-size:.9rem">Response</h3>
 <pre><code>{
   "<span class="str">id</span>": <span class="num">42</span>,
+  "<span class="str">title</span>": "<span class="str">Spaghetti Carbonara</span>",
+  "<span class="str">rating</span>": <span class="num">0.0</span>,
+  "<span class="str">reviewCount</span>": <span class="num">0</span>,
+  "<span class="str">author</span>": { "<span class="str">id</span>": <span class="num">1</span>, "<span class="str">name</span>": "<span class="str">Max</span>" },
+  "<span class="str">category</span>": { "<span class="str">name</span>": "<span class="str">Pasta</span>" },
+  <span class="cm">// ... alle Felder</span>
+}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     SLIDE 8 — REVIEWS + ADMIN + OTHER ENDPOINTS
+     ══════════════════════════════════════════════════ -->
+<section class="slide scrollable bg-grain bg-glow-right" data-slide="8">
+  <div class="slide-tag">08 — Weitere Endpoints</div>
+  <h2>Reviews · Admin · <em>Sonstige</em></h2>
+
+  <div class="two-col" style="gap:24px">
+    <div>
+      <h3>ReviewController — /api/reviews</h3>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="ep-row"><span class="pill pill-post">POST</span><div><span class="ep-url">/api/reviews/recipe/{recipeId}</span><br><span class="ep-desc">Bewertung abgeben (1–5 ⭐, Kommentar)</span></div><span class="ep-auth">JWT</span></div>
+        <div class="ep-row"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/reviews/recipe/{recipeId}</span><br><span class="ep-desc">Alle Bewertungen (neueste zuerst)</span></div><span class="ep-auth">PUBLIC</span></div>
+        <div class="ep-row" style="border:none"><span class="pill pill-del">DEL</span><div><span class="ep-url">/api/reviews/recipe/{recipeId}</span><br><span class="ep-desc">Eigene Bewertung löschen</span></div><span class="ep-auth">JWT</span></div>
+      </div>
+
+      <h3 style="margin-top:20px">Sonstige</h3>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="ep-row"><span class="pill pill-get">GET</span><span class="ep-url">/api/categories/getAll</span><span class="ep-auth">PUBLIC</span></div>
+        <div class="ep-row"><span class="pill pill-get">GET</span><span class="ep-url">/api/ingridients/getIngredientsWithRecipeId</span><span class="ep-auth">PUBLIC</span></div>
+        <div class="ep-row"><span class="pill pill-get">GET</span><span class="ep-url">/api/nutritionInfo/getNutritionInfoWithRecipeId</span><span class="ep-auth">PUBLIC</span></div>
+        <div class="ep-row"><span class="pill pill-get">GET</span><span class="ep-url">/api/cooking-steps/getCookingStepsWithRecipeId</span><span class="ep-auth">PUBLIC</span></div>
+        <div class="ep-row" style="border:none"><span class="pill pill-get">GET</span><div><span class="ep-url">/</span><br><span class="ep-desc">Health Check</span></div><span class="ep-auth">PUBLIC</span></div>
+      </div>
+    </div>
+    <div>
+      <h3>AdminController — /api/admin</h3>
+      <p style="font-size:.78rem;color:var(--yellow);margin-bottom:10px">⚠ Alle erfordern ADMIN-Rolle</p>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="ep-row"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/admin/users</span><br><span class="ep-desc">Alle Benutzer auflisten</span></div><span class="ep-auth">ADMIN</span></div>
+        <div class="ep-row"><span class="pill pill-put">PUT</span><div><span class="ep-url">/api/admin/users/{id}/role</span><br><span class="ep-desc">Rolle ändern (USER/ADMIN)</span></div><span class="ep-auth">ADMIN</span></div>
+        <div class="ep-row"><span class="pill pill-del">DEL</span><div><span class="ep-url">/api/admin/delete-user/{id}</span></div><span class="ep-auth">ADMIN</span></div>
+        <div class="ep-row" style="border:none"><span class="pill pill-del">DEL</span><div><span class="ep-url">/api/admin/delete-recipe/{id}</span></div><span class="ep-auth">ADMIN</span></div>
+      </div>
+
+      <h3 style="margin-top:20px">Beispiel: Review</h3>
+<pre><code><span class="cm">// POST /api/reviews/recipe/42</span>
+{
   "<span class="str">stars</span>": <span class="num">5</span>,
-  "<span class="str">comment</span>": "<span class="str">Absolut fantastisch!</span>",
-  "<span class="str">createdAt</span>": "<span class="str">2026-05-13T14:22:00</span>",
-  "<span class="str">authorName</span>": "<span class="str">Max Mustermann</span>",
-  "<span class="str">authorProfilePicture</span>": <span class="kw">null</span>,
-  "<span class="str">authorId</span>": <span class="num">1</span>
-}</code></pre>
-</div>
-</div>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-get">GET</span>
-  <span class="endpoint-url">/api/reviews/recipe/{recipeId}</span>
-  <span class="endpoint-desc">Alle Bewertungen eines Rezepts</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Path Variable</td><td><code>recipeId</code> (Long)</td></tr>
-  <tr><td>Authentifizierung</td><td>Keine (öffentlich)</td></tr>
-  <tr><td>Response</td><td><code>List&lt;ReviewResponseDto&gt;</code></td></tr>
-  <tr><td>Sortierung</td><td>Neueste zuerst (<code>createdAt DESC</code>)</td></tr>
-</table>
-</div>
-</div>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-delete">DELETE</span>
-  <span class="endpoint-url">/api/reviews/recipe/{recipeId}</span>
-  <span class="endpoint-desc">Eigene Bewertung löschen</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Authentifizierung</td><td>Bearer Token</td></tr>
-  <tr><td>Status 204</td><td>Bewertung gelöscht, aggregiertes Rating aktualisiert</td></tr>
-</table>
-</div>
-</div>
-
-<!-- ═══ ADMIN ═══ -->
-<h3 id="api-admin">AdminController — <code>/api/admin</code></h3>
-<p style="margin-bottom:12px;color:var(--yellow)">⚠ Alle Endpunkte erfordern <code>@PreAuthorize("hasRole('ADMIN')")</code></p>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-get">GET</span>
-  <span class="endpoint-url">/api/admin/users</span>
-  <span class="endpoint-desc">Alle Benutzer auflisten</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Response</td><td><code>List&lt;AdminUserDto&gt;</code></td></tr>
-</table>
-<h4>Beispiel Response</h4>
-<pre><code>[{
-  "<span class="str">id</span>": <span class="num">1</span>,
-  "<span class="str">name</span>": "<span class="str">Max Mustermann</span>",
-  "<span class="str">email</span>": "<span class="str">max@example.com</span>",
-  "<span class="str">profilePicture</span>": <span class="kw">null</span>,
-  "<span class="str">role</span>": "<span class="str">USER</span>",
-  "<span class="str">joinedAt</span>": "<span class="str">2026-05-01T10:00:00</span>"
-}]</code></pre>
-</div>
-</div>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-put">PUT</span>
-  <span class="endpoint-url">/api/admin/users/{id}/role</span>
-  <span class="endpoint-desc">Benutzerrolle ändern</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Path Variable</td><td><code>id</code> (Long)</td></tr>
-  <tr><td>Request Body</td><td><code>{ "role": "ADMIN" }</code></td></tr>
-  <tr><td>Mögliche Werte</td><td><code>USER</code> oder <code>ADMIN</code></td></tr>
-  <tr><td>Response</td><td><code>AdminUserDto</code></td></tr>
-</table>
-</div>
-</div>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-delete">DELETE</span>
-  <span class="endpoint-url">/api/admin/delete-user/{id}</span>
-  <span class="endpoint-desc">Benutzer löschen</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Status 204</td><td>Benutzer gelöscht</td></tr>
-</table>
-</div>
-</div>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-delete">DELETE</span>
-  <span class="endpoint-url">/api/admin/delete-recipe/{id}</span>
-  <span class="endpoint-desc">Rezept löschen (Admin)</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Status 204</td><td>Rezept gelöscht</td></tr>
-</table>
-</div>
-</div>
-
-<!-- ═══ CATEGORIES ═══ -->
-<h3 id="api-categories">CategorieController — <code>/api/categories</code></h3>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-get">GET</span>
-  <span class="endpoint-url">/api/categories/getAll</span>
-  <span class="endpoint-desc">Alle Kategorien abrufen</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Authentifizierung</td><td>Keine (öffentlich)</td></tr>
-  <tr><td>Response</td><td><code>List&lt;CategoryResponseDto&gt;</code></td></tr>
-</table>
-<h4>Beispiel Response</h4>
-<pre><code>[
-  { "<span class="str">id</span>": <span class="num">1</span>, "<span class="str">name</span>": "<span class="str">Pasta</span>", "<span class="str">icon</span>": "<span class="str">🍝</span>", "<span class="str">count</span>": <span class="num">5</span> },
-  { "<span class="str">id</span>": <span class="num">2</span>, "<span class="str">name</span>": "<span class="str">Salate</span>", "<span class="str">icon</span>": "<span class="str">🥗</span>", "<span class="str">count</span>": <span class="num">3</span> },
-  { "<span class="str">id</span>": <span class="num">3</span>, "<span class="str">name</span>": "<span class="str">Desserts</span>", "<span class="str">icon</span>": "<span class="str">🍰</span>", "<span class="str">count</span>": <span class="num">8</span> }
-]</code></pre>
-</div>
-</div>
-
-<!-- ═══ INGREDIENTS ═══ -->
-<h3 id="api-ingredients">IngredientsController — <code>/api/ingridients</code></h3>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-get">GET</span>
-  <span class="endpoint-url">/api/ingridients/getIngredientsWithRecipeId?recipeId=1</span>
-  <span class="endpoint-desc">Zutaten eines Rezepts laden</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Parameter</td><td><code>recipeId</code> (Long)</td></tr>
-  <tr><td>Response</td><td><code>List&lt;IngredientResponseDto&gt;</code></td></tr>
-</table>
-<h4>Beispiel Response</h4>
-<pre><code>[
-  { "<span class="str">id</span>": <span class="num">1</span>, "<span class="str">name</span>": "<span class="str">Spaghetti</span>", "<span class="str">amount</span>": <span class="num">400.00</span>, "<span class="str">unit</span>": "<span class="str">g</span>" },
-  { "<span class="str">id</span>": <span class="num">2</span>, "<span class="str">name</span>": "<span class="str">Guanciale</span>", "<span class="str">amount</span>": <span class="num">200.00</span>, "<span class="str">unit</span>": "<span class="str">g</span>" }
-]</code></pre>
-</div>
-</div>
-
-<!-- ═══ NUTRITION ═══ -->
-<h3 id="api-nutrition">NutritionInfoController — <code>/api/nutritionInfo</code></h3>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-get">GET</span>
-  <span class="endpoint-url">/api/nutritionInfo/getNutritionInfoWithRecipeId?recipeId=1</span>
-  <span class="endpoint-desc">Nährwertinformationen eines Rezepts</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Parameter</td><td><code>recipeId</code> (Long)</td></tr>
-  <tr><td>Response</td><td><code>NutritionInfoResponseDto</code></td></tr>
-</table>
-<h4>Beispiel Response</h4>
-<pre><code>{
-  "<span class="str">calories</span>": <span class="num">580</span>,
-  "<span class="str">protein</span>": <span class="num">22</span>,
-  "<span class="str">carbs</span>": <span class="num">65</span>,
-  "<span class="str">fat</span>": <span class="num">24</span>,
-  "<span class="str">fiber</span>": <span class="num">3</span>
-}</code></pre>
-</div>
-</div>
-
-<!-- ═══ COOKING STEPS ═══ -->
-<h3 id="api-steps">CookingStepsController — <code>/api/cooking-steps</code></h3>
-
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-get">GET</span>
-  <span class="endpoint-url">/api/cooking-steps/getCookingStepsWithRecipeId?recipeId=1</span>
-  <span class="endpoint-desc">Kochschritte eines Rezepts</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Parameter</td><td><code>recipeId</code> (Long)</td></tr>
-  <tr><td>Sortierung</td><td>Nach <code>stepNumber ASC</code></td></tr>
-  <tr><td>Response</td><td><code>List&lt;CookingStepResponseDto&gt;</code></td></tr>
-</table>
-<h4>Beispiel Response</h4>
-<pre><code>[
-  { "<span class="str">id</span>": <span class="num">1</span>, "<span class="str">stepNumber</span>": <span class="num">1</span>, "<span class="str">instruction</span>": "<span class="str">Wasser zum Kochen bringen</span>", "<span class="str">image</span>": <span class="kw">null</span>, "<span class="str">duration</span>": <span class="num">10</span> },
-  { "<span class="str">id</span>": <span class="num">2</span>, "<span class="str">stepNumber</span>": <span class="num">2</span>, "<span class="str">instruction</span>": "<span class="str">Guanciale knusprig braten</span>", "<span class="str">image</span>": <span class="kw">null</span>, "<span class="str">duration</span>": <span class="num">5</span> }
-]</code></pre>
-</div>
-</div>
-
-<!-- ═══ HOME ═══ -->
-<h3>HomeController — <code>/</code></h3>
-<div class="endpoint">
-<div class="endpoint-head" onclick="this.parentElement.classList.toggle('open')">
-  <span class="badge badge-get">GET</span>
-  <span class="endpoint-url">/</span>
-  <span class="endpoint-desc">Health Check</span>
-</div>
-<div class="endpoint-body">
-<table>
-  <tr><td>Response</td><td><code>"CookBook API is running..."</code></td></tr>
-</table>
-</div>
-</div>
-
-<!-- ── ENDPOINT OVERVIEW TABLE ── -->
-<h3>Endpoint-Übersicht</h3>
-<table>
-<tr><th>Methode</th><th>Endpoint</th><th>Auth</th><th>Beschreibung</th></tr>
-<tr><td><span class="badge badge-post">POST</span></td><td><code>/api/auth/register</code></td><td>—</td><td>Registrierung</td></tr>
-<tr><td><span class="badge badge-post">POST</span></td><td><code>/api/auth/login</code></td><td>—</td><td>Login</td></tr>
-<tr><td><span class="badge badge-get">GET</span></td><td><code>/api/auth/me</code></td><td>JWT</td><td>Aktueller User</td></tr>
-<tr><td><span class="badge badge-put">PUT</span></td><td><code>/api/auth/update</code></td><td>JWT</td><td>Profil bearbeiten</td></tr>
-<tr><td><span class="badge badge-get">GET</span></td><td><code>/api/recipes/getAll</code></td><td>—</td><td>Alle Rezepte</td></tr>
-<tr><td><span class="badge badge-get">GET</span></td><td><code>/api/recipes/getSixBestRated</code></td><td>—</td><td>Top 6</td></tr>
-<tr><td><span class="badge badge-get">GET</span></td><td><code>/api/recipes/getByCategorieFilter</code></td><td>—</td><td>Nach Kategorie</td></tr>
-<tr><td><span class="badge badge-get">GET</span></td><td><code>/api/recipes/getRecipeById</code></td><td>—</td><td>Einzelnes Rezept</td></tr>
-<tr><td><span class="badge badge-get">GET</span></td><td><code>/api/recipes/search</code></td><td>—</td><td>Volltextsuche</td></tr>
-<tr><td><span class="badge badge-post">POST</span></td><td><code>/api/recipes/create</code></td><td>JWT</td><td>Rezept erstellen</td></tr>
-<tr><td><span class="badge badge-put">PUT</span></td><td><code>/api/recipes/update/{id}</code></td><td>JWT (Author)</td><td>Rezept bearbeiten</td></tr>
-<tr><td><span class="badge badge-delete">DELETE</span></td><td><code>/api/recipes/delete/{id}</code></td><td>JWT (Author)</td><td>Rezept löschen</td></tr>
-<tr><td><span class="badge badge-post">POST</span></td><td><code>/api/recipes/{id}/toggle-save</code></td><td>JWT</td><td>Favorit toggle</td></tr>
-<tr><td><span class="badge badge-get">GET</span></td><td><code>/api/recipes/saved</code></td><td>JWT</td><td>Gespeicherte Rezepte</td></tr>
-<tr><td><span class="badge badge-get">GET</span></td><td><code>/api/recipes/saved-ids</code></td><td>JWT</td><td>Gespeicherte IDs</td></tr>
-<tr><td><span class="badge badge-post">POST</span></td><td><code>/api/reviews/recipe/{id}</code></td><td>JWT</td><td>Bewertung abgeben</td></tr>
-<tr><td><span class="badge badge-get">GET</span></td><td><code>/api/reviews/recipe/{id}</code></td><td>—</td><td>Bewertungen laden</td></tr>
-<tr><td><span class="badge badge-delete">DELETE</span></td><td><code>/api/reviews/recipe/{id}</code></td><td>JWT</td><td>Bewertung löschen</td></tr>
-<tr><td><span class="badge badge-get">GET</span></td><td><code>/api/admin/users</code></td><td>ADMIN</td><td>Alle User</td></tr>
-<tr><td><span class="badge badge-put">PUT</span></td><td><code>/api/admin/users/{id}/role</code></td><td>ADMIN</td><td>Rolle ändern</td></tr>
-<tr><td><span class="badge badge-delete">DELETE</span></td><td><code>/api/admin/delete-user/{id}</code></td><td>ADMIN</td><td>User löschen</td></tr>
-<tr><td><span class="badge badge-delete">DELETE</span></td><td><code>/api/admin/delete-recipe/{id}</code></td><td>ADMIN</td><td>Rezept löschen</td></tr>
-<tr><td><span class="badge badge-get">GET</span></td><td><code>/api/categories/getAll</code></td><td>—</td><td>Kategorien</td></tr>
-<tr><td><span class="badge badge-get">GET</span></td><td><code>/api/ingridients/getIngredientsWithRecipeId</code></td><td>—</td><td>Zutaten</td></tr>
-<tr><td><span class="badge badge-get">GET</span></td><td><code>/api/nutritionInfo/getNutritionInfoWithRecipeId</code></td><td>—</td><td>Nährwerte</td></tr>
-<tr><td><span class="badge badge-get">GET</span></td><td><code>/api/cooking-steps/getCookingStepsWithRecipeId</code></td><td>—</td><td>Kochschritte</td></tr>
-<tr><td><span class="badge badge-get">GET</span></td><td><code>/</code></td><td>—</td><td>Health Check</td></tr>
-</table>
+  "<span class="str">comment</span>": "<span class="str">Fantastisch!</span>"
+}
+<span class="cm">// → Upsert (Create or Update)</span>
+<span class="cm">// → updateRecipeAggregate()</span>
+<span class="cm">//   → AVG(stars) + COUNT → recipe</span></code></pre>
+    </div>
+  </div>
 </section>
 
-<!-- ────────────── 6. DATENBANK ────────────── -->
-<section id="database">
-<h2>6. Datenbank</h2>
+<!-- ══════════════════════════════════════════════════
+     SLIDE 9 — DATENBANK
+     ══════════════════════════════════════════════════ -->
+<section class="slide full-bleed bg-grain bg-glow-left" data-slide="9">
+  <div class="slide-tag">09 — Datenbank</div>
+  <h2>ER-Modell — <em>8 Tabellen</em></h2>
 
-<h3>Übersicht</h3>
-<p>PostgreSQL auf Port 5433, Schema wird durch <strong>7 Flyway-Migrationen</strong> (V0.0 – V0.7) verwaltet. <code>ddl-auto: none</code> — kein automatisches Schema-Management durch Hibernate.</p>
+  <div class="er-wrap">
+  <svg viewBox="0 0 820 440" xmlns="http://www.w3.org/2000/svg" style="width:100%">
+    <style>.t{font-family:'JetBrains Mono',monospace}.th{fill:#ff6b35;font-size:13px;font-weight:700}.tc{fill:#7c8194;font-size:10px}.tp{fill:#ff4757;font-size:10px;font-weight:700}.tf{fill:#35c7ff;font-size:10px}.tu{fill:#ffc233;font-size:10px;font-weight:600}</style>
 
-<h3>Entity-Relationship-Diagramm</h3>
-<div class="diagram-wrapper">
-<svg viewBox="0 0 860 520" xmlns="http://www.w3.org/2000/svg" style="max-width:840px;width:100%">
-  <style>
-    .tbl{fill:#1c2333;stroke:#30363d;stroke-width:1.5;rx:8}
-    .tbl-head{fill:#0f3460;rx:8}
-    .tbl-t{font-size:13px;font-weight:700;fill:#e0e0e0;font-family:monospace}
-    .col{font-size:10px;fill:#c0c0c0;font-family:monospace}
-    .pk{fill:#e94560;font-weight:700}.fk{fill:#53d8fb}.uq{fill:#fdcb6e}
-    .rel{stroke-width:1.8;fill:none;marker-end:url(#ah)}
-  </style>
-  <defs><marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#53d8fb"/></marker></defs>
+    <!-- users -->
+    <rect x="5" y="5" width="175" height="190" rx="8" fill="#14161e" stroke="#252835"/>
+    <rect x="5" y="5" width="175" height="24" rx="8" fill="#1a1d28"/>
+    <text class="t th" x="92" y="22" text-anchor="middle">users</text>
+    <text class="t tp" x="12" y="44">PK id BIGSERIAL</text>
+    <text class="t tc" x="12" y="58">   name VARCHAR(100)</text>
+    <text class="t tu" x="12" y="72">UQ email VARCHAR(255)</text>
+    <text class="t tc" x="12" y="86">   profile_picture</text>
+    <text class="t tc" x="12" y="100">   bio TEXT</text>
+    <text class="t tc" x="12" y="114">   password VARCHAR(255)</text>
+    <text class="t tc" x="12" y="128">   auth_provider VARCHAR(20)</text>
+    <text class="t tc" x="12" y="142">   provider_id VARCHAR(255)</text>
+    <text class="t tc" x="12" y="156">   role VARCHAR(20)</text>
+    <text class="t tc" x="12" y="170">   joined_at TIMESTAMP</text>
 
-  <!-- users -->
-  <rect class="tbl" x="10" y="10" width="190" height="200"/>
-  <rect class="tbl-head" x="10" y="10" width="190" height="26"/>
-  <text class="tbl-t" x="105" y="28" text-anchor="middle">users</text>
-  <text class="col pk" x="18" y="52">PK id BIGSERIAL</text>
-  <text class="col" x="18" y="68">   name VARCHAR(100)</text>
-  <text class="col uq" x="18" y="84">UQ email VARCHAR(255)</text>
-  <text class="col" x="18" y="100">   profile_picture</text>
-  <text class="col" x="18" y="116">   bio TEXT</text>
-  <text class="col" x="18" y="132">   password VARCHAR(255)</text>
-  <text class="col" x="18" y="148">   auth_provider VARCHAR(20)</text>
-  <text class="col" x="18" y="164">   provider_id VARCHAR(255)</text>
-  <text class="col" x="18" y="180">   role VARCHAR(20)</text>
-  <text class="col" x="18" y="196">   joined_at TIMESTAMP</text>
+    <!-- recipes -->
+    <rect x="280" y="5" width="210" height="215" rx="8" fill="#14161e" stroke="#252835"/>
+    <rect x="280" y="5" width="210" height="24" rx="8" fill="#1a1d28"/>
+    <text class="t th" x="385" y="22" text-anchor="middle">recipes</text>
+    <text class="t tp" x="287" y="44">PK id BIGSERIAL</text>
+    <text class="t tc" x="287" y="58">   title VARCHAR(200)</text>
+    <text class="t tc" x="287" y="72">   description TEXT</text>
+    <text class="t tc" x="287" y="86">   image VARCHAR(500)</text>
+    <text class="t tc" x="287" y="100">   rating DECIMAL(2,1)</text>
+    <text class="t tc" x="287" y="114">   review_count INT</text>
+    <text class="t tc" x="287" y="128">   prep/cook_time INT</text>
+    <text class="t tc" x="287" y="142">   difficulty VARCHAR(20)</text>
+    <text class="t tc" x="287" y="156">   servings INT</text>
+    <text class="t tc" x="287" y="170">   tags JSONB</text>
+    <text class="t tf" x="287" y="184">FK author_id → users</text>
+    <text class="t tf" x="287" y="198">FK category_id → categories</text>
 
-  <!-- recipes -->
-  <rect class="tbl" x="300" y="10" width="220" height="230"/>
-  <rect class="tbl-head" x="300" y="10" width="220" height="26"/>
-  <text class="tbl-t" x="410" y="28" text-anchor="middle">recipes</text>
-  <text class="col pk" x="308" y="52">PK id BIGSERIAL</text>
-  <text class="col" x="308" y="68">   title VARCHAR(200)</text>
-  <text class="col" x="308" y="84">   description TEXT</text>
-  <text class="col" x="308" y="100">   image VARCHAR(500)</text>
-  <text class="col" x="308" y="116">   rating DECIMAL(2,1)</text>
-  <text class="col" x="308" y="132">   review_count INT</text>
-  <text class="col" x="308" y="148">   prep/cook_time INT</text>
-  <text class="col" x="308" y="164">   difficulty VARCHAR(20)</text>
-  <text class="col" x="308" y="180">   servings INT / tags JSONB</text>
-  <text class="col fk" x="308" y="196">FK author_id → users</text>
-  <text class="col fk" x="308" y="212">FK category_id → categories</text>
-  <text class="col" x="308" y="228">   created_at TIMESTAMP</text>
+    <!-- categories -->
+    <rect x="610" y="5" width="195" height="96" rx="8" fill="#14161e" stroke="#252835"/>
+    <rect x="610" y="5" width="195" height="24" rx="8" fill="#1a1d28"/>
+    <text class="t th" x="707" y="22" text-anchor="middle">categories</text>
+    <text class="t tp" x="617" y="44">PK id BIGSERIAL</text>
+    <text class="t tu" x="617" y="58">UQ name VARCHAR(100)</text>
+    <text class="t tc" x="617" y="72">   icon VARCHAR(100)</text>
+    <text class="t tc" x="617" y="86">   count INT</text>
 
-  <!-- categories -->
-  <rect class="tbl" x="640" y="10" width="200" height="100"/>
-  <rect class="tbl-head" x="640" y="10" width="200" height="26"/>
-  <text class="tbl-t" x="740" y="28" text-anchor="middle">categories</text>
-  <text class="col pk" x="648" y="52">PK id BIGSERIAL</text>
-  <text class="col uq" x="648" y="68">UQ name VARCHAR(100)</text>
-  <text class="col" x="648" y="84">   icon VARCHAR(100)</text>
-  <text class="col" x="648" y="100">   count INT</text>
+    <!-- ingredients -->
+    <rect x="610" y="130" width="195" height="96" rx="8" fill="#14161e" stroke="#252835"/>
+    <rect x="610" y="130" width="195" height="24" rx="8" fill="#1a1d28"/>
+    <text class="t th" x="707" y="147" text-anchor="middle">ingredients</text>
+    <text class="t tp" x="617" y="169">PK id BIGSERIAL</text>
+    <text class="t tf" x="617" y="183">FK recipe_id → recipes</text>
+    <text class="t tc" x="617" y="197">   name, amount, unit</text>
 
-  <!-- ingredients -->
-  <rect class="tbl" x="620" y="160" width="220" height="120"/>
-  <rect class="tbl-head" x="620" y="160" width="220" height="26"/>
-  <text class="tbl-t" x="730" y="178" text-anchor="middle">ingredients</text>
-  <text class="col pk" x="628" y="202">PK id BIGSERIAL</text>
-  <text class="col fk" x="628" y="218">FK recipe_id → recipes</text>
-  <text class="col" x="628" y="234">   name VARCHAR(150)</text>
-  <text class="col" x="628" y="250">   amount DECIMAL / unit</text>
-  <text class="col" x="628" y="266">   </text>
+    <!-- cooking_steps -->
+    <rect x="610" y="255" width="195" height="96" rx="8" fill="#14161e" stroke="#252835"/>
+    <rect x="610" y="255" width="195" height="24" rx="8" fill="#1a1d28"/>
+    <text class="t th" x="707" y="272" text-anchor="middle">cooking_steps</text>
+    <text class="t tp" x="617" y="294">PK id BIGSERIAL</text>
+    <text class="t tf" x="617" y="308">FK recipe_id → recipes</text>
+    <text class="t tc" x="617" y="322">   step_number, instruction</text>
+    <text class="t tc" x="617" y="336">   image, duration</text>
 
-  <!-- cooking_steps -->
-  <rect class="tbl" x="620" y="310" width="220" height="110"/>
-  <rect class="tbl-head" x="620" y="310" width="220" height="26"/>
-  <text class="tbl-t" x="730" y="328" text-anchor="middle">cooking_steps</text>
-  <text class="col pk" x="628" y="352">PK id BIGSERIAL</text>
-  <text class="col fk" x="628" y="368">FK recipe_id → recipes</text>
-  <text class="col" x="628" y="384">   step_number INT</text>
-  <text class="col" x="628" y="400">   instruction TEXT</text>
-  <text class="col" x="628" y="416">   image / duration</text>
+    <!-- nutrition_info -->
+    <rect x="300" y="260" width="190" height="96" rx="8" fill="#14161e" stroke="#252835"/>
+    <rect x="300" y="260" width="190" height="24" rx="8" fill="#1a1d28"/>
+    <text class="t th" x="395" y="277" text-anchor="middle">nutrition_info</text>
+    <text class="t tp" x="307" y="299">PK id BIGSERIAL</text>
+    <text class="t tf" x="307" y="313">FK recipe_id (UNIQUE)</text>
+    <text class="t tc" x="307" y="327">   cal, protein, carbs</text>
+    <text class="t tc" x="307" y="341">   fat, fiber</text>
 
-  <!-- nutrition_info -->
-  <rect class="tbl" x="300" y="300" width="220" height="120"/>
-  <rect class="tbl-head" x="300" y="300" width="220" height="26"/>
-  <text class="tbl-t" x="410" y="318" text-anchor="middle">nutrition_info</text>
-  <text class="col pk" x="308" y="342">PK id BIGSERIAL</text>
-  <text class="col fk" x="308" y="358">FK recipe_id → recipes (UQ)</text>
-  <text class="col" x="308" y="374">   calories / protein INT</text>
-  <text class="col" x="308" y="390">   carbs / fat INT</text>
-  <text class="col" x="308" y="406">   fiber INT (optional)</text>
+    <!-- reviews -->
+    <rect x="5" y="240" width="200" height="100" rx="8" fill="#14161e" stroke="#252835"/>
+    <rect x="5" y="240" width="200" height="24" rx="8" fill="#1a1d28"/>
+    <text class="t th" x="105" y="257" text-anchor="middle">reviews</text>
+    <text class="t tp" x="12" y="279">PK id BIGSERIAL</text>
+    <text class="t tf" x="12" y="293">FK recipe_id (CASCADE)</text>
+    <text class="t tf" x="12" y="307">FK user_id (CASCADE)</text>
+    <text class="t tc" x="12" y="321">   stars CHECK(1-5), comment</text>
+    <text class="t tu" x="12" y="335">UQ (user_id, recipe_id)</text>
 
-  <!-- reviews -->
-  <rect class="tbl" x="10" y="260" width="220" height="130"/>
-  <rect class="tbl-head" x="10" y="260" width="220" height="26"/>
-  <text class="tbl-t" x="120" y="278" text-anchor="middle">reviews</text>
-  <text class="col pk" x="18" y="302">PK id BIGSERIAL</text>
-  <text class="col fk" x="18" y="318">FK recipe_id → recipes (CASCADE)</text>
-  <text class="col fk" x="18" y="334">FK user_id → users (CASCADE)</text>
-  <text class="col" x="18" y="350">   stars INT CHECK(1-5)</text>
-  <text class="col" x="18" y="366">   comment TEXT</text>
-  <text class="col uq" x="18" y="382">UQ (user_id, recipe_id)</text>
+    <!-- saved_recipes -->
+    <rect x="5" y="375" width="200" height="60" rx="8" fill="#14161e" stroke="#252835"/>
+    <rect x="5" y="375" width="200" height="24" rx="8" fill="#1a1d28"/>
+    <text class="t th" x="105" y="392" text-anchor="middle">saved_recipes</text>
+    <text class="t tf" x="12" y="414">FK user_id + recipe_id</text>
+    <text class="t tu" x="12" y="428">UQ (user_id, recipe_id)</text>
 
-  <!-- saved_recipes -->
-  <rect class="tbl" x="10" y="430" width="220" height="80"/>
-  <rect class="tbl-head" x="10" y="430" width="220" height="26"/>
-  <text class="tbl-t" x="120" y="448" text-anchor="middle">saved_recipes</text>
-  <text class="col pk" x="18" y="472">PK id BIGSERIAL</text>
-  <text class="col fk" x="18" y="488">FK user_id / recipe_id</text>
-  <text class="col uq" x="18" y="504">UQ (user_id, recipe_id)</text>
-
-  <!-- Relations -->
-  <path class="rel" d="M200,110 L300,196" stroke="#e94560"/>
-  <text x="240" y="146" fill="#e94560" font-size="9" font-weight="700">1:N</text>
-  <path class="rel" d="M520,212 L640,60" stroke="#53d8fb"/>
-  <text x="570" y="125" fill="#53d8fb" font-size="9" font-weight="700">N:1</text>
-  <path class="rel" d="M520,170 L620,210" stroke="#53d8fb"/>
-  <text x="570" y="185" fill="#53d8fb" font-size="9" font-weight="700">1:N</text>
-  <path class="rel" d="M520,200 L620,360" stroke="#53d8fb"/>
-  <text x="560" y="280" fill="#53d8fb" font-size="9" font-weight="700">1:N</text>
-  <path class="rel" d="M410,240 L410,300" stroke="#3fb950"/>
-  <text x="420" y="270" fill="#3fb950" font-size="9" font-weight="700">1:1</text>
-  <path class="rel" d="M300,130 L230,300" stroke="#e94560"/>
-  <text x="255" y="218" fill="#e94560" font-size="9" font-weight="700">1:N</text>
-  <path class="rel" d="M105,210 L105,260" stroke="#fdcb6e"/>
-  <text x="115" y="238" fill="#fdcb6e" font-size="9" font-weight="700">1:N</text>
-  <path class="rel" d="M105,390 L105,430" stroke="#fdcb6e"/>
-  <text x="115" y="413" fill="#fdcb6e" font-size="9" font-weight="700">1:N</text>
-  <path class="rel" d="M230,470 Q330,470 320,240" stroke="#3fb950" stroke-dasharray="5,4"/>
-  <text x="290" y="460" fill="#3fb950" font-size="9" font-weight="700">N:1</text>
-</svg>
-</div>
-
-<p style="color:var(--text2);font-size:.85rem;margin-top:8px">Die vollständige draw.io-Datei liegt unter <code>database-model.drawio</code> im Projektverzeichnis.</p>
-
-<h3>Tabellen-Details</h3>
-
-<div class="card">
-<h4>users</h4>
-<p>Speichert alle Benutzerkonten — sowohl lokale (Passwort) als auch OAuth2-Benutzer (Google). Das Feld <code>password</code> ist nullable für OAuth-Benutzer.</p>
-<p><strong>Rollen:</strong> <code>USER</code> (Standard), <code>ADMIN</code> — gesteuert über <code>role</code>-Spalte.</p>
-<p><strong>Auth Provider:</strong> <code>LOCAL</code>, <code>GOOGLE</code></p>
-</div>
-
-<div class="card">
-<h4>recipes</h4>
-<p>Zentrale Tabelle mit Rezeptdaten. Enthält aggregierte Werte (<code>rating</code>, <code>review_count</code>) die bei jeder Bewertungsänderung aktualisiert werden. Tags werden als <strong>JSONB</strong>-Array gespeichert.</p>
-<p><strong>Schwierigkeit:</strong> <code>EINFACH</code>, <code>MITTEL</code>, <code>SCHWER</code></p>
-</div>
-
-<div class="card">
-<h4>reviews</h4>
-<p>Bewertungen mit 1–5 Sternen und optionalem Kommentar. Ein Benutzer kann ein Rezept <strong>nur einmal bewerten</strong> (Unique Constraint). CASCADE-Löschung bei Rezept- oder User-Löschung.</p>
-</div>
-
-<div class="card">
-<h4>saved_recipes</h4>
-<p><strong>Junction-Tabelle</strong> für die M:N-Beziehung zwischen Benutzern und ihren gespeicherten Rezepten. Ermöglicht die „Favoriten"-Funktion.</p>
-</div>
-
-<h3>Flyway-Migrationen</h3>
-<table>
-  <tr><th>Version</th><th>Beschreibung</th></tr>
-  <tr><td><code>V0.0</code></td><td>Initiales Schema — 7 Tabellen (users, categories, recipes, ingredients, cooking_steps, nutrition_info, saved_recipes) + Indizes</td></tr>
-  <tr><td><code>V0.1</code></td><td>Testdaten (5 Benutzer, 6 Kategorien, 6 Rezepte mit allen Unterentitäten)</td></tr>
-  <tr><td><code>V0.2</code></td><td>Testbenutzer entfernt</td></tr>
-  <tr><td><code>V0.3</code></td><td>Testdaten ohne Benutzer regeneriert (ON CONFLICT Handling)</td></tr>
-  <tr><td><code>V0.4</code></td><td>OAuth2-Support: <code>auth_provider</code>, <code>provider_id</code> Spalten + Indizes</td></tr>
-  <tr><td><code>V0.5</code></td><td>Spalte <code>avatar</code> → <code>profile_picture</code> umbenannt</td></tr>
-  <tr><td><code>V0.6</code></td><td>Reviews-Tabelle erstellt mit Sternen-Constraint und Unique-Constraint</td></tr>
-  <tr><td><code>V0.7</code></td><td>Rollen-System: <code>role</code>-Spalte hinzugefügt, Admin-Benutzer gesetzt</td></tr>
-</table>
+    <!-- Relationships -->
+    <line x1="180" y1="90" x2="280" y2="184" stroke="#ff6b35" stroke-width="1.5" stroke-opacity=".6"/>
+    <text x="225" y="130" fill="#ff6b35" font-size="9" font-weight="700" font-family="Sora">1:N</text>
+    <line x1="490" y1="198" x2="610" y2="50" stroke="#35c7ff" stroke-width="1.5" stroke-opacity=".5"/>
+    <text x="545" y="115" fill="#35c7ff" font-size="9" font-weight="700" font-family="Sora">N:1</text>
+    <line x1="490" y1="130" x2="610" y2="175" stroke="#35c7ff" stroke-width="1.5" stroke-opacity=".5"/>
+    <text x="545" y="148" fill="#35c7ff" font-size="9" font-weight="700" font-family="Sora">1:N</text>
+    <line x1="490" y1="170" x2="610" y2="300" stroke="#35c7ff" stroke-width="1.5" stroke-opacity=".5"/>
+    <text x="545" y="240" fill="#35c7ff" font-size="9" font-weight="700" font-family="Sora">1:N</text>
+    <line x1="385" y1="220" x2="385" y2="260" stroke="#3ddc84" stroke-width="1.5" stroke-opacity=".5"/>
+    <text x="395" y="243" fill="#3ddc84" font-size="9" font-weight="700" font-family="Sora">1:1</text>
+    <line x1="280" y1="110" x2="205" y2="280" stroke="#ff6b35" stroke-width="1.5" stroke-opacity=".4"/>
+    <text x="235" y="200" fill="#ff6b35" font-size="9" font-weight="700" font-family="Sora">1:N</text>
+    <line x1="92" y1="195" x2="92" y2="240" stroke="#ffc233" stroke-width="1.5" stroke-opacity=".4"/>
+    <text x="100" y="220" fill="#ffc233" font-size="9" font-weight="700" font-family="Sora">1:N</text>
+    <line x1="92" y1="340" x2="92" y2="375" stroke="#ffc233" stroke-width="1.5" stroke-opacity=".4" stroke-dasharray="4,3"/>
+    <text x="100" y="360" fill="#ffc233" font-size="9" font-weight="700" font-family="Sora">1:N</text>
+  </svg>
+  </div>
 </section>
 
-<!-- ────────────── 7. FRONTEND (KURZ) ────────────── -->
-<section id="frontend">
-<h2>7. Frontend (Kompakt)</h2>
+<!-- ══════════════════════════════════════════════════
+     SLIDE 10 — PROJEKTSTRUKTUR
+     ══════════════════════════════════════════════════ -->
+<section class="slide bg-grain bg-glow-left" data-slide="10">
+  <div class="slide-tag">10 — Projektstruktur</div>
+  <h2>Backend <em>Ordnerstruktur</em></h2>
 
-<div class="card">
-<h4>Technologie</h4>
-<p><strong>Angular 17.3</strong> mit Standalone Components (kein NgModule), Tailwind CSS, Angular Material, TypeScript 5.4</p>
-
-<h4>Komponentenstruktur (25+ Komponenten)</h4>
-<table>
-  <tr><th>Bereich</th><th>Komponenten</th></tr>
-  <tr><td>Rezepte</td><td>all-recipes, recipe-card, recipe-detail, create-recipe, edit-recipe, my-recipes, saved-recipes</td></tr>
-  <tr><td>Auth</td><td>login, register, oauth2-redirect</td></tr>
-  <tr><td>Benutzer</td><td>profile, edit-profile</td></tr>
-  <tr><td>Navigation</td><td>header, footer, search-overlay, search-results</td></tr>
-  <tr><td>Admin</td><td>admin (User-/Rezept-Verwaltung)</td></tr>
-  <tr><td>UI</td><td>category-pill, confirm-dialog, toast, color-theme-picker, cookbook-logo</td></tr>
-</table>
-
-<h4>Routing</h4>
-<p>Öffentliche Routen (/, /recipe/:id, /categories, /recipes, /search), geschützte Routen mit <code>authGuard</code> (/profile, /create-recipe, /saved, /my-recipes, /edit-recipe/:id), Admin-Routen mit <code>adminGuard</code> (/admin), Guest-Only mit <code>guestGuard</code> (/login, /register).</p>
-
-<h4>Services (12)</h4>
-<p>recipe.service, user.service, review.service, ingredients.service, cookingSteps.service, nutrition-info.service, categorie.service, saved-recipe.service, admin.service, cloudinary.service, toast.service, theme.service — alle kommunizieren über <code>HttpClient</code> mit der REST API.</p>
-
-<h4>Interceptors</h4>
-<p><strong>AuthInterceptor:</strong> Fügt <code>Authorization: Bearer &lt;token&gt;</code> zu allen <code>/api/</code>-Requests hinzu. <strong>ErrorInterceptor:</strong> Löscht Token bei 401-Responses.</p>
-</div>
-</section>
-
-<!-- ────────────── 8. SICHERHEIT (KURZ) ────────────── -->
-<section id="security">
-<h2>8. Sicherheit (Kompakt)</h2>
-
-<div class="card">
-<table>
-  <tr><th>Aspekt</th><th>Implementierung</th></tr>
-  <tr><td>Authentifizierung</td><td>JWT (HMAC-SHA256, 24h Gültigkeit) + Google OAuth2</td></tr>
-  <tr><td>Passwort-Hashing</td><td>BCrypt mit konfigurierbarer Stärke</td></tr>
-  <tr><td>Autorisierung</td><td>Rollenbasiert (USER / ADMIN), <code>@PreAuthorize</code> auf Controller-Ebene</td></tr>
-  <tr><td>Session</td><td>Zustandslos (STATELESS) — kein Server-seitiger Session-Speicher</td></tr>
-  <tr><td>CORS</td><td>Auf <code>http://localhost:4200</code> beschränkt</td></tr>
-  <tr><td>CSRF</td><td>Deaktiviert (nicht nötig bei JWT-basierter Authentifizierung)</td></tr>
-  <tr><td>JWT-Filter</td><td><code>JwtAuthenticationFilter</code> extrahiert und validiert Token aus dem Authorization-Header</td></tr>
-  <tr><td>OAuth2-Flow</td><td>Google Login → Custom SuccessHandler generiert JWT → Redirect zum Frontend mit Token</td></tr>
-  <tr><td>Ressourcen-Schutz</td><td>Nur Autoren können eigene Rezepte bearbeiten/löschen. Selbstbewertung verhindert.</td></tr>
-</table>
-</div>
-</section>
-
-<!-- ────────────── 9. VERBESSERUNGEN ────────────── -->
-<section id="improvements">
-<h2>9. Performance &amp; Verbesserungsvorschläge</h2>
-
-<div class="card">
-<h4 style="color:var(--green)">✓ Positive Architekturentscheidungen</h4>
-<ul>
-  <li><strong>Flyway-Migrationen</strong> — Reproduzierbares, versioniertes Datenbankschema</li>
-  <li><strong>DTO-Pattern</strong> — Saubere Trennung zwischen Entity- und API-Schicht</li>
-  <li><strong>Zustandslose Authentifizierung</strong> — JWT ermöglicht horizontale Skalierung</li>
-  <li><strong>Aggregiertes Rating</strong> — Vermeidet teure JOIN-Queries bei jedem Rezept-Abruf</li>
-  <li><strong>Constructor Injection</strong> — Best Practice für Dependency Injection in Spring</li>
-  <li><strong>Standalone Components</strong> — Modernes Angular-Pattern ohne NgModules</li>
-  <li><strong>saved-ids Endpoint</strong> — Effiziente ID-Liste statt vollständiger Rezept-Daten für Frontend-Checks</li>
-</ul>
-
-<h4 style="color:var(--accent)">✗ Verbesserungspotenzial</h4>
-<ul>
-  <li><strong>Kein globaler ExceptionHandler</strong> — Fehlt ein <code>@ControllerAdvice</code> für einheitliche Fehlerantworten. Aktuell try-catch in jedem Controller.</li>
-  <li><strong>Hardcoded Credentials</strong> — Datenbank-Passwort in <code>application.properties</code>. Sollte über Umgebungsvariablen konfiguriert werden.</li>
-  <li><strong>N+1 Query Risiko</strong> — Lazy-Loading von Author/Category bei Listen-Abfragen. Kann mit <code>@EntityGraph</code> oder <code>JOIN FETCH</code> optimiert werden.</li>
-  <li><strong>Keine Pagination</strong> — <code>getAll</code> liefert alle Rezepte ohne Limit. Bei wachsender Datenmenge sollte <code>Pageable</code> verwendet werden.</li>
-  <li><strong>Keine Input-Validierung</strong> — Fehlende Bean Validation (<code>@Valid</code>, <code>@NotBlank</code>) auf DTOs. Validierung nur programmatisch in Services.</li>
-  <li><strong>Typo in Endpoint-Pfad</strong> — <code>/api/ingridients</code> statt <code>/api/ingredients</code></li>
-  <li><strong>Keine Rate Limiting</strong> — Kein Schutz vor Brute-Force-Angriffen auf Login-Endpoint</li>
-  <li><strong>CORS Hardcoded</strong> — Localhost-URL in Produktion nicht verwendbar, sollte konfigurierbar sein</li>
-</ul>
-</div>
-</section>
-
-<!-- ────────────── 10. PROJEKTSTRUKTUR ────────────── -->
-<section id="structure">
-<h2>10. Projektstruktur</h2>
-
-<div class="card">
-<h4>Backend (CookBook-be/)</h4>
-<pre><code>src/main/java/de/cookBook/backend/
-├── <span class="fn">controller/</span>      <span class="cm">// 9 REST Controller</span>
-├── <span class="fn">service/</span>         <span class="cm">// 4 Services (Business-Logik)</span>
-├── <span class="fn">repository/</span>      <span class="cm">// 8 JPA Repositories</span>
-├── <span class="fn">entities/</span>        <span class="cm">// 8 JPA Entities + Enums</span>
-├── <span class="fn">dto/</span>             <span class="cm">// 14+ Data Transfer Objects</span>
-├── <span class="fn">config/</span>          <span class="cm">// SecurityConfig, WebConfig, JacksonConfig</span>
-└── <span class="fn">security/</span>        <span class="cm">// JWT Filter, OAuth2 Handlers</span>
+  <div class="two-col" style="gap:32px">
+    <div>
+<pre style="font-size:.82rem;line-height:1.8"><code>src/main/java/de/cookBook/backend/
+├── <span class="fn">controller/</span>      <span class="cm">9 REST Controller</span>
+├── <span class="fn">service/</span>         <span class="cm">4 Services (Business-Logik)</span>
+│   ├── AuthService
+│   ├── RecipeService
+│   ├── ReviewService
+│   └── JwtTokenProvider
+├── <span class="fn">repository/</span>      <span class="cm">8 JPA Repositories</span>
+├── <span class="fn">entities/</span>        <span class="cm">8 Entities + 3 Enums</span>
+│   ├── Users, Recipes, Review
+│   ├── Categories, Ingredients
+│   ├── CookingSteps, NutritionInfo
+│   ├── SavedRecipes
+│   └── Role, Difficulty, AuthProvider
+├── <span class="fn">dto/</span>             <span class="cm">14+ DTOs</span>
+├── <span class="fn">config/</span>          <span class="cm">Security, Web, Jackson</span>
+└── <span class="fn">security/</span>        <span class="cm">JWT Filter, OAuth2 Handler</span>
 
 src/main/resources/
-├── application.properties   <span class="cm">// DB, JWT, OAuth2 Konfiguration</span>
-└── db/migration/            <span class="cm">// V0.0 – V0.7 Flyway SQL Scripts</span></code></pre>
+├── application.properties
+└── db/migration/    <span class="cm">V0.0 – V0.7</span></code></pre>
+    </div>
+    <div>
+      <h3>Build & Start</h3>
+      <div class="card-sm" style="margin-bottom:12px">
+        <p style="font-size:.82rem;color:var(--text3);margin-bottom:4px">Development</p>
+        <code style="color:var(--green);font-size:.85rem">./gradlew bootRun</code>
+        <p style="font-size:.78rem;color:var(--text3);margin-top:4px">→ Spring Boot auf Port 8080</p>
+      </div>
+      <div class="card-sm" style="margin-bottom:12px">
+        <p style="font-size:.82rem;color:var(--text3);margin-bottom:4px">Production Build</p>
+        <code style="color:var(--green);font-size:.85rem">./gradlew bootJar</code>
+        <p style="font-size:.78rem;color:var(--text3);margin-top:4px">→ build/libs/*.jar</p>
+      </div>
 
-<h4>Frontend (CookBook-ui/)</h4>
-<pre><code>src/app/
-├── <span class="fn">components/</span>     <span class="cm">// 25+ Angular Standalone Components</span>
-├── <span class="fn">services/</span>       <span class="cm">// 12 API Services</span>
-├── <span class="fn">models/</span>         <span class="cm">// TypeScript Interfaces</span>
-├── <span class="fn">guards/</span>         <span class="cm">// auth, admin, guest, pendingChanges</span>
-├── <span class="fn">interceptors/</span>   <span class="cm">// Auth + Error Interceptors</span>
-├── app.routes.ts   <span class="cm">// Routing-Konfiguration</span>
-└── app.component.ts</code></pre>
-
-<h4>Build-Prozess</h4>
-<table>
-  <tr><th>Komponente</th><th>Befehl</th><th>Output</th></tr>
-  <tr><td>Backend</td><td><code>./gradlew bootRun</code></td><td>Spring Boot auf :8080</td></tr>
-  <tr><td>Backend JAR</td><td><code>./gradlew bootJar</code></td><td><code>build/libs/*.jar</code></td></tr>
-  <tr><td>Frontend</td><td><code>npm start</code> / <code>bun start</code></td><td>Dev Server auf :4200</td></tr>
-  <tr><td>Frontend Build</td><td><code>ng build</code></td><td><code>dist/tasteful-recipes/</code></td></tr>
-</table>
-</div>
+      <h3 style="margin-top:24px">Dependencies (build.gradle)</h3>
+      <div class="flex-col gap-xs" style="font-size:.82rem;color:var(--text2)">
+        <div>• Spring Data JPA</div>
+        <div>• Spring Security + OAuth2 Client</div>
+        <div>• PostgreSQL Driver 42.7.7</div>
+        <div>• Flyway Core</div>
+        <div>• jjwt 0.12.5</div>
+        <div>• Jackson Databind</div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ────────────── 11. FAZIT ────────────── -->
-<section id="conclusion">
-<h2>11. Fazit</h2>
+<!-- ══════════════════════════════════════════════════
+     SLIDE 11 — FRONTEND (KURZ)
+     ══════════════════════════════════════════════════ -->
+<section class="slide bg-grain bg-glow-right" data-slide="11">
+  <div class="slide-tag">11 — Frontend</div>
+  <h2>Frontend — <em>Kurzübersicht</em></h2>
 
-<div class="card">
-<h4 style="color:var(--green)">Stärken</h4>
-<ul>
-  <li>Saubere Schichtenarchitektur (Controller → Service → Repository)</li>
-  <li>Vollständiges Feature-Set: CRUD, Suche, Bewertungen, Favoriten, Admin-Panel</li>
-  <li>Dual-Auth-System: Lokale Registrierung + Google OAuth2</li>
-  <li>Versioniertes Datenbankschema mit Flyway</li>
-  <li>Modernes Frontend mit Angular 17 Standalone Components</li>
-  <li>Effizientes aggregiertes Rating-System</li>
-</ul>
+  <div class="two-col" style="gap:32px">
+    <div>
+      <p class="big-p" style="margin-bottom:24px">Das Frontend wurde <strong>größtenteils mit KI-Unterstützung</strong> erstellt und dient als Single-Page-Application für die Interaktion mit der REST API.</p>
 
-<h4 style="color:var(--accent2)">Erweiterungsmöglichkeiten</h4>
-<ul>
-  <li>Pagination und Sorting für Rezeptlisten</li>
-  <li>Globaler ExceptionHandler mit standardisierten Error-Responses</li>
-  <li>Bean Validation auf DTOs</li>
-  <li>Caching (z.B. Redis) für häufig abgerufene Daten</li>
-  <li>WebSocket-basierte Echtzeit-Benachrichtigungen</li>
-  <li>Docker-Compose für einheitliches Deployment</li>
-  <li>OpenAPI/Swagger-Integration für automatische API-Docs</li>
-  <li>Umgebungsvariablen für alle sensiblen Konfigurationen</li>
-</ul>
+      <div class="card-sm" style="margin-bottom:12px">
+        <strong style="color:var(--accent)">Technologie</strong>
+        <p style="font-size:.85rem">Angular 17 (Standalone Components) · Tailwind CSS · Angular Material</p>
+      </div>
+      <div class="card-sm" style="margin-bottom:12px">
+        <strong style="color:var(--accent)">Komponenten</strong>
+        <p style="font-size:.85rem">25+ Komponenten — Rezepte, Auth, Profil, Admin, Suche, UI-Elemente</p>
+      </div>
+      <div class="card-sm" style="margin-bottom:12px">
+        <strong style="color:var(--accent)">API-Kommunikation</strong>
+        <p style="font-size:.85rem">12 Services nutzen HttpClient · Auth-Interceptor fügt JWT hinzu · Error-Interceptor handhabt 401</p>
+      </div>
+    </div>
+    <div>
+      <div class="card-sm" style="margin-bottom:12px">
+        <strong style="color:var(--accent)">Routing</strong>
+        <p style="font-size:.85rem">Öffentliche Routen (Home, Rezeptdetail, Suche), geschützte Routen mit Guards (Profil, Create, Saved, Admin)</p>
+      </div>
+      <div class="card-sm" style="margin-bottom:12px">
+        <strong style="color:var(--accent)">Guards</strong>
+        <p style="font-size:.85rem">authGuard · adminGuard · guestGuard · pendingChangesGuard</p>
+      </div>
+      <div class="card-sm">
+        <strong style="color:var(--accent)">Bild-Upload</strong>
+        <p style="font-size:.85rem">Direkt zu Cloudinary — 5MB Limit, Frontend-seitige Validierung</p>
+      </div>
 
-<h4 style="color:var(--yellow)">Lernfaktor</h4>
-<p>Das Projekt demonstriert einen vollständigen Full-Stack-Workflow: Vom Datenbankdesign über REST-API-Entwicklung mit Spring Boot, JWT-Security, OAuth2-Integration, bis hin zum modernen Angular-Frontend mit Standalone Components und Tailwind CSS. Es deckt die wichtigsten Konzepte moderner Webentwicklung ab und eignet sich hervorragend als Portfolio-Projekt.</p>
-</div>
-
-<p style="text-align:center;color:var(--text2);margin-top:48px;font-size:.85rem">
-  CookBook Projektdokumentation — Erstellt am 13. Mai 2026
-</p>
+      <div style="margin-top:28px;padding:18px 22px;background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.15);border-radius:10px">
+        <p style="font-size:.85rem;color:var(--accent)"><strong>Hinweis:</strong> Der Fokus dieser Präsentation liegt auf dem Backend. Das Frontend wurde überwiegend mit KI-Tools generiert und wird hier nur der Vollständigkeit halber erwähnt.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-</main>
+<!-- ══════════════════════════════════════════════════
+     SLIDE 12 — FAZIT
+     ══════════════════════════════════════════════════ -->
+<section class="slide title-slide bg-grain bg-glow-left bg-glow-right" data-slide="12">
+  <div class="slide-tag">Fazit & Ausblick</div>
+  <h1 style="font-size:3.8rem;margin-bottom:12px">Zusammen<wbr>fassung</h1>
+  <p class="subtitle" style="max-width:680px;margin:0 auto 36px;font-size:1.15rem;color:var(--text2)">Ein vollständiges Backend mit modernem Tech Stack</p>
+
+  <div style="max-width:800px;margin:0 auto;text-align:left">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:40px">
+      <div class="card-sm" style="border-left:3px solid var(--accent);display:flex;align-items:center;gap:14px">
+        <span style="font-size:1.8rem">🚀</span>
+        <div><strong style="color:var(--text);font-size:1rem">Spring Boot REST API</strong><p style="font-size:.82rem;margin-top:2px">27 Endpoints · 9 Controller · 4 Services</p></div>
+      </div>
+      <div class="card-sm" style="border-left:3px solid var(--green);display:flex;align-items:center;gap:14px">
+        <span style="font-size:1.8rem">🗄</span>
+        <div><strong style="color:var(--text);font-size:1rem">PostgreSQL + Flyway</strong><p style="font-size:.82rem;margin-top:2px">8 Tabellen · 7 versionierte Migrationen</p></div>
+      </div>
+      <div class="card-sm" style="border-left:3px solid var(--yellow);display:flex;align-items:center;gap:14px">
+        <span style="font-size:1.8rem">🔐</span>
+        <div><strong style="color:var(--text);font-size:1rem">JWT + OAuth2 Security</strong><p style="font-size:.82rem;margin-top:2px">Lokaler Login & Google · Rollenbasiert</p></div>
+      </div>
+      <div class="card-sm" style="border-left:3px solid var(--accent2);display:flex;align-items:center;gap:14px">
+        <span style="font-size:1.8rem">✨</span>
+        <div><strong style="color:var(--text);font-size:1rem">Vollständiges Feature-Set</strong><p style="font-size:.82rem;margin-top:2px">CRUD · Bewertungen · Suche · Favoriten · Admin</p></div>
+      </div>
+    </div>
+
+    <!-- Live Demo CTA -->
+    <div style="text-align:center;margin-top:8px;position:relative">
+      <a class="demo-btn" id="demoBtn" href="http://localhost:4200" target="_blank" rel="noopener">
+        <!-- Holographic shimmer layer -->
+        <div class="demo-shimmer"></div>
+        <!-- Ambient orbs -->
+        <div class="demo-orb" style="width:6px;height:6px;background:var(--accent);top:-8px;left:15%;--dx:8px;--dy:-12px;--dur:4s;--s2:1.5"></div>
+        <div class="demo-orb" style="width:4px;height:4px;background:var(--accent2);top:20%;right:-6px;--dx:-6px;--dy:10px;--dur:5s;--s2:0.7"></div>
+        <div class="demo-orb" style="width:5px;height:5px;background:var(--green);bottom:-6px;right:25%;--dx:12px;--dy:8px;--dur:6s;--s2:1.2"></div>
+        <div class="demo-orb" style="width:3px;height:3px;background:var(--yellow);bottom:30%;left:-5px;--dx:5px;--dy:-8px;--dur:3.5s;--s2:1.8"></div>
+        <!-- Content -->
+        <span class="demo-icon" style="position:relative;z-index:1">🚀</span>
+        <div style="text-align:left;position:relative;z-index:1">
+          <div class="demo-title" style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--text);letter-spacing:-.5px;transition:text-shadow .4s ease">Live Demo starten</div>
+          <div style="font-size:.88rem;color:var(--text2);margin-top:2px">localhost:4200 — Anwendung öffnen</div>
+        </div>
+        <span class="demo-arrow" style="font-size:1.2rem;color:var(--text3);margin-left:8px;opacity:.6;position:relative;z-index:1">↗</span>
+      </a>
+    </div>
+  </div>
+  <p class="meta" style="margin-top:44px">CookBook Backend — Juni 2026</p>
+</section>
+
+</div><!-- /deck -->
+
+<!-- ═══ CONTROLS ═══ -->
+<div class="controls">
+  <button onclick="prev()" title="Zurück (←)" id="btnPrev">&#8592;</button>
+  <span class="slide-counter" id="counter">1 / 13</span>
+  <button onclick="next()" title="Weiter (→)" id="btnNext">&#8594;</button>
+</div>
 
 <script>
-// Toggle all endpoints
-document.querySelectorAll('.endpoint-head').forEach(h=>{
-  h.addEventListener('click',()=>h.parentElement.classList.toggle('open'));
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+let current = 0;
+
+function goTo(n) {
+  if (n < 0 || n >= total) return;
+  slides[current].classList.remove('active', 'prev');
+  current = n;
+  slides.forEach((s, i) => {
+    s.classList.remove('active', 'prev');
+    if (i === current) s.classList.add('active');
+    else if (i < current) s.classList.add('prev');
+  });
+  document.getElementById('counter').textContent = (current + 1) + ' / ' + total;
+  document.getElementById('progress').style.width = ((current + 1) / total * 100) + '%';
+  // scroll content slides back to top
+  slides[current].scrollTop = 0;
+}
+
+function next() { goTo(current + 1); }
+function prev() { goTo(current - 1); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+  if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+});
+
+// Touch support
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+document.addEventListener('touchend', e => {
+  const diff = e.changedTouches[0].screenX - touchStartX;
+  if (Math.abs(diff) > 60) { diff < 0 ? next() : prev(); }
+});
+
+// Init
+goTo(0);
+
+// Live Demo button — PRO MAX cinematic launch sequence
+document.getElementById('demoBtn').addEventListener('click', function(e) {
+  e.preventDefault();
+  const btn = this;
+  if (btn.classList.contains('launching')) return;
+
+  const rect = btn.getBoundingClientRect();
+  const cx = e.clientX || rect.left + rect.width/2;
+  const cy = e.clientY || rect.top + rect.height/2;
+  const lx = cx - rect.left;
+  const ly = cy - rect.top;
+
+  btn.classList.add('launching');
+
+  const colors = ['#ff6b35','#35c7ff','#3ddc84','#ffc233','#ff4757','#fff','#d2a8ff'];
+
+  // Helper: create element inside btn
+  function spawn(cls, styles, parent) {
+    const el = document.createElement('div');
+    el.className = cls;
+    Object.assign(el.style, styles || {});
+    (parent || btn).appendChild(el);
+    return el;
+  }
+
+  // ━━━ PHASE 1: CHARGE-UP (0–400ms) ━━━
+  // Countdown ring + charge animation
+  btn.classList.add('charging');
+  spawn('demo-countdown-ring', {});
+  const statusText = spawn('demo-status-text', {}, btn.parentElement);
+  statusText.textContent = '▶ INITIATING...';
+
+  // ━━━ PHASE 2: RUMBLE + PARTICLES CHARGE (400–650ms) ━━━
+  setTimeout(() => {
+    btn.classList.remove('charging');
+    btn.classList.add('rumbling');
+
+    // Inward-sucking particles (converge to center)
+    for (let i = 0; i < 12; i++) {
+      const angle = (Math.PI * 2 / 12) * i;
+      const startDist = 80 + Math.random() * 60;
+      const startX = lx + Math.cos(angle) * startDist;
+      const startY = ly + Math.sin(angle) * startDist;
+      spawn('demo-particle', {
+        left: startX + 'px',
+        top: startY + 'px',
+        width: '3px', height: '3px',
+        background: colors[Math.floor(Math.random() * colors.length)],
+        boxShadow: '0 0 8px ' + colors[Math.floor(Math.random() * colors.length)],
+        '--tx': (lx - startX) + 'px',
+        '--ty': (ly - startY) + 'px',
+        '--dur': '.35s'
+      });
+    }
+  }, 400);
+
+  // ━━━ PHASE 3: BLAST (650–1000ms) ━━━
+  setTimeout(() => {
+    btn.classList.remove('rumbling');
+    btn.classList.add('blasting');
+
+    // Triple shockwave rings
+    const shockSize = 70;
+    ['primary', 'secondary', 'tertiary'].forEach(tier => {
+      spawn('demo-shockwave demo-shockwave--' + tier, {
+        width: shockSize + 'px', height: shockSize + 'px',
+        left: (lx - shockSize/2) + 'px', top: (ly - shockSize/2) + 'px'
+      });
+    });
+
+    // Energy beams (12 radial)
+    for (let i = 0; i < 12; i++) {
+      const angle = (360 / 12) * i;
+      spawn('demo-beam', {
+        left: lx + 'px', top: ly + 'px',
+        width: (60 + Math.random() * 80) + 'px',
+        '--angle': angle + 'deg',
+        '--dist': (40 + Math.random() * 60) + 'px',
+        '--beam-color': colors[i % colors.length],
+        '--dur': (.3 + Math.random() * .3) + 's',
+        animationDelay: (Math.random() * .1) + 's',
+        opacity: (.4 + Math.random() * .6).toString()
+      });
+    }
+
+    // Massive particle explosion (35 particles)
+    for (let i = 0; i < 35; i++) {
+      const angle = (Math.PI * 2 / 35) * i + (Math.random() - .5) * .5;
+      const dist = 70 + Math.random() * 140;
+      const isTrail = Math.random() > .5;
+      const size = 2 + Math.random() * 5;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      spawn(isTrail ? 'demo-particle demo-particle--trail' : 'demo-particle', {
+        left: lx + 'px', top: ly + 'px',
+        width: size + 'px', height: (isTrail ? size * .5 : size) + 'px',
+        background: color,
+        boxShadow: '0 0 ' + (6 + Math.random() * 10) + 'px ' + color,
+        '--tx': Math.cos(angle) * dist + 'px',
+        '--ty': Math.sin(angle) * dist + 'px',
+        '--dur': (.5 + Math.random() * .7) + 's',
+        '--angle': (angle * 180 / Math.PI) + 'deg',
+        '--w': size + 'px'
+      });
+    }
+
+    // Plasma trail blobs (behind rocket path)
+    for (let i = 0; i < 6; i++) {
+      const progress = i / 6;
+      const trailX = lx + progress * 120;
+      const trailY = ly - progress * 100;
+      setTimeout(() => {
+        spawn('demo-plasma-trail', {
+          left: (trailX - 15) + 'px', top: (trailY - 15) + 'px',
+          width: '30px', height: '30px',
+          '--dur': (.4 + Math.random() * .3) + 's'
+        });
+      }, i * 60);
+    }
+
+    // Speed / warp lines
+    for (let i = 0; i < 12; i++) {
+      const y = 5 + Math.random() * (rect.height - 10);
+      spawn('demo-warp-line', {
+        left: (lx + 10) + 'px', top: y + 'px',
+        width: (30 + Math.random() * 90) + 'px',
+        '--tx': (60 + Math.random() * 150) + 'px',
+        '--dur': (.25 + Math.random() * .35) + 's',
+        animationDelay: (Math.random() * .15) + 's',
+        opacity: (.3 + Math.random() * .7).toString()
+      });
+    }
+  }, 650);
+
+  // ━━━ PHASE 4: SCREEN EFFECTS (850ms) ━━━
+  setTimeout(() => {
+    // Multi-layered screen flash
+    const flash = document.createElement('div');
+    flash.className = 'demo-flash';
+    flash.style.setProperty('--cx', cx + 'px');
+    flash.style.setProperty('--cy', cy + 'px');
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 900);
+
+    // Gravitational ripple rings (3 expanding)
+    for (let i = 0; i < 3; i++) {
+      const ripple = document.createElement('div');
+      ripple.className = 'demo-ripple';
+      const rippleSize = 200 + i * 150;
+      Object.assign(ripple.style, {
+        width: rippleSize + 'px', height: rippleSize + 'px',
+        left: (cx - rippleSize/2) + 'px', top: (cy - rippleSize/2) + 'px',
+        animationDelay: (i * .12) + 's'
+      });
+      document.body.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 1400);
+    }
+
+    // Aurora afterglow
+    const aurora = document.createElement('div');
+    aurora.className = 'demo-aurora';
+    document.body.appendChild(aurora);
+    setTimeout(() => aurora.remove(), 1600);
+  }, 850);
+
+  // ━━━ PHASE 5: OPEN + RESET (1100ms) ━━━
+  setTimeout(() => {
+    window.open('http://localhost:4200', '_blank');
+
+    // Graceful reset
+    setTimeout(() => {
+      btn.classList.remove('launching', 'blasting');
+      btn.querySelectorAll('.demo-shockwave,.demo-particle,.demo-warp-line,.demo-beam,.demo-plasma-trail,.demo-countdown-ring').forEach(el => el.remove());
+      if (statusText.parentElement) statusText.remove();
+    }, 500);
+  }, 1100);
 });
 </script>
 </body>

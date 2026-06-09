@@ -50,7 +50,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
     @keyframes back-to-top-in {
       to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
       }
     }
     @media (prefers-reduced-motion: reduce) {
