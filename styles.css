@@ -1,0 +1,191 @@
+/* ============================================================
+   CookBook — Abschlusspräsentation
+   Anthropic / Claude design language: warm paper, fine serif,
+   generous whitespace, soft shadows, no neon, no dark mode.
+   ============================================================ */
+
+:root {
+  /* palette */
+  --paper:      #FAF7F2;
+  --paper-2:    #F5F1EB;
+  --panel:      #FFFFFF;
+  --sand:       #EFE7DA;
+  --sand-line:  #E2D6C4;
+  --ink:        #2D2A26;
+  --soft:       #6B6359;
+  --muted:      #948B7E;
+  --terracotta: #CC785C;
+  --terracotta-soft: #E7C6B8;
+  --mocha:      #8B7355;
+
+  /* type scale (1920×1080) */
+  --type-display:  104px;
+  --type-title:    62px;
+  --type-subtitle: 40px;
+  --type-lead:     34px;
+  --type-body:     30px;
+  --type-small:    25px;
+  --type-mono:     24px;
+  --type-eyebrow:  24px;
+  --type-kpi:      112px;
+
+  /* spacing */
+  --pad-x:      112px;
+  --pad-top:    96px;
+  --pad-bottom: 84px;
+  --gap-title:  44px;
+  --gap-item:   26px;
+
+  --radius:   18px;
+  --radius-s: 12px;
+  --shadow:   0 1px 3px rgba(45,42,38,.05), 0 12px 32px rgba(45,42,38,.05);
+  --shadow-s: 0 1px 2px rgba(45,42,38,.05);
+  --ease:     cubic-bezier(.22,1,.36,1);
+
+  --serif: "Newsreader", Georgia, serif;
+  --sans:  "IBM Plex Sans", system-ui, sans-serif;
+  --mono:  "JetBrains Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+
+deck-stage:not(:defined) { visibility: hidden; }
+
+html, body { margin: 0; background: #1c1916; }
+
+deck-stage { background: #1c1916; }
+
+section {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  overflow: hidden;
+}
+
+/* paper grain overlay */
+section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  padding: var(--pad-top) var(--pad-x) var(--pad-bottom);
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+/* ---------- shared type ---------- */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: var(--type-eyebrow);
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.eyebrow::before {
+  content: "";
+  width: 34px;
+  height: 2px;
+  background: var(--terracotta);
+  display: inline-block;
+}
+
+.s-title {
+  font-family: var(--serif);
+  font-size: var(--type-title);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -.015em;
+  margin: 0;
+}
+.s-title em { font-style: italic; color: var(--terracotta); }
+
+.lead {
+  font-size: var(--type-lead);
+  line-height: 1.45;
+  color: var(--soft);
+  font-weight: 350;
+  margin: 0;
+  max-width: 22ch;
+}
+.body { font-size: var(--type-body); line-height: 1.5; color: var(--soft); margin: 0; }
+.small { font-size: var(--type-small); line-height: 1.45; color: var(--muted); margin: 0; }
+
+.head { margin-bottom: var(--gap-title); }
+.head .s-title { margin-top: 18px; }
+
+.divider { height: 1px; background: var(--sand-line); border: 0; width: 100%; }
+
+/* slide number footer dot pattern handled by deck-stage overlay */
+
+.mono { font-family: var(--mono); }
+
+/* ---------- pills ---------- */
+.pill {
+  font-family: var(--mono);
+  font-size: var(--type-small);
+  font-weight: 500;
+  color: var(--soft);
+  background: var(--panel);
+  border: 1px solid var(--sand-line);
+  border-radius: 999px;
+  padding: 12px 24px;
+  box-shadow: var(--shadow-s);
+  white-space: nowrap;
+}
+.pill-row { display: flex; flex-wrap: wrap; gap: 16px; }
+
+/* ---------- panel / card ---------- */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--sand-line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 38px 40px;
+}
+
+/* ---------- entrance ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  [data-deck-active] .anim {
+    animation: rise .6s var(--ease) both;
+  }
+  [data-deck-active] .anim-2 { animation: rise .6s var(--ease) .08s both; }
+  [data-deck-active] .anim-3 { animation: rise .6s var(--ease) .16s both; }
+  [data-deck-active] .anim-4 { animation: rise .6s var(--ease) .24s both; }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* eyebrow tick grows in from the left */
+  [data-deck-active] .eyebrow::before { animation: tick .7s var(--ease) .12s both; transform-origin: left center; }
+  @keyframes tick { from { transform: scaleX(0); opacity: 0; } to { transform: scaleX(1); opacity: 1; } }
+
+  /* SVG connectors draw themselves in (architecture + ER) */
+  [data-deck-active] .draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: drawln 1s var(--ease) .45s forwards; }
+  @keyframes drawln { to { stroke-dashoffset: 0; } }
+
+  /* delayed soft fade — labels / captions appear after the lines */
+  [data-deck-active] .fadein { animation: fadein .6s ease 1s both; }
+  @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+}
+
+@media print {
+  html, body, deck-stage { background: #fff; }
+  section { background: var(--paper); }
+  .draw { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+  .fadein { opacity: 1 !important; }
+}

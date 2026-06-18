@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CookBook — Abschlusspräsentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ---------- per-slide layouts ---------- */
+
+  /* S1 — title */
+  .title-slide { justify-content: space-between; }
+  .title-slide > div { position: relative; z-index: 1; }
+  .title-plate { position: absolute; z-index: 0; right: -160px; top: 50%; transform: translateY(-50%); width: 700px; height: 700px; opacity: .6; pointer-events: none; }
+  .brandmark { display: flex; align-items: center; gap: 18px; }
+  .brandmark .dot { width: 18px; height: 18px; border-radius: 50%; background: var(--terracotta); }
+  .brandmark span { font-family: var(--mono); font-size: var(--type-small); letter-spacing: .14em; text-transform: uppercase; color: var(--soft); }
+  .title-slide .display {
+    font-family: var(--serif); font-weight: 400; font-size: 134px;
+    line-height: .96; letter-spacing: -.03em; margin: 0;
+  }
+  .title-slide .display em { font-style: italic; color: var(--terracotta); }
+  .title-slide .subtitle { font-size: var(--type-subtitle); color: var(--soft); font-weight: 300; max-width: 26ch; margin: 28px 0 0; line-height: 1.3; }
+  .title-foot { display: flex; justify-content: space-between; align-items: flex-end; }
+  .title-foot .who { font-size: var(--type-body); }
+  .title-foot .who b { font-weight: 600; color: var(--ink); }
+  .title-foot .who div { color: var(--muted); margin-top: 6px; font-size: var(--type-small); }
+
+  /* S2 — leitfragen */
+  .lf-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 80px; row-gap: 30px; flex: 1; align-content: center; }
+  .lf-item { display: flex; gap: 26px; align-items: baseline; padding-bottom: 26px; border-bottom: 1px solid var(--sand-line); }
+  .lf-item .n { font-family: var(--mono); font-size: var(--type-small); color: var(--terracotta); font-weight: 600; min-width: 38px; }
+  .lf-item .n + div { display: flex; flex-direction: column; gap: 8px; }
+  .lf-item .q { font-family: var(--serif); font-size: 33px; color: var(--ink); line-height: 1.2; }
+  .lf-item .where { font-family: var(--mono); font-size: 24px; color: var(--muted); letter-spacing: .03em; }
+
+  /* S3 — was ist cookbook */
+  .two-col { display: grid; grid-template-columns: 1.05fr 1fr; gap: 84px; flex: 1; align-items: center; }
+  .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .kpi { background: var(--panel); border: 1px solid var(--sand-line); border-radius: var(--radius); padding: 34px 36px; box-shadow: var(--shadow-s); }
+  .kpi .num { font-family: var(--serif); font-size: var(--type-kpi); line-height: .9; color: var(--terracotta); letter-spacing: -.02em; }
+  .kpi .lbl { font-size: var(--type-small); color: var(--soft); margin-top: 14px; }
+  .feat-list { display: flex; flex-direction: column; gap: 16px; margin-top: 30px; }
+  .feat-list .row { display: flex; gap: 16px; align-items: baseline; font-size: var(--type-body); color: var(--soft); }
+  .feat-list .row .b { width: 7px; height: 7px; border-radius: 50%; background: var(--mocha); flex: none; transform: translateY(-4px); }
+
+  /* S4 — vorgehensweise */
+  .phases { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; flex: 1; align-content: center; position: relative; }
+  .phase { padding: 0 30px; position: relative; }
+  .phase:not(:last-child)::after { content: ""; position: absolute; top: 31px; right: -1px; width: 1px; height: calc(100% - 10px); background: var(--sand-line); }
+  .phase .pn { width: 62px; height: 62px; border-radius: 50%; border: 1.5px solid var(--terracotta); color: var(--terracotta); font-family: var(--serif); font-size: 32px; display: flex; align-items: center; justify-content: center; }
+  .phase h3 { font-family: var(--serif); font-size: 30px; font-weight: 500; margin: 26px 0 12px; color: var(--ink); line-height: 1.15; }
+  .phase p { font-size: var(--type-small); color: var(--soft); line-height: 1.42; margin: 0; }
+  .leitprinzip { margin-top: 56px; font-family: var(--serif); font-style: italic; font-size: 32px; color: var(--mocha); }
+  .leitprinzip b { font-style: normal; font-weight: 500; color: var(--ink); }
+
+  /* S5 — tech stack */
+  .stack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; flex: 1; align-content: stretch; }
+  .stack-col { background: var(--panel); border: 1px solid var(--sand-line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 40px 38px; display: flex; flex-direction: column; }
+  .stack-col h3 { font-family: var(--mono); font-size: 24px; letter-spacing: .06em; text-transform: uppercase; color: var(--terracotta); margin: 0 0 8px; }
+  .stack-col .sub { font-size: 24px; color: var(--muted); margin: 0 0 26px; }
+  .stack-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 17px; }
+  .stack-col li { font-size: 26px; color: var(--ink); line-height: 1.3; display: flex; gap: 14px; align-items: baseline; }
+  .stack-col li b { font-weight: 600; white-space: nowrap; }
+  .stack-col li span.t { color: var(--soft); font-weight: 400; }
+  .stack-col li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--sand-line); flex: none; transform: translateY(-5px); }
+
+  /* S6 — architektur */
+  .arch-wrap { flex: 1; display: flex; align-items: center; justify-content: center; }
+  .arch-wrap svg { width: 100%; height: auto; max-height: 640px; }
+
+  /* S7 — datenmodell */
+  .er-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; flex: 1; align-content: center; }
+  .er { background: var(--panel); border: 1px solid var(--sand-line); border-radius: var(--radius-s); padding: 26px 28px; box-shadow: var(--shadow-s); }
+  .er.key { border-color: var(--terracotta-soft); background: #FCF6F2; }
+  .er .tn { font-family: var(--mono); font-size: 25px; color: var(--ink); font-weight: 600; }
+  .er.key .tn { color: var(--terracotta); }
+  .er .td { font-size: 24px; color: var(--soft); margin-top: 9px; line-height: 1.35; }
+  .er-note { margin-top: 28px; font-size: var(--type-small); color: var(--muted); display: flex; gap: 28px; flex-wrap: wrap; }
+  .er-note b { color: var(--mocha); font-weight: 600; }
+
+  /* S7 — relational ER model */
+  .er-slide { padding: 52px 60px 38px; }
+  .er-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 16px; }
+  .er-head .s-title { font-size: 44px; margin-top: 12px; white-space: nowrap; }
+  .er-legend { display: flex; gap: 26px; font-family: var(--mono); font-size: 24px; white-space: nowrap; }
+  .er-legend span { display: flex; align-items: center; gap: 9px; color: var(--soft); }
+  .er-legend i { width: 15px; height: 15px; border-radius: 4px; display: inline-block; }
+  .er-canvas { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
+  .er-canvas svg { width: 100%; max-width: 1330px; height: auto; max-height: 100%; }
+
+  /* S8 — rest api */
+  .api-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; flex: 1; align-content: center; }
+  .api { background: var(--panel); border: 1px solid var(--sand-line); border-radius: var(--radius-s); padding: 26px 26px 24px; box-shadow: var(--shadow-s); }
+  .api .cn { font-family: var(--mono); font-size: 24px; color: var(--ink); font-weight: 600; }
+  .api .ce { font-size: 24px; color: var(--soft); margin-top: 8px; line-height: 1.35; }
+  .api-legend { display: flex; gap: 36px; margin-top: 34px; font-size: var(--type-small); color: var(--soft); flex-wrap: wrap; }
+  .api-legend .lg { display: flex; align-items: center; gap: 12px; }
+  .api-legend .sw { width: 14px; height: 14px; border-radius: 4px; }
+
+  /* S9 — code */
+  .code-wrap { display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; flex: 1; align-items: stretch; }
+  .codebox { background: #2B2722; border-radius: var(--radius); padding: 34px 38px; box-shadow: var(--shadow); overflow: hidden; }
+  .codebox .fname { font-family: var(--mono); font-size: 24px; color: #B9AE9E; letter-spacing: .03em; margin-bottom: 22px; display: flex; align-items: center; gap: 10px; }
+  .codebox .fname::before { content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--terracotta); }
+  .codebox pre { margin: 0; font-family: var(--mono); font-size: var(--type-mono); line-height: 1.62; color: #EDE6DA; white-space: pre; }
+  .codebox .k { color: #E0997B; }
+  .codebox .a { color: #C9A86A; }
+  .codebox .s { color: #A9B98C; }
+  .codebox .c { color: #7C7468; font-style: italic; }
+  .codebox .t { color: #8FB8C9; }
+  .flow { display: flex; flex-direction: column; gap: 18px; justify-content: center; }
+  .flow .step { display: flex; gap: 20px; align-items: flex-start; }
+  .flow .step .sn { font-family: var(--mono); font-size: 24px; color: var(--terracotta); font-weight: 600; min-width: 34px; padding-top: 4px; }
+  .flow .step .stx b { font-size: 26px; color: var(--ink); font-weight: 600; display: block; }
+  .flow .step .stx span { font-size: 24px; color: var(--soft); }
+  .flow .step:not(:last-child) .sn::after { content: ""; display: block; width: 1px; height: 20px; background: var(--sand-line); margin: 8px auto 0; }
+
+  /* S10 — security */
+  .sec-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; flex: 1; align-items: stretch; }
+  .sec-col { background: var(--panel); border: 1px solid var(--sand-line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 40px 42px; display: flex; flex-direction: column; }
+  .sec-col h3 { font-family: var(--serif); font-size: 34px; font-weight: 500; margin: 0 0 6px; }
+  .sec-col .tag { font-family: var(--mono); font-size: 24px; color: var(--terracotta); letter-spacing: .05em; text-transform: uppercase; margin-bottom: 26px; }
+  .sec-flow { display: flex; flex-direction: column; gap: 0; }
+  .sec-flow .st { display: flex; gap: 18px; align-items: center; font-size: 25px; color: var(--ink); padding: 13px 0; }
+  .sec-flow .st .b { font-family: var(--mono); font-size: 24px; color: var(--mocha); min-width: 30px; font-weight: 600; }
+  .sec-flow .arrow { color: var(--sand-line); font-size: 22px; padding-left: 8px; }
+  .sec-note { margin-top: auto; padding-top: 24px; font-size: 24px; color: var(--soft); border-top: 1px solid var(--sand-line); }
+  .sec-note b { color: var(--ink); font-weight: 600; }
+
+  /* S11 — KI chat highlight */
+  .hl { background: var(--paper-2); }
+  .hl .slide { }
+  .chat-wrap { display: grid; grid-template-columns: 1fr 1.02fr; gap: 64px; flex: 1; align-items: center; }
+  .chat-feats { display: flex; flex-direction: column; gap: 28px; margin-top: 8px; }
+  .chat-feats .cf { }
+  .chat-feats .cf h3 { font-family: var(--serif); font-size: 32px; font-weight: 500; margin: 0 0 8px; color: var(--ink); }
+  .chat-feats .cf p { font-size: 24px; color: var(--soft); margin: 0; line-height: 1.4; }
+  .chat-card { background: var(--panel); border: 1px solid var(--sand-line); border-radius: 22px; box-shadow: var(--shadow); padding: 30px; }
+  .chat-card .ch-head { display: flex; align-items: center; gap: 14px; padding-bottom: 22px; border-bottom: 1px solid var(--sand-line); margin-bottom: 22px; }
+  .chat-card .ch-head .av { width: 40px; height: 40px; border-radius: 50%; background: var(--terracotta); }
+  .chat-card .ch-head b { font-size: 24px; }
+  .chat-card .ch-head span { font-family: var(--mono); font-size: 24px; color: var(--muted); margin-left: auto; }
+  .bub { border-radius: 16px; padding: 18px 22px; font-size: 24px; line-height: 1.42; max-width: 86%; }
+  .bub.u { background: var(--sand); color: var(--ink); margin-left: auto; border-bottom-right-radius: 5px; }
+  .bub.a { background: #FAF5F1; border: 1px solid var(--terracotta-soft); color: var(--ink); margin: 16px 0; border-bottom-left-radius: 5px; }
+  .bub.a .link { color: var(--terracotta); text-decoration: underline; text-underline-offset: 3px; }
+  .bub .cursor { display: inline-block; width: 9px; height: 22px; background: var(--terracotta); margin-left: 3px; transform: translateY(3px); animation: blink 1s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .chat-snip { font-family: var(--mono); font-size: 24px; color: var(--mocha); margin-top: 18px; background: var(--sand); border-radius: 10px; padding: 14px 18px; }
+
+  /* S12 — herausforderungen */
+  .ch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; flex: 1; align-content: center; }
+  .ch-card { background: var(--panel); border: 1px solid var(--sand-line); border-radius: var(--radius); padding: 32px 34px; box-shadow: var(--shadow-s); }
+  .ch-card .p { font-family: var(--serif); font-size: 28px; font-weight: 500; color: var(--ink); line-height: 1.2; }
+  .ch-card .line { height: 1px; background: var(--sand-line); margin: 18px 0; }
+  .ch-card .s { font-size: 24px; color: var(--soft); line-height: 1.4; }
+  .ch-card .s b { color: var(--terracotta); font-weight: 600; }
+
+  /* S13 — lessons */
+  .les-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; }
+  .les h3 { font-family: var(--mono); font-size: 24px; letter-spacing: .06em; text-transform: uppercase; color: var(--terracotta); margin: 0 0 22px; padding-bottom: 16px; border-bottom: 1px solid var(--sand-line); }
+  .les ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+  .les li { font-size: 25px; color: var(--ink); line-height: 1.35; }
+  .les li span { color: var(--soft); }
+  .takeaway { margin-top: 56px; font-family: var(--serif); font-size: 46px; line-height: 1.26; color: var(--ink); max-width: 40ch; }
+  .takeaway em { font-style: italic; color: var(--terracotta); }
+
+  /* S14 — KI im projekt */
+  .ki-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; flex: 1; align-content: center; }
+  .ki-col { background: var(--panel); border: 1px solid var(--sand-line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 40px 42px; }
+  .ki-col.strong { border-top: 3px solid var(--terracotta); }
+  .ki-col.weak { border-top: 3px solid var(--mocha); }
+  .ki-col h3 { font-family: var(--serif); font-size: 34px; font-weight: 500; margin: 0 0 6px; }
+  .ki-col .tag { font-family: var(--mono); font-size: 24px; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 24px; }
+  .ki-col.strong .tag { color: var(--terracotta); }
+  .ki-col.weak .tag { color: var(--mocha); }
+  .ki-col .chips { display: flex; flex-wrap: wrap; gap: 12px; }
+  .ki-col .chip { font-size: 24px; color: var(--soft); background: var(--paper-2); border: 1px solid var(--sand-line); border-radius: 999px; padding: 10px 20px; }
+  .ki-fazit { margin-top: 44px; font-family: var(--serif); font-size: 36px; line-height: 1.3; color: var(--ink); }
+  .ki-fazit em { font-style: italic; color: var(--terracotta); }
+
+  /* S15 — demo (dark finale) */
+  .demo-slide { align-items: center; justify-content: center; text-align: center; background: #211E1B; }
+  .demo-slide::after { content: ""; position: absolute; left: 50%; top: 54%; width: 900px; height: 900px; transform: translate(-50%,-50%); background: radial-gradient(circle, rgba(204,120,92,.16), transparent 62%); pointer-events: none; }
+  .demo-slide > * { position: relative; z-index: 1; }
+  .demo-slide .eyebrow { justify-content: center; color: var(--terracotta); }
+  .demo-slide .eyebrow::before { display: none; }
+  .demo-slide .display { font-family: var(--serif); font-size: 96px; font-weight: 400; letter-spacing: -.02em; margin: 24px 0 18px; color: #F6F1EA; }
+  .demo-slide .display em { font-style: italic; color: var(--terracotta); }
+  .demo-slide p { font-size: var(--type-lead); color: #B6AC9D; margin: 0 0 52px; }
+  .demo-btn {
+    display: inline-flex; align-items: center; gap: 18px; text-decoration: none;
+    background: var(--terracotta); color: #fff; font-family: var(--mono); font-size: 28px;
+    font-weight: 500; padding: 26px 52px; border-radius: 999px; box-shadow: 0 10px 44px rgba(204,120,92,.5);
+    transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  .demo-btn:hover { transform: translateY(-3px); box-shadow: 0 16px 56px rgba(204,120,92,.62); }
+  .demo-btn .arr { font-size: 30px; }
+  .demo-foot { position: absolute; bottom: var(--pad-bottom); left: 0; right: 0; text-align: center; font-size: var(--type-small); color: rgba(245,241,235,.45); z-index: 1; }
+</style>
+</head>
+<body>
+
+<deck-stage width="1920" height="1080" no-rail>
+
+  <!-- 1 · TITLE -->
+  <section data-label="Titel">
+    <div class="slide title-slide">
+      <svg class="title-plate" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="50" cy="50" r="48" stroke="#D4C5B0" stroke-width=".4"/>
+        <circle cx="50" cy="50" r="37" stroke="#CC785C" stroke-width=".5" stroke-opacity=".55"/>
+        <circle cx="50" cy="50" r="24" stroke="#D4C5B0" stroke-width=".4"/>
+      </svg>
+      <div class="brandmark anim">
+        <div class="dot"></div>
+        <span>Abschlussprojekt · Juni 2026</span>
+      </div>
+      <div>
+        <h1 class="display anim-2">Cook<em>Book</em></h1>
+        <p class="subtitle anim-3">Eine moderne Full-Stack-Rezeptplattform zum Erstellen, Teilen und Bewerten von Rezepten.</p>
+        <div class="pill-row anim-3" style="margin-top:40px;">
+          <div class="pill">Spring Boot 4</div>
+          <div class="pill">Angular 17</div>
+          <div class="pill">PostgreSQL 17</div>
+          <div class="pill">JWT + OAuth2</div>
+          <div class="pill">Cloudinary</div>
+        </div>
+      </div>
+      <div class="title-foot anim-4">
+        <div class="who">
+          <b>Daniel Braun</b>
+          <div>Präsentation &amp; Code-Review · ca. 15 Minuten</div>
+        </div>
+        <div class="who" style="text-align:right;">
+          <b>CookBook</b>
+          <div>Full-Stack · Java &amp; TypeScript</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · LEITFRAGEN -->
+  <section data-label="Leitfragen">
+    <div class="slide">
+      <div class="head anim">
+        <p class="eyebrow">Agenda</p>
+        <h2 class="s-title">Diese Fragen beantwortet die Präsentation</h2>
+      </div>
+      <div class="lf-grid anim-2">
+        <div class="lf-item">
+          <div class="n">01</div>
+          <div><div class="q">Was habe ich gemacht?</div><div class="where">Was ist CookBook · Features</div></div>
+        </div>
+        <div class="lf-item">
+          <div class="n">02</div>
+          <div><div class="q">Wie habe ich es gemacht?</div><div class="where">Vorgehensweise · 5 Phasen</div></div>
+        </div>
+        <div class="lf-item">
+          <div class="n">03</div>
+          <div><div class="q">Verwendete Technologien?</div><div class="where">Technologie-Stack</div></div>
+        </div>
+        <div class="lf-item">
+          <div class="n">04</div>
+          <div><div class="q">Technischer Hintergrund?</div><div class="where">Architektur · Datenmodell · API · Sicherheit</div></div>
+        </div>
+        <div class="lf-item">
+          <div class="n">05</div>
+          <div><div class="q">Umsetzung &amp; aufgetretene Probleme?</div><div class="where">Herausforderungen &amp; Lösungen</div></div>
+        </div>
+        <div class="lf-item">
+          <div class="n">06</div>
+          <div><div class="q">Lessons learned?</div><div class="where">Erkenntnisse aus dem Projekt</div></div>
+        </div>
+        <div class="lf-item" style="border-bottom:none;">
+          <div class="n">07</div>
+          <div><div class="q">Wo half KI — und wo nicht?</div><div class="where">KI im Projekt · ehrliche Bilanz</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · WAS IST COOKBOOK -->
+  <section data-label="Was ist CookBook">
+    <div class="slide">
+      <div class="head anim">
+        <p class="eyebrow">Was habe ich gemacht?</p>
+        <h2 class="s-title">Was ist CookBook?</h2>
+      </div>
+      <div class="two-col">
+        <div class="anim-2">
+          <p class="lead" style="max-width:24ch;">Eine moderne Plattform zum <b style="color:var(--ink);font-weight:600;">Erstellen, Teilen, Bewerten und Verwalten</b> von Rezepten.</p>
+          <div class="feat-list">
+            <div class="row"><span class="b"></span><span>Rezepte mit Zutaten, Kochschritten &amp; Nährwerten</span></div>
+            <div class="row"><span class="b"></span><span>Bewertungen, Favoriten &amp; Volltextsuche</span></div>
+            <div class="row"><span class="b"></span><span>Kochmodus mit Timer &amp; Portionsanpassung</span></div>
+            <div class="row"><span class="b"></span><span>Admin-Dashboard &amp; PWA mit Offline-Support</span></div>
+          </div>
+        </div>
+        <div class="kpi-grid anim-3">
+          <div class="kpi"><div class="num" data-count="25" data-prefix="~">~25</div><div class="lbl">REST-Endpoints</div></div>
+          <div class="kpi"><div class="num" data-count="9">9</div><div class="lbl">Controller</div></div>
+          <div class="kpi"><div class="num" data-count="8">8</div><div class="lbl">DB-Tabellen</div></div>
+          <div class="kpi"><div class="num" data-count="25" data-suffix="+">25+</div><div class="lbl">UI-Komponenten</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · VORGEHENSWEISE -->
+  <section data-label="Vorgehensweise">
+    <div class="slide">
+      <div class="head anim">
+        <p class="eyebrow">Wie habe ich es gemacht?</p>
+        <h2 class="s-title">Vorgehensweise in fünf Phasen</h2>
+      </div>
+      <div class="phases anim-2">
+        <div class="phase"><div class="pn">1</div><h3>Grundidee</h3><p>Was soll die App können? Orientierung an Chefkoch.de.</p></div>
+        <div class="phase"><div class="pn">2</div><h3>Datenmodell</h3><p>Relationales ER-Diagramm zuerst — in drawio entworfen.</p></div>
+        <div class="phase"><div class="pn">3</div><h3>Frontend-Entwurf</h3><p>UI-Grundgerüst mit KI generiert und verfeinert.</p></div>
+        <div class="phase"><div class="pn">4</div><h3>Iterativ erweitert</h3><p>REST &amp; UI Hand in Hand ausgebaut.</p></div>
+        <div class="phase"><div class="pn">5</div><h3>Sicherheit</h3><p>JWT &amp; OAuth2 zuletzt, mit KI-Unterstützung.</p></div>
+      </div>
+      <p class="leitprinzip anim-3"><b>Leitprinzip:</b> &nbsp;Erst die solide Basis — Datenmodell, REST, Security — dann der Rest.</p>
+    </div>
+  </section>
+
+  <!-- 5 · TECH STACK -->
+  <section data-label="Technologie-Stack">
+    <div class="slide">
+      <div class="head anim">
+        <p class="eyebrow">Verwendete Technologien</p>
+        <h2 class="s-title">Technologie-Stack</h2>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-col anim-2">
+          <h3>Backend</h3>
+          <p class="sub">CookBook-be</p>
+          <ul>
+            <li><b>Spring Boot 4</b></li>
+            <li>Java 17 · <span class="t">Gradle</span></li>
+            <li>Spring Data JPA · <span class="t">Hibernate</span></li>
+            <li>Bean Validation</li>
+            <li>Lombok · <span class="t">DTO-Pattern</span></li>
+          </ul>
+        </div>
+        <div class="stack-col anim-3">
+          <h3>Daten &amp; Sicherheit</h3>
+          <p class="sub">Persistenz &amp; Auth</p>
+          <ul>
+            <li><b>PostgreSQL 17</b> <span class="t">(:5433)</span></li>
+            <li>Flyway <span class="t">V0.0 – V0.7</span></li>
+            <li>Spring Security</li>
+            <li>JWT <span class="t">(HMAC-SHA256)</span> · OAuth2</li>
+            <li>Cloudinary <span class="t">(Bildhosting)</span></li>
+          </ul>
+        </div>
+        <div class="stack-col anim-4">
+          <h3>Frontend</h3>
+          <p class="sub">CookBook-ui</p>
+          <ul>
+            <li><b>Angular 17</b> <span class="t">Standalone</span></li>
+            <li>TypeScript 5.4</li>
+            <li>Tailwind CSS · <span class="t">SCSS</span></li>
+            <li>RxJS · <span class="t">Angular Material</span></li>
+            <li>Service Worker · <span class="t">PWA</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · ARCHITEKTUR -->
+  <section data-label="Architektur">
+    <div class="slide">
+      <div class="head anim">
+        <p class="eyebrow">Technischer Hintergrund</p>
+        <h2 class="s-title">Architektur — drei Schichten</h2>
+      </div>
+      <div class="arch-wrap anim-2">
+        <svg viewBox="0 0 1660 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="ar" markerWidth="11" markerHeight="11" refX="8" refY="5" orient="auto">
+              <path d="M1,1 L9,5 L1,9" fill="none" stroke="#CC785C" stroke-width="1.6"/>
+            </marker>
+            <marker id="ar2" markerWidth="11" markerHeight="11" refX="8" refY="5" orient="auto">
+              <path d="M1,1 L9,5 L1,9" fill="none" stroke="#8B7355" stroke-width="1.6"/>
+            </marker>
+          </defs>
+          <!-- main three layers -->
+          <g>
+            <rect x="40" y="120" width="380" height="190" rx="18" fill="#FFFFFF" stroke="#E2D6C4"/>
+            <text x="230" y="176" text-anchor="middle" font-family="JetBrains Mono" font-size="24" fill="#CC785C" letter-spacing="1">FRONTEND</text>
+            <text x="230" y="222" text-anchor="middle" font-family="Newsreader" font-size="34" fill="#2D2A26">Angular 17</text>
+            <text x="230" y="264" text-anchor="middle" font-family="JetBrains Mono" font-size="24" fill="#6B6359">localhost : 4200</text>
+          </g>
+          <g>
+            <rect x="640" y="120" width="380" height="190" rx="18" fill="#FFFFFF" stroke="#E2D6C4"/>
+            <text x="830" y="176" text-anchor="middle" font-family="JetBrains Mono" font-size="24" fill="#CC785C" letter-spacing="1">BACKEND</text>
+            <text x="830" y="222" text-anchor="middle" font-family="Newsreader" font-size="34" fill="#2D2A26">Spring Boot 4</text>
+            <text x="830" y="264" text-anchor="middle" font-family="JetBrains Mono" font-size="24" fill="#6B6359">localhost : 8080</text>
+          </g>
+          <g>
+            <rect x="1240" y="120" width="380" height="190" rx="18" fill="#FFFFFF" stroke="#E2D6C4"/>
+            <text x="1430" y="176" text-anchor="middle" font-family="JetBrains Mono" font-size="24" fill="#CC785C" letter-spacing="1">DATENBANK</text>
+            <text x="1430" y="222" text-anchor="middle" font-family="Newsreader" font-size="34" fill="#2D2A26">PostgreSQL 17</text>
+            <text x="1430" y="264" text-anchor="middle" font-family="JetBrains Mono" font-size="24" fill="#6B6359">8 Tabellen · Flyway</text>
+          </g>
+          <!-- connectors -->
+          <line x1="420" y1="215" x2="632" y2="215" stroke="#CC785C" stroke-width="2" marker-end="url(#ar)" class="draw" pathLength="1"/>
+          <text x="526" y="198" text-anchor="middle" font-family="JetBrains Mono" font-size="24" fill="#8B7355" class="fadein">REST</text>
+          <line x1="1020" y1="215" x2="1232" y2="215" stroke="#CC785C" stroke-width="2" marker-end="url(#ar)" class="draw" pathLength="1"/>
+          <text x="1126" y="198" text-anchor="middle" font-family="JetBrains Mono" font-size="24" fill="#8B7355" class="fadein">JPA</text>
+          <!-- external identity provider -->
+          <g>
+            <rect x="740" y="400" width="180" height="110" rx="14" fill="#F5F1EB" stroke="#E2D6C4"/>
+            <text x="830" y="446" text-anchor="middle" font-family="IBM Plex Sans" font-size="26" fill="#2D2A26">Google</text>
+            <text x="830" y="480" text-anchor="middle" font-family="JetBrains Mono" font-size="24" fill="#6B6359">OAuth2</text>
+          </g>
+          <line x1="830" y1="310" x2="830" y2="394" stroke="#8B7355" stroke-width="1.8" marker-end="url(#ar2)" class="draw" pathLength="1"/>
+          <text x="958" y="476" font-family="JetBrains Mono" font-size="24" fill="#948B7E" class="fadein">Single Sign-On</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · DATENMODELL (relationales Modell) -->
+  <section data-label="Datenmodell">
+    <div class="slide er-slide">
+      <div class="er-head anim">
+        <div>
+          <p class="eyebrow">Technischer Hintergrund</p>
+          <h2 class="s-title">Datenmodell — <em>8 Tabellen</em></h2>
+        </div>
+        <div class="er-legend">
+          <span><i style="background:#CC785C;"></i>PK</span>
+          <span><i style="background:#6E84A6;"></i>FK</span>
+          <span><i style="background:#8B7355;"></i>UQ</span>
+        </div>
+      </div>
+      <div class="er-canvas anim-2">
+        <svg viewBox="0 0 1280 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ER-Diagramm des CookBook-Datenmodells">
+          <defs>
+            <filter id="e7sh" x="-15%" y="-15%" width="130%" height="140%">
+              <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#2D2A26" flood-opacity="0.10"/>
+            </filter>
+          </defs>
+          <style>
+            .e7h{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:600;fill:#CC785C}
+            .e7t{font-family:'JetBrains Mono',monospace;font-size:24px}
+            .e7lbl{font-family:'JetBrains Mono',monospace;font-size:24px;fill:#8B7355;font-weight:600}
+            .e7pk{fill:#CC785C;font-weight:600}.e7fk{fill:#6E84A6;font-weight:600}.e7uq{fill:#8B7355;font-weight:600}
+            .e7c{fill:#6B6359}.e7m{fill:#A89F92}
+            .e7rel{stroke:#CBB89E;stroke-width:2;fill:none}
+            .e7card{fill:#FFFFFF;stroke:#E2D6C4}
+            .e7hub{fill:#FCF6F2;stroke:#E7C6B8}
+            .e7band{fill:#F3EBDD}
+          </style>
+
+          <path class="e7rel draw" pathLength="1" d="M408,124 C430,124 426,140 448,140"/>
+          <path class="e7rel draw" pathLength="1" d="M832,90 C854,90 850,92 872,92"/>
+          <path class="e7rel draw" pathLength="1" d="M832,170 C856,170 848,276 872,276"/>
+          <path class="e7rel draw" pathLength="1" d="M832,210 C858,210 846,476 872,476"/>
+          <path class="e7rel draw" pathLength="1" d="M640,264 L640,300"/>
+          <path class="e7rel draw" pathLength="1" d="M448,200 C426,200 430,372 408,372"/>
+          <path class="e7rel draw" pathLength="1" d="M216,232 L216,264"/>
+          <path class="e7rel draw" pathLength="1" d="M448,240 C418,240 422,588 408,588"/>
+
+          <rect class="e7card" x="24" y="16" width="384" height="216" rx="14" filter="url(#e7sh)"/>
+          <path class="e7band" d="M24,30 a14,14 0 0 1 14,-14 h356 a14,14 0 0 1 14,14 v30 h-384 z"/>
+          <text class="e7h" x="216" y="46" text-anchor="middle">users</text>
+          <text class="e7t" x="44" y="88"><tspan class="e7pk">PK</tspan> <tspan class="e7c">id BIGSERIAL</tspan></text>
+          <text class="e7t" x="44" y="120"><tspan class="e7uq">UQ</tspan> <tspan class="e7c">email</tspan></text>
+          <text class="e7t" x="44" y="152"><tspan class="e7c">password</tspan></text>
+          <text class="e7t" x="44" y="184"><tspan class="e7c">auth_provider · role</tspan></text>
+          <text class="e7t" x="44" y="216"><tspan class="e7m">+ name · bio · avatar</tspan></text>
+
+          <rect class="e7card" x="24" y="264" width="384" height="216" rx="14" filter="url(#e7sh)"/>
+          <path class="e7band" d="M24,278 a14,14 0 0 1 14,-14 h356 a14,14 0 0 1 14,14 v30 h-384 z"/>
+          <text class="e7h" x="216" y="294" text-anchor="middle">reviews</text>
+          <text class="e7t" x="44" y="336"><tspan class="e7pk">PK</tspan> <tspan class="e7c">id BIGSERIAL</tspan></text>
+          <text class="e7t" x="44" y="368"><tspan class="e7fk">FK</tspan> <tspan class="e7c">recipe_id (CASCADE)</tspan></text>
+          <text class="e7t" x="44" y="400"><tspan class="e7fk">FK</tspan> <tspan class="e7c">user_id (CASCADE)</tspan></text>
+          <text class="e7t" x="44" y="432"><tspan class="e7c">stars 1–5 · comment</tspan></text>
+          <text class="e7t" x="44" y="464"><tspan class="e7uq">UQ</tspan> <tspan class="e7c">(user, recipe)</tspan></text>
+
+          <rect class="e7card" x="24" y="512" width="384" height="152" rx="14" filter="url(#e7sh)"/>
+          <path class="e7band" d="M24,526 a14,14 0 0 1 14,-14 h356 a14,14 0 0 1 14,14 v30 h-384 z"/>
+          <text class="e7h" x="216" y="542" text-anchor="middle">saved_recipes</text>
+          <text class="e7t" x="44" y="584"><tspan class="e7fk">FK</tspan> <tspan class="e7c">user_id</tspan></text>
+          <text class="e7t" x="44" y="616"><tspan class="e7fk">FK</tspan> <tspan class="e7c">recipe_id</tspan></text>
+          <text class="e7t" x="44" y="648"><tspan class="e7uq">UQ</tspan> <tspan class="e7c">(user, recipe)</tspan></text>
+
+          <rect class="e7hub" x="448" y="16" width="384" height="248" rx="14" filter="url(#e7sh)"/>
+          <path class="e7band" d="M448,30 a14,14 0 0 1 14,-14 h356 a14,14 0 0 1 14,14 v30 h-384 z" fill="#F6E4DA"/>
+          <text class="e7h" x="640" y="46" text-anchor="middle">recipes</text>
+          <text class="e7t" x="468" y="88"><tspan class="e7pk">PK</tspan> <tspan class="e7c">id BIGSERIAL</tspan></text>
+          <text class="e7t" x="468" y="120"><tspan class="e7c">title · description</tspan></text>
+          <text class="e7t" x="468" y="152"><tspan class="e7c">rating · review_count</tspan></text>
+          <text class="e7t" x="468" y="184"><tspan class="e7c">difficulty · tags JSONB</tspan></text>
+          <text class="e7t" x="468" y="216"><tspan class="e7fk">FK</tspan> <tspan class="e7c">author_id</tspan></text>
+          <text class="e7t" x="468" y="248"><tspan class="e7fk">FK</tspan> <tspan class="e7c">category_id</tspan></text>
+
+          <rect class="e7card" x="448" y="300" width="384" height="184" rx="14" filter="url(#e7sh)"/>
+          <path class="e7band" d="M448,314 a14,14 0 0 1 14,-14 h356 a14,14 0 0 1 14,14 v30 h-384 z"/>
+          <text class="e7h" x="640" y="330" text-anchor="middle">nutrition_info</text>
+          <text class="e7t" x="468" y="372"><tspan class="e7pk">PK</tspan> <tspan class="e7c">id BIGSERIAL</tspan></text>
+          <text class="e7t" x="468" y="404"><tspan class="e7fk">FK</tspan> <tspan class="e7c">recipe_id</tspan></text>
+          <text class="e7t" x="468" y="436"><tspan class="e7c">kcal · protein · carbs</tspan></text>
+          <text class="e7t" x="468" y="468"><tspan class="e7c">fat · fiber</tspan></text>
+
+          <rect class="e7card" x="872" y="16" width="384" height="152" rx="14" filter="url(#e7sh)"/>
+          <path class="e7band" d="M872,30 a14,14 0 0 1 14,-14 h356 a14,14 0 0 1 14,14 v30 h-384 z"/>
+          <text class="e7h" x="1064" y="46" text-anchor="middle">categories</text>
+          <text class="e7t" x="892" y="88"><tspan class="e7pk">PK</tspan> <tspan class="e7c">id BIGSERIAL</tspan></text>
+          <text class="e7t" x="892" y="120"><tspan class="e7uq">UQ</tspan> <tspan class="e7c">name</tspan></text>
+          <text class="e7t" x="892" y="152"><tspan class="e7c">icon · count</tspan></text>
+
+          <rect class="e7card" x="872" y="200" width="384" height="152" rx="14" filter="url(#e7sh)"/>
+          <path class="e7band" d="M872,214 a14,14 0 0 1 14,-14 h356 a14,14 0 0 1 14,14 v30 h-384 z"/>
+          <text class="e7h" x="1064" y="230" text-anchor="middle">ingredients</text>
+          <text class="e7t" x="892" y="272"><tspan class="e7pk">PK</tspan> <tspan class="e7c">id BIGSERIAL</tspan></text>
+          <text class="e7t" x="892" y="304"><tspan class="e7fk">FK</tspan> <tspan class="e7c">recipe_id</tspan></text>
+          <text class="e7t" x="892" y="336"><tspan class="e7c">name · amount · unit</tspan></text>
+
+          <rect class="e7card" x="872" y="384" width="384" height="184" rx="14" filter="url(#e7sh)"/>
+          <path class="e7band" d="M872,398 a14,14 0 0 1 14,-14 h356 a14,14 0 0 1 14,14 v30 h-384 z"/>
+          <text class="e7h" x="1064" y="414" text-anchor="middle">cooking_steps</text>
+          <text class="e7t" x="892" y="456"><tspan class="e7pk">PK</tspan> <tspan class="e7c">id BIGSERIAL</tspan></text>
+          <text class="e7t" x="892" y="488"><tspan class="e7fk">FK</tspan> <tspan class="e7c">recipe_id</tspan></text>
+          <text class="e7t" x="892" y="520"><tspan class="e7c">step_number</tspan></text>
+          <text class="e7t" x="892" y="552"><tspan class="e7c">instruction · duration</tspan></text>
+
+          <g class="fadein"><rect x="406" y="98" width="44" height="28" rx="6" fill="#FAF7F2"/><text class="e7lbl" x="428" y="119" text-anchor="middle">1:N</text></g>
+          <g class="fadein"><rect x="406" y="286" width="44" height="28" rx="6" fill="#FAF7F2"/><text class="e7lbl" x="428" y="307" text-anchor="middle">1:N</text></g>
+          <g class="fadein"><rect x="402" y="426" width="44" height="28" rx="6" fill="#FAF7F2"/><text class="e7lbl" x="424" y="447" text-anchor="middle">1:N</text></g>
+          <g class="fadein"><rect x="194" y="238" width="44" height="28" rx="6" fill="#FAF7F2"/><text class="e7lbl" x="216" y="259" text-anchor="middle">1:N</text></g>
+          <g class="fadein"><rect x="618" y="272" width="44" height="28" rx="6" fill="#FAF7F2"/><text class="e7lbl" x="640" y="293" text-anchor="middle">1:1</text></g>
+          <g class="fadein"><rect x="830" y="64" width="44" height="28" rx="6" fill="#FAF7F2"/><text class="e7lbl" x="852" y="85" text-anchor="middle">1:N</text></g>
+          <g class="fadein"><rect x="830" y="214" width="44" height="28" rx="6" fill="#FAF7F2"/><text class="e7lbl" x="852" y="235" text-anchor="middle">1:N</text></g>
+          <g class="fadein"><rect x="830" y="346" width="44" height="28" rx="6" fill="#FAF7F2"/><text class="e7lbl" x="852" y="367" text-anchor="middle">1:N</text></g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · REST API -->
+  <section data-label="REST-API">
+    <div class="slide">
+      <div class="head anim">
+        <p class="eyebrow">Technischer Hintergrund</p>
+        <h2 class="s-title">REST-API — 9 Controller, ~25 Endpoints</h2>
+      </div>
+      <div class="api-grid anim-2">
+        <div class="api"><div class="cn">AuthController</div><div class="ce">Register, Login, Profil, Profilbild</div></div>
+        <div class="api"><div class="cn">RecipesController</div><div class="ce">CRUD, Suche, Favoriten, Events</div></div>
+        <div class="api"><div class="cn">ReviewController</div><div class="ce">Bewertungen — Upsert je User/Rezept</div></div>
+        <div class="api"><div class="cn">CategorieController</div><div class="ce">Kategorien lesen &amp; filtern</div></div>
+        <div class="api"><div class="cn">IngredientsController</div><div class="ce">Zutaten je Rezept</div></div>
+        <div class="api"><div class="cn">CookingStepsController</div><div class="ce">Sortierte Kochschritte</div></div>
+        <div class="api"><div class="cn">NutritionInfoController</div><div class="ce">Nährwerte je Rezept</div></div>
+        <div class="api"><div class="cn">AdminController</div><div class="ce">Nutzer, Rollen, Moderation</div></div>
+        <div class="api"><div class="cn">HomeController</div><div class="ce">Health &amp; Statistik</div></div>
+        <div class="api" style="background:var(--paper-2);border-style:dashed;"><div class="cn" style="color:var(--mocha);">3 Zugriffsebenen</div><div class="ce">gestaffelt nach Rolle</div></div>
+      </div>
+      <div class="api-legend anim-3">
+        <div class="lg"><span class="sw" style="background:#9BAE86;"></span>Öffentlich — lesen, suchen, registrieren</div>
+        <div class="lg"><span class="sw" style="background:#CC785C;"></span>JWT — authentifizierte Aktionen</div>
+        <div class="lg"><span class="sw" style="background:#8B7355;"></span>ADMIN — @PreAuthorize geschützt</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · CODE -->
+  <section data-label="Code-Beispiel">
+    <div class="slide">
+      <div class="head anim">
+        <p class="eyebrow">Technischer Hintergrund</p>
+        <h2 class="s-title">Code-Beispiel — Rezept anlegen</h2>
+      </div>
+      <div class="code-wrap">
+        <div class="codebox anim-2">
+          <div class="fname">RecipesController.java</div>
+<pre><span class="a">@PostMapping</span>(<span class="s">"/create"</span>)
+<span class="k">public</span> <span class="t">RecipeResponseDto</span> createRecipe(
+    <span class="a">@RequestBody</span> <span class="t">CreateRecipeRequestDto</span> request,
+    <span class="a">@AuthenticationPrincipal</span> <span class="t">Users</span> currentUser
+) {
+    <span class="k">return</span> recipeService
+        .createRecipe(request, currentUser);
+}
+
+<span class="c">// Service: Entity bauen, Zutaten +</span>
+<span class="c">// Schritte + Nährwerte verknüpfen,</span>
+<span class="c">// speichern → RecipeResponseDto</span></pre>
+        </div>
+        <div class="flow anim-3">
+          <div class="step"><div class="sn">1</div><div class="stx"><b>Request</b><span>JSON → CreateRecipeRequestDto</span></div></div>
+          <div class="step"><div class="sn">2</div><div class="stx"><b>JWT-Filter</b><span>currentUser aus SecurityContext</span></div></div>
+          <div class="step"><div class="sn">3</div><div class="stx"><b>Service</b><span>Entity + Relationen verknüpfen</span></div></div>
+          <div class="step"><div class="sn">4</div><div class="stx"><b>Repository</b><span>JPA persist in PostgreSQL</span></div></div>
+          <div class="step"><div class="sn">5</div><div class="stx"><b>Response</b><span>Mapping → RecipeResponseDto</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · SICHERHEIT -->
+  <section data-label="Sicherheit">
+    <div class="slide">
+      <div class="head anim">
+        <p class="eyebrow">Technischer Hintergrund</p>
+        <h2 class="s-title">Sicherheit — zwei Auth-Wege</h2>
+      </div>
+      <div class="sec-cols">
+        <div class="sec-col anim-2">
+          <h3>Lokaler Login</h3>
+          <div class="tag">E-Mail + Passwort · JWT</div>
+          <div class="sec-flow">
+            <div class="st"><span class="b">1</span>Login mit E-Mail &amp; Passwort</div>
+            <div class="st"><span class="b">2</span>BCrypt-Abgleich (Salt)</div>
+            <div class="st"><span class="b">3</span>JWT signiert — HMAC-SHA256, 24 h</div>
+            <div class="st"><span class="b">4</span>Token trägt userId + role</div>
+            <div class="st"><span class="b">5</span>JwtAuthFilter setzt SecurityContext</div>
+          </div>
+          <div class="sec-note">Pro Request validiert — <b>@PreAuthorize</b> schützt ADMIN-Endpoints.</div>
+        </div>
+        <div class="sec-col anim-3">
+          <h3>Google OAuth2</h3>
+          <div class="tag">Single Sign-On</div>
+          <div class="sec-flow">
+            <div class="st"><span class="b">1</span>„Mit Google anmelden"</div>
+            <div class="st"><span class="b">2</span>Redirect → Google Identity</div>
+            <div class="st"><span class="b">3</span>Profil zurück an Backend</div>
+            <div class="st"><span class="b">4</span>SuccessHandler: Upsert User</div>
+            <div class="st"><span class="b">5</span>auth_provider = GOOGLE · JWT</div>
+          </div>
+          <div class="sec-note">Aufwendigste Stelle — <b>CustomOAuth2SuccessHandler</b> vereint beide Wege.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 · HERAUSFORDERUNGEN -->
+  <section data-label="Herausforderungen">
+    <div class="slide">
+      <div class="head anim">
+        <p class="eyebrow">Umsetzung &amp; aufgetretene Probleme</p>
+        <h2 class="s-title">Herausforderungen &amp; Lösungen</h2>
+      </div>
+      <div class="ch-grid anim-2">
+        <div class="ch-card"><div class="p">OAuth2 &amp; JWT</div><div class="line"></div><div class="s">Aufwendigste Stelle — mit viel Doku &amp; <b>KI-Unterstützung</b> gemeistert.</div></div>
+        <div class="ch-card"><div class="p">Eingabevalidierung</div><div class="line"></div><div class="s">Pflichtfelder serverseitig mit <b>Bean Validation</b> abgesichert.</div></div>
+        <div class="ch-card"><div class="p">JPA-Beziehungen</div><div class="line"></div><div class="s">Mit kleinen <b>Test-Entities</b> geübt, bis Mappings saßen.</div></div>
+        <div class="ch-card"><div class="p">Bilder-Upload</div><div class="line"></div><div class="s"><b>Cloudinary</b> statt eigenem Filesystem — URL-only.</div></div>
+        <div class="ch-card"><div class="p">REST-API testen</div><div class="line"></div><div class="s"><b>Postman</b> + gezielte DTO-Anpassungen.</div></div>
+        <div class="ch-card"><div class="p">DB-Verbindung &amp; Setup</div><div class="line"></div><div class="s"><b>application.properties</b> penibel geprüft, Doku gelesen.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 · LESSONS LEARNED -->
+  <section data-label="Lessons Learned">
+    <div class="slide">
+      <div class="head anim">
+        <p class="eyebrow">Lessons learned</p>
+        <h2 class="s-title">Was ich mitnehme</h2>
+      </div>
+      <div class="les-cols anim-2">
+        <div class="les">
+          <h3>Architektur</h3>
+          <ul>
+            <li>DTO-Pattern <span>lohnt sich</span></li>
+            <li>Constructor Injection <span>&gt; @Autowired</span></li>
+            <li>Schichten <span>sauber trennen</span></li>
+          </ul>
+        </div>
+        <div class="les">
+          <h3>Praxis</h3>
+          <ul>
+            <li>Flyway <span>ab Tag 1</span></li>
+            <li>Security <span>früh konzipieren</span></li>
+            <li>API-Pfade <span>konsistent halten</span></li>
+          </ul>
+        </div>
+        <div class="les">
+          <h3>Mindset</h3>
+          <ul>
+            <li>Funktional first, <span>dann optimieren</span></li>
+            <li>Aussagekräftige <span>Commits</span></li>
+            <li>Iterativ <span>statt perfekt</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="takeaway anim-3">Eine solide Backend-Basis — <em>Datenmodell, REST &amp; Security</em> — macht alles Nachfolgende massiv einfacher.</p>
+    </div>
+  </section>
+
+  <!-- 14 · KI IM PROJEKT -->
+  <section data-label="KI im Projekt">
+    <div class="slide">
+      <div class="head anim">
+        <p class="eyebrow">Wo half KI — und wo nicht?</p>
+        <h2 class="s-title">KI im Projekt</h2>
+      </div>
+      <div class="ki-cols">
+        <div class="ki-col strong anim-2">
+          <h3>Mit KI umgesetzt</h3>
+          <div class="tag">Beschleuniger</div>
+          <div class="chips">
+            <span class="chip">Angular-Frontend (UI)</span>
+            <span class="chip">Tailwind &amp; SCSS</span>
+            <span class="chip">OAuth2 &amp; JWT-Setup</span>
+            <span class="chip">Boilerplate · DTOs · Mapper</span>
+            <span class="chip">Refactoring</span>
+            <span class="chip">Doku &amp; Stacktrace-Analyse</span>
+          </div>
+        </div>
+        <div class="ki-col weak anim-3">
+          <h3>Meine Eigenleistung</h3>
+          <div class="tag">Backend-Substanz</div>
+          <div class="chips">
+            <span class="chip">Backend-Architektur</span>
+            <span class="chip">Datenmodell-Design</span>
+            <span class="chip">REST-API-Design</span>
+            <span class="chip">Domain-Logik &amp; Bugs</span>
+            <span class="chip">Flyway-Migrationen</span>
+            <span class="chip">Big Picture</span>
+          </div>
+        </div>
+      </div>
+      <p class="ki-fazit anim-4">Das <em>Frontend</em> entstand größtenteils mit KI — die <em>Backend-Substanz</em> stammt von mir. Bei OAuth2 &amp; JWT war KI eine große Hilfe.</p>
+    </div>
+  </section>
+
+  <!-- 15 · DEMO -->
+  <section data-label="Live-Demo">
+    <div class="slide demo-slide">
+      <p class="eyebrow anim">Live-Demo &amp; Danke</p>
+      <h2 class="display anim-2">Schauen wir's uns <em>an</em>.</h2>
+      <p class="anim-3">Rezepte, Bewertungen, Kochmodus und Suche — live.</p>
+      <a class="demo-btn anim-3" href="http://localhost:4200" target="_blank" rel="noopener">CookBook öffnen <span class="arr">→</span></a>
+    </div>
+    <div class="demo-foot anim-4">Daniel Braun · CookBook · Juni 2026 &nbsp;·&nbsp; localhost:4200</div>
+  </section>
+
+</deck-stage>
+
+<template id="__bundler_thumbnail">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#FAF7F2"/>
+    <circle cx="50" cy="42" r="17" fill="none" stroke="#CC785C" stroke-width="3"/>
+    <line x1="50" y1="25" x2="50" y2="59" stroke="#CC785C" stroke-width="3"/>
+    <line x1="33" y1="42" x2="67" y2="42" stroke="#CC785C" stroke-width="3"/>
+    <text x="50" y="80" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="#2D2A26">CookBook</text>
+  </svg>
+</template>
+
+<script src="deck-stage.js"></script>
+<script>
+(function () {
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function animateNum(el) {
+    var target = parseFloat(el.dataset.count);
+    if (isNaN(target)) return;
+    var prefix = el.dataset.prefix || '', suffix = el.dataset.suffix || '';
+    var finalize = function () { el.textContent = prefix + target + suffix; };
+    if (reduce) { finalize(); return; }
+    var dur = 950, start = performance.now(), done = false;
+    function step(t) {
+      if (done) return;
+      var p = Math.min(1, (t - start) / dur);
+      var e = 1 - Math.pow(1 - p, 3);
+      el.textContent = prefix + Math.round(target * e) + suffix;
+      if (p < 1) requestAnimationFrame(step); else done = true;
+    }
+    requestAnimationFrame(step);
+    setTimeout(function () { if (!done) { done = true; finalize(); } }, dur + 400);
+  }
+  function run(sec) {
+    if (!sec) return;
+    sec.querySelectorAll('.kpi .num[data-count]').forEach(function (el) {
+      el.textContent = (el.dataset.prefix || '') + '0' + (el.dataset.suffix || '');
+      animateNum(el);
+    });
+  }
+  var stage = document.querySelector('deck-stage');
+  if (stage) stage.addEventListener('slidechange', function (e) { run(e.detail && e.detail.slide); });
+})();
+</script>
+</body>
+</html>
