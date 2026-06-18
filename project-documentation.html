@@ -436,388 +436,114 @@ pre {
 .slide.full-bleed .er-wrap { padding: 16px; height: calc(100vh - 140px); display:flex; align-items:center; justify-content:center; }
 .slide.full-bleed .er-wrap svg { max-height: 100%; width: auto; max-width: 100%; }
 
-/* ═══════════════════════════════════════════════
-   LIVE DEMO BUTTON — PRO MAX CINEMATIC ENGINE
-   ═══════════════════════════════════════════════ */
+/* Live Demo pulse */
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,107,53,.15); }
+  50% { box-shadow: 0 0 30px 8px rgba(255,107,53,.25); }
+}
 
-/* ── CUSTOM PROPERTIES ── */
+/* ═══ LIVE DEMO BUTTON — CINEMATIC ═══ */
+.demo-btn {
+  display:inline-flex;align-items:center;gap:18px;
+  background:linear-gradient(135deg,rgba(255,107,53,.1),rgba(53,199,255,.06));
+  border:2px solid rgba(255,107,53,.3);border-radius:18px;
+  padding:28px 52px;animation:pulse 2.5s ease-in-out infinite;
+  cursor:pointer;transition:all .4s cubic-bezier(.22,1,.36,1);
+  position:relative;overflow:hidden;text-decoration:none;
+}
+/* Animated gradient border */
+.demo-btn::before {
+  content:'';position:absolute;inset:-2px;z-index:0;
+  background:conic-gradient(from var(--border-angle,0deg),var(--accent),var(--accent2),var(--green),var(--accent));
+  border-radius:20px;opacity:0;transition:opacity .5s;
+  animation:borderSpin 3s linear infinite;
+}
+.demo-btn::after {
+  content:'';position:absolute;inset:2px;z-index:0;
+  background:var(--surface);border-radius:16px;
+}
+.demo-btn:hover::before { opacity:1; }
+.demo-btn:hover { transform:scale(1.06);border-color:transparent;box-shadow:0 0 40px rgba(255,107,53,.15); }
+.demo-btn > * { position:relative;z-index:1; }
 @property --border-angle {
   syntax:'<angle>';initial-value:0deg;inherits:false;
 }
-@property --shimmer-x {
-  syntax:'<percentage>';initial-value:-100%;inherits:false;
-}
-@property --glow-intensity {
-  syntax:'<number>';initial-value:0;inherits:false;
-}
-@property --shake-x {
-  syntax:'<length>';initial-value:0px;inherits:false;
-}
-@property --shake-y {
-  syntax:'<length>';initial-value:0px;inherits:false;
-}
-
-/* ── IDLE STATE — Breathing Glow ── */
-.demo-btn {
-  display:inline-flex;align-items:center;gap:20px;
-  background:linear-gradient(135deg,rgba(255,107,53,.08),rgba(53,199,255,.04),rgba(61,220,132,.03));
-  border:2px solid rgba(255,107,53,.25);border-radius:20px;
-  padding:30px 56px;cursor:pointer;
-  position:relative;overflow:visible;text-decoration:none;
-  animation:breathe 3.5s cubic-bezier(.4,0,.6,1) infinite;
-  transition:transform .5s cubic-bezier(.22,1,.36,1),
-             border-color .4s ease,
-             box-shadow .4s ease;
-  isolation:isolate;
-}
-
-@keyframes breathe {
-  0%,100% {
-    box-shadow:
-      0 0 20px rgba(255,107,53,.08),
-      0 0 60px rgba(255,107,53,.04),
-      0 4px 30px rgba(0,0,0,.3);
-  }
-  50% {
-    box-shadow:
-      0 0 30px rgba(255,107,53,.15),
-      0 0 80px rgba(255,107,53,.08),
-      0 0 120px rgba(53,199,255,.04),
-      0 4px 30px rgba(0,0,0,.3);
-  }
-}
-
-/* ── Animated Gradient Border (conic) ── */
-.demo-btn::before {
-  content:'';position:absolute;inset:-2px;z-index:-2;
-  background:conic-gradient(from var(--border-angle,0deg),
-    var(--accent),var(--accent2),var(--green),var(--yellow),var(--accent));
-  border-radius:22px;
-  opacity:0;transition:opacity .6s cubic-bezier(.22,1,.36,1);
-  animation:borderSpin 4s linear infinite;
-}
-/* Inner fill to mask the border gradient */
-.demo-btn::after {
-  content:'';position:absolute;inset:2px;z-index:-1;
-  background:linear-gradient(135deg,var(--surface),var(--surface2));
-  border-radius:18px;
-}
-
 @keyframes borderSpin {
   to { --border-angle:360deg; }
 }
 
-/* ── Holographic Shimmer Layer ── */
-.demo-shimmer {
-  position:absolute;inset:0;z-index:0;pointer-events:none;
-  border-radius:18px;overflow:hidden;
-}
-.demo-shimmer::before {
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(105deg,
-    transparent 30%,
-    rgba(255,107,53,.06) 38%,
-    rgba(53,199,255,.08) 42%,
-    rgba(255,194,51,.06) 46%,
-    transparent 54%
-  );
-  background-size:250% 100%;
-  animation:shimmerSlide 4s ease-in-out infinite;
-}
-@keyframes shimmerSlide {
-  0%,100% { background-position:250% 0; }
-  50% { background-position:-50% 0; }
-}
-
-/* ── HOVER ── */
-.demo-btn:hover {
-  transform:translateY(-4px) scale(1.04);
-  border-color:transparent;
-  box-shadow:
-    0 0 40px rgba(255,107,53,.18),
-    0 0 80px rgba(255,107,53,.08),
-    0 8px 40px rgba(0,0,0,.4);
-}
-.demo-btn:hover::before { opacity:1; }
-
-/* ── Rocket Icon ── */
+/* Rocket icon */
 .demo-btn .demo-icon {
-  font-size:2.8rem;display:inline-block;
-  transition:transform .6s cubic-bezier(.34,1.56,.64,1),filter .4s ease;
-  filter:drop-shadow(0 0 0 transparent);
-  transform-origin:center center;
+  font-size:2.6rem;display:inline-block;
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1),filter .3s;
+  filter:drop-shadow(0 0 0px transparent);
 }
 .demo-btn:hover .demo-icon {
-  animation:rocketEager 1.2s ease-in-out infinite;
-  filter:drop-shadow(0 0 16px rgba(255,107,53,.5));
-}
-@keyframes rocketEager {
-  0%,100% { transform:rotate(-8deg) scale(1.12); }
-  25% { transform:rotate(-12deg) scale(1.15) translateY(-2px); }
-  75% { transform:rotate(-5deg) scale(1.1) translateY(1px); }
+  transform:scale(1.15) rotate(-8deg);
+  filter:drop-shadow(0 0 12px rgba(255,107,53,.6));
 }
 
-/* ── Text Glow on Hover ── */
-.demo-btn:hover .demo-title {
-  text-shadow:0 0 20px rgba(255,107,53,.3);
-}
-
-/* ── Arrow Nudge ── */
-.demo-btn .demo-arrow {
-  transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .3s;
-}
-.demo-btn:hover .demo-arrow {
-  transform:translate(4px,-4px);
-  opacity:1;
-}
-
-/* ── Ambient Floating Orbs (idle) ── */
-.demo-orb {
-  position:absolute;border-radius:50%;pointer-events:none;
-  opacity:.25;filter:blur(1px);
-  animation:orbFloat var(--dur,5s) ease-in-out infinite alternate;
-}
-@keyframes orbFloat {
-  0% { transform:translate(0,0) scale(1); }
-  100% { transform:translate(var(--dx,10px),var(--dy,-15px)) scale(var(--s2,1.3)); }
-}
-
-/* ═══ LAUNCHING STATE ═══ */
+/* ── LAUNCHING STATE ── */
 .demo-btn.launching {
   animation:none !important;
   pointer-events:none;
 }
 .demo-btn.launching::before { opacity:1; }
-
-/* ── Phase 1: Charge-up (button contracts + trembles) ── */
-.demo-btn.charging {
-  animation:chargeUp .4s cubic-bezier(.4,0,.2,1) forwards !important;
-}
-@keyframes chargeUp {
-  0% { transform:scale(1); }
-  30% { transform:scale(.96); }
-  60% { transform:scale(.94) rotate(-.5deg); }
-  80% { transform:scale(.93) rotate(.5deg); }
-  100% { transform:scale(.92); filter:brightness(1.15); }
-}
-
-/* ── Phase 2: Rumble ── */
-.demo-btn.rumbling {
-  animation:rumble .15s linear infinite !important;
-}
-@keyframes rumble {
-  0% { transform:scale(.92) translate(0,0); }
-  25% { transform:scale(.92) translate(-2px,1px); }
-  50% { transform:scale(.92) translate(2px,-1px); }
-  75% { transform:scale(.92) translate(-1px,-2px); }
-  100% { transform:scale(.92) translate(1px,2px); }
-}
-
-/* ── Phase 3: Blast (expand + flash) ── */
-.demo-btn.blasting {
-  animation:blast .3s cubic-bezier(.16,1,.3,1) forwards !important;
-}
-@keyframes blast {
-  0% { transform:scale(.92); filter:brightness(1.15); }
-  40% { transform:scale(1.08); filter:brightness(1.4); }
-  100% { transform:scale(1.02); filter:brightness(1); }
-}
-
-/* ── Rocket Launch Animation ── */
 .demo-btn.launching .demo-icon {
-  animation:rocketLaunch 1.1s cubic-bezier(.16,1,.3,1) forwards;
+  animation:rocketBlast 1s cubic-bezier(.2,.8,.2,1) forwards;
 }
-@keyframes rocketLaunch {
-  0%   { transform:scale(1) translate(0,0) rotate(0deg);opacity:1;
-         filter:drop-shadow(0 0 0 transparent); }
-  15%  { transform:scale(1.4) translate(0,6px) rotate(-12deg);opacity:1;
-         filter:drop-shadow(0 0 24px rgba(255,107,53,.9)); }
-  35%  { transform:scale(1.2) translate(0,3px) rotate(-18deg);opacity:1;
-         filter:drop-shadow(0 0 36px rgba(255,107,53,1))
-                drop-shadow(0 0 60px rgba(255,194,51,.5)); }
-  55%  { transform:scale(1) translate(20px,-30px) rotate(-30deg);opacity:1;
-         filter:drop-shadow(0 0 40px rgba(255,107,53,.8))
-                drop-shadow(0 20px 30px rgba(255,71,87,.4)); }
-  100% { transform:scale(.4) translate(180px,-180px) rotate(-45deg);opacity:0;
-         filter:drop-shadow(0 0 80px rgba(255,107,53,.6))
-                drop-shadow(0 30px 50px rgba(255,71,87,.3)); }
+@keyframes rocketBlast {
+  0%   { transform:scale(1) translate(0,0) rotate(0deg);opacity:1;filter:drop-shadow(0 0 0 transparent); }
+  20%  { transform:scale(1.3) translate(0,4px) rotate(-15deg);opacity:1;filter:drop-shadow(0 0 20px rgba(255,107,53,.8)); }
+  50%  { transform:scale(1.1) translate(0,2px) rotate(-20deg);opacity:1;filter:drop-shadow(0 0 30px rgba(255,107,53,1)); }
+  100% { transform:scale(.6) translate(120px,-120px) rotate(-45deg);opacity:0;filter:drop-shadow(0 0 60px rgba(255,107,53,.8)); }
 }
 
-/* ── Shockwave Rings (multiple) ── */
+/* Shockwave ring */
 .demo-shockwave {
   position:absolute;border-radius:50%;pointer-events:none;z-index:2;
-  border:2px solid rgba(255,107,53,.5);
-  box-shadow:0 0 20px rgba(255,107,53,.25),
-             inset 0 0 20px rgba(255,107,53,.08);
+  border:2px solid rgba(255,107,53,.6);
+  box-shadow:0 0 20px rgba(255,107,53,.3),inset 0 0 20px rgba(255,107,53,.1);
   transform:scale(0);opacity:1;
-}
-.demo-shockwave--primary {
-  animation:shockwave .9s cubic-bezier(.16,1,.3,1) forwards;
-}
-.demo-shockwave--secondary {
-  border-color:rgba(53,199,255,.3);
-  box-shadow:0 0 30px rgba(53,199,255,.15),
-             inset 0 0 15px rgba(53,199,255,.05);
-  animation:shockwave 1.1s cubic-bezier(.16,1,.3,1) .1s forwards;
-}
-.demo-shockwave--tertiary {
-  border-width:1px;
-  border-color:rgba(255,194,51,.2);
-  box-shadow:0 0 15px rgba(255,194,51,.1);
-  animation:shockwave 1.4s cubic-bezier(.16,1,.3,1) .2s forwards;
+  animation:shockwave .8s cubic-bezier(.2,.8,.2,1) forwards;
 }
 @keyframes shockwave {
   0%   { transform:scale(0);opacity:1; }
-  60%  { opacity:.6; }
-  100% { transform:scale(8);opacity:0; }
+  100% { transform:scale(6);opacity:0; }
 }
 
-/* ── Particles (upgraded with trails) ── */
+/* Particles */
 .demo-particle {
-  position:absolute;border-radius:50%;pointer-events:none;z-index:3;
-  animation:particleFly var(--dur,.9s) cubic-bezier(.12,.8,.2,1) forwards;
-}
-.demo-particle--trail {
-  border-radius:20px;
-  animation:particleTrail var(--dur,.7s) cubic-bezier(.12,.8,.2,1) forwards;
+  position:absolute;width:4px;height:4px;border-radius:50%;pointer-events:none;z-index:3;
+  animation:particleFly var(--dur,.8s) cubic-bezier(.15,.8,.3,1) forwards;
 }
 @keyframes particleFly {
   0%   { transform:translate(0,0) scale(1);opacity:1; }
-  70%  { opacity:.8; }
   100% { transform:translate(var(--tx,0),var(--ty,0)) scale(0);opacity:0; }
 }
-@keyframes particleTrail {
-  0%   { transform:translate(0,0) scaleX(1) rotate(var(--angle,0deg));opacity:.8;width:var(--w,4px); }
-  40%  { opacity:.6;width:calc(var(--w,4px) * 2.5); }
-  100% { transform:translate(var(--tx,0),var(--ty,0)) scaleX(.3) rotate(var(--angle,0deg));opacity:0;width:var(--w,4px); }
-}
 
-/* ── Plasma Trail (behind rocket) ── */
-.demo-plasma-trail {
-  position:absolute;pointer-events:none;z-index:1;
-  border-radius:50%;
-  background:radial-gradient(ellipse,rgba(255,107,53,.5),rgba(255,71,87,.3),transparent 70%);
-  filter:blur(8px);
-  animation:plasmaFade var(--dur,.6s) ease-out forwards;
-}
-@keyframes plasmaFade {
-  0%   { transform:scale(1);opacity:.7; }
-  100% { transform:scale(2.5);opacity:0; }
-}
-
-/* ── Energy Beams (radiate from center) ── */
-.demo-beam {
-  position:absolute;pointer-events:none;z-index:2;
-  height:2px;
-  background:linear-gradient(90deg,var(--beam-color,var(--accent)),transparent);
-  transform-origin:left center;
-  border-radius:2px;
-  animation:beamShoot var(--dur,.5s) cubic-bezier(.16,1,.3,1) forwards;
-}
-@keyframes beamShoot {
-  0%   { transform:rotate(var(--angle,0deg)) scaleX(0);opacity:0; }
-  20%  { opacity:1; }
-  100% { transform:rotate(var(--angle,0deg)) scaleX(1) translateX(var(--dist,100px));opacity:0; }
-}
-
-/* ── Speed Lines (warp) ── */
+/* Speed lines (warp effect) */
 .demo-warp-line {
   position:absolute;height:2px;border-radius:2px;pointer-events:none;z-index:2;
-  background:linear-gradient(90deg,transparent,var(--accent),rgba(53,199,255,.6),transparent);
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
   animation:warpLine var(--dur,.5s) ease-out forwards;
   transform-origin:left center;
 }
 @keyframes warpLine {
   0%   { transform:scaleX(0) translateX(0);opacity:0; }
-  25%  { opacity:1; }
-  100% { transform:scaleX(1.5) translateX(var(--tx,100px));opacity:0; }
+  30%  { opacity:1; }
+  100% { transform:scaleX(1) translateX(var(--tx,100px));opacity:0; }
 }
 
-/* ── Screen Flash (layered radial) ── */
+/* Full-screen flash */
 .demo-flash {
   position:fixed;inset:0;z-index:9999;pointer-events:none;
-  animation:flashPulse .8s ease-out forwards;
+  background:radial-gradient(circle at var(--cx,50%) var(--cy,50%),rgba(255,107,53,.25),transparent 70%);
+  animation:flash .6s ease-out forwards;
 }
-.demo-flash::before {
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(circle at var(--cx,50%) var(--cy,50%),
-    rgba(255,107,53,.3) 0%,
-    rgba(255,107,53,.15) 20%,
-    rgba(53,199,255,.06) 40%,
-    transparent 70%);
-}
-.demo-flash::after {
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(circle at var(--cx,50%) var(--cy,50%),
-    rgba(255,255,255,.08) 0%,
-    transparent 30%);
-}
-@keyframes flashPulse {
+@keyframes flash {
   0%   { opacity:1; }
-  40%  { opacity:.7; }
   100% { opacity:0; }
-}
-
-/* ── Screen Ripple / Gravitational Lens ── */
-.demo-ripple {
-  position:fixed;pointer-events:none;z-index:9998;
-  border-radius:50%;
-  border:1px solid rgba(255,107,53,.15);
-  box-shadow:0 0 40px rgba(255,107,53,.06),
-             inset 0 0 40px rgba(53,199,255,.03);
-  animation:rippleExpand 1.2s cubic-bezier(.16,1,.3,1) forwards;
-}
-@keyframes rippleExpand {
-  0%   { transform:scale(0);opacity:.8; }
-  50%  { opacity:.4; }
-  100% { transform:scale(1);opacity:0; }
-}
-
-/* ── Aurora Afterglow ── */
-.demo-aurora {
-  position:fixed;inset:0;pointer-events:none;z-index:9997;
-  background:linear-gradient(
-    135deg,
-    rgba(255,107,53,.04) 0%,
-    rgba(53,199,255,.03) 30%,
-    rgba(61,220,132,.02) 60%,
-    transparent 100%
-  );
-  animation:auroraGlow 1.5s ease-out forwards;
-}
-@keyframes auroraGlow {
-  0%   { opacity:0; }
-  30%  { opacity:1; }
-  100% { opacity:0; }
-}
-
-/* ── Countdown Ring (border fill before launch) ── */
-.demo-countdown-ring {
-  position:absolute;inset:-4px;border-radius:24px;pointer-events:none;z-index:5;
-  border:3px solid transparent;
-  border-top-color:var(--accent);
-  animation:countdownSpin .4s linear forwards;
-}
-@keyframes countdownSpin {
-  0%   { transform:rotate(0deg); border-top-color:var(--accent); }
-  33%  { border-right-color:var(--accent2); }
-  66%  { border-bottom-color:var(--green); }
-  100% { transform:rotate(360deg); border-color:var(--accent); }
-}
-
-/* ── Status Text Morph ── */
-.demo-status-text {
-  position:absolute;bottom:-32px;left:50%;transform:translateX(-50%);
-  font-family:var(--font-mono);font-size:.7rem;letter-spacing:2px;
-  text-transform:uppercase;white-space:nowrap;
-  color:var(--accent);opacity:0;
-  animation:statusFade .8s ease forwards;
-}
-@keyframes statusFade {
-  0%   { opacity:0;transform:translateX(-50%) translateY(6px); }
-  20%  { opacity:1;transform:translateX(-50%) translateY(0); }
-  80%  { opacity:1; }
-  100% { opacity:0;transform:translateX(-50%) translateY(-4px); }
 }
 
 /* Responsive */
@@ -845,24 +571,24 @@ pre {
      SLIDE 0 — TITLE
      ══════════════════════════════════════════════════ -->
 <section class="slide title-slide bg-grain active" data-slide="0">
-  <div class="slide-tag">Technische Präsentation</div>
+  <div class="slide-tag">Projektpräsentation</div>
   <h1><em>CookBook</em></h1>
-  <p class="subtitle">Backend-Architektur einer Full-Stack Rezeptverwaltung</p>
-  <div style="display:flex;gap:24px;justify-content:center;margin:28px 0">
+  <p class="subtitle">Full-Stack Rezeptverwaltung mit Spring Boot & Angular</p>
+  <div style="display:flex;gap:24px;justify-content:center;margin:28px 0;flex-wrap:wrap">
     <div class="tech-pill">Spring Boot 4.0.1</div>
     <div class="tech-pill">PostgreSQL</div>
     <div class="tech-pill">JWT + OAuth2</div>
-    <div class="tech-pill">Java 17</div>
+    <div class="tech-pill">Angular 17</div>
   </div>
-  <p class="meta">Juni 2026</p>
+  <p class="meta">Abschlussprojekt · Juni 2026 · Daniel Braun</p>
 </section>
 
 <!-- ══════════════════════════════════════════════════
-     SLIDE 1 — PROJEKTÜBERSICHT
+     SLIDE 1 — WAS HABE ICH GEMACHT?
      ══════════════════════════════════════════════════ -->
 <section class="slide bg-grain bg-glow-left" data-slide="1">
-  <div class="slide-tag">01 — Projektübersicht</div>
-  <h2>Was ist <em>CookBook</em>?</h2>
+  <div class="slide-tag">01 — Was habe ich gemacht?</div>
+  <h2>Das Projekt — <em>CookBook</em></h2>
   <div class="two-col">
     <div>
       <p class="big-p" style="margin-bottom:24px">Eine moderne Webanwendung zum <strong>Erstellen, Durchsuchen, Bewerten und Speichern</strong> von Rezepten — mit lokalem Login und Google OAuth2.</p>
@@ -880,17 +606,105 @@ pre {
         <div class="stat-card"><div class="stat-num">27</div><div class="stat-label">REST Endpoints</div></div>
         <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">DB Tabellen</div></div>
         <div class="stat-card"><div class="stat-num">9</div><div class="stat-label">Controller</div></div>
-        <div class="stat-card"><div class="stat-num">7</div><div class="stat-label">Migrations</div></div>
+        <div class="stat-card"><div class="stat-num">25+</div><div class="stat-label">UI Komponenten</div></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ══════════════════════════════════════════════════
-     SLIDE 2 — ARCHITEKTUR
+     SLIDE 2 — WIE HABE ICH ES GEMACHT?
      ══════════════════════════════════════════════════ -->
 <section class="slide bg-grain bg-glow-right" data-slide="2">
-  <div class="slide-tag">02 — Systemarchitektur</div>
+  <div class="slide-tag">02 — Wie habe ich es gemacht?</div>
+  <h2><em>Vorgehensweise</em> & Methodik</h2>
+
+  <div class="two-col" style="gap:40px;margin-top:8px">
+    <div>
+      <h3 style="margin-bottom:18px">Phasen</h3>
+      <div class="card-sm" style="border-left:3px solid var(--accent);margin-bottom:12px">
+        <strong style="color:var(--text)">1. Grundidee & Projektziel</strong>
+        <p style="font-size:.88rem;margin-top:4px">Was soll die App können? Orientierung an Chefkoch.de als fachliche Vorlage</p>
+      </div>
+      <div class="card-sm" style="border-left:3px solid var(--accent2);margin-bottom:12px">
+        <strong style="color:var(--text)">2. Erstes Datenbankmodell</strong>
+        <p style="font-size:.88rem;margin-top:4px">Relationales Datenbankmodel erstellt und verstanden, wie die Entities und Beziehungen aussehen sollen</p>
+      </div>
+      <div class="card-sm" style="border-left:3px solid var(--green);margin-bottom:12px">
+        <strong style="color:var(--text)">3. Erster Frontend-Entwurf</strong>
+        <p style="font-size:.88rem;margin-top:4px">UI-Grundstruktur mit KI erstellt, um früh ein Bild der Anwendung zu bekommen</p>
+      </div>
+      <div class="card-sm" style="border-left:3px solid var(--yellow);margin-bottom:12px">
+        <strong style="color:var(--text)">4. Backend + Frontend iterativ erweitert</strong>
+        <p style="font-size:.88rem;margin-top:4px">Nach und nach REST-Endpoints gebaut und das Frontend passend dazu ausgebaut</p>
+      </div>
+      <div class="card-sm" style="border-left:3px solid var(--red)">
+        <strong style="color:var(--text)">5. Security & Auth zum Schluss</strong>
+        <p style="font-size:.88rem;margin-top:4px">JWT und Google OAuth2 am Ende ergänzt, mit KI-Unterstützung bei der Umsetzung</p>
+      </div>
+    </div>
+    <div>
+      <h3 style="margin-bottom:18px">Arbeitsweise & Tools</h3>
+      <ul style="font-size:1rem;line-height:1.95">
+        <li><strong>Iterativ feature-basiert</strong> — Idee, Datenmodell und Umsetzung schrittweise verfeinert</li>
+        <li><strong>Git</strong> — Branch-basiert, sprechende Commits</li>
+        <li><strong>Flyway</strong> — DB-Schema versioniert im Repo</li>
+        <li><strong>VS Code</strong> — Entwicklung, Frontend und Projektarbeit</li>
+        <li><strong>KI-Unterstützung</strong> — vor allem beim ersten Frontend-Entwurf und später bei Security/Auth</li>
+        <li><strong>Postman</strong> — Manuelle API-Tests pro Endpoint</li>
+        <li><strong>JUnit 5</strong> — Tests für kritische Services</li>
+      </ul>
+      <div style="margin-top:22px;padding:18px 22px;background:rgba(255,107,53,.06);border-left:4px solid var(--accent);border-radius:10px">
+        <strong style="color:var(--accent);font-size:.95rem">Leitprinzip</strong>
+        <p style="font-size:.95rem;margin-top:6px">Erst Idee und Datenmodell klären, dann einen UI-Entwurf aufbauen und die Anwendung danach iterativ über Backend-Endpoints und Frontend-Erweiterungen vervollständigen. Security kam bewusst zum Schluss.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     SLIDE 3 — VERWENDETE TECHNOLOGIEN
+     ══════════════════════════════════════════════════ -->
+<section class="slide bg-grain bg-glow-left" data-slide="3">
+  <div class="slide-tag">03 — Verwendete Technologien</div>
+  <h2>Verwendete <em>Technologien</em></h2>
+  <div class="three-col" style="margin-top:20px;gap:28px">
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:28px 24px;border-top:3px solid var(--accent)">
+      <h3 style="font-size:1.2rem;margin-bottom:18px;display:flex;align-items:center;gap:10px"><span style="font-size:1.6rem">⚙</span> Backend</h3>
+      <div class="flex-col gap-sm">
+        <div class="tech-pill" style="border-left:3px solid var(--accent)">Spring Boot 4.0.1<span>REST API Framework</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--accent)">Java 17<span>Programmiersprache</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--accent)">Hibernate / JPA<span>ORM & Datenbankabstraktion</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--accent)">Spring Security<span>Auth-Framework</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--accent)">Spring OAuth2 Client<span>Google Login</span></div>
+      </div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:28px 24px;border-top:3px solid var(--green)">
+      <h3 style="font-size:1.2rem;margin-bottom:18px;color:var(--green);display:flex;align-items:center;gap:10px"><span style="font-size:1.6rem">🗄</span> Datenbank & Build</h3>
+      <div class="flex-col gap-sm">
+        <div class="tech-pill" style="border-left:3px solid var(--green)">PostgreSQL<span>Relationale Datenbank</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--green)">Flyway<span>DB Migrations (V0.0–V0.7)</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--green)">Gradle<span>Build-Tool & Dependencies</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--green)">JSONB<span>Tags als JSON in PostgreSQL</span></div>
+      </div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:28px 24px;border-top:3px solid var(--yellow)">
+      <h3 style="font-size:1.2rem;margin-bottom:18px;color:var(--yellow);display:flex;align-items:center;gap:10px"><span style="font-size:1.6rem">🔐</span> Security & Frontend</h3>
+      <div class="flex-col gap-sm">
+        <div class="tech-pill" style="border-left:3px solid var(--yellow)">JWT (jjwt 0.12.5)<span>HMAC-SHA256, 24h Gültigkeit</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--yellow)">BCrypt<span>Passwort-Hashing</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--yellow)">Angular 17<span>SPA Frontend</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--yellow)">Tailwind CSS<span>Utility-First Styling</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     SLIDE 4 — TECHNISCHER HINTERGRUND (ARCHITEKTUR)
+     ══════════════════════════════════════════════════ -->
+<section class="slide bg-grain bg-glow-right" data-slide="4">
+  <div class="slide-tag">04 — Technischer Hintergrund</div>
   <h2>3-Schichten <em>Architektur</em></h2>
   <svg class="arch-svg" viewBox="0 0 820 370" xmlns="http://www.w3.org/2000/svg" style="max-height:72vh">
     <defs>
@@ -942,293 +756,11 @@ pre {
 </section>
 
 <!-- ══════════════════════════════════════════════════
-     SLIDE 3 — TECH STACK
+  SLIDE 5 — UMSETZUNG: DATENBANK
      ══════════════════════════════════════════════════ -->
-<section class="slide bg-grain bg-glow-left" data-slide="3">
-  <div class="slide-tag">03 — Tech Stack</div>
-  <h2>Verwendete <em>Technologien</em></h2>
-  <div class="three-col" style="margin-top:20px;gap:28px">
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:28px 24px;border-top:3px solid var(--accent)">
-      <h3 style="font-size:1.2rem;margin-bottom:18px;display:flex;align-items:center;gap:10px"><span style="font-size:1.6rem">⚙</span> Backend</h3>
-      <div class="flex-col gap-sm">
-        <div class="tech-pill" style="border-left:3px solid var(--accent)">Spring Boot 4.0.1<span>REST API Framework</span></div>
-        <div class="tech-pill" style="border-left:3px solid var(--accent)">Java 17<span>Programmiersprache</span></div>
-        <div class="tech-pill" style="border-left:3px solid var(--accent)">Hibernate / JPA<span>ORM & Datenbankabstraktion</span></div>
-        <div class="tech-pill" style="border-left:3px solid var(--accent)">Spring Security<span>Auth-Framework</span></div>
-        <div class="tech-pill" style="border-left:3px solid var(--accent)">Spring OAuth2 Client<span>Google Login</span></div>
-      </div>
-    </div>
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:28px 24px;border-top:3px solid var(--green)">
-      <h3 style="font-size:1.2rem;margin-bottom:18px;color:var(--green);display:flex;align-items:center;gap:10px"><span style="font-size:1.6rem">🗄</span> Datenbank & Build</h3>
-      <div class="flex-col gap-sm">
-        <div class="tech-pill" style="border-left:3px solid var(--green)">PostgreSQL<span>Relationale Datenbank</span></div>
-        <div class="tech-pill" style="border-left:3px solid var(--green)">Flyway<span>DB Migrations (V0.0–V0.7)</span></div>
-        <div class="tech-pill" style="border-left:3px solid var(--green)">Gradle<span>Build-Tool & Dependencies</span></div>
-        <div class="tech-pill" style="border-left:3px solid var(--green)">JSONB<span>Tags als JSON in PostgreSQL</span></div>
-      </div>
-    </div>
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:28px 24px;border-top:3px solid var(--yellow)">
-      <h3 style="font-size:1.2rem;margin-bottom:18px;color:var(--yellow);display:flex;align-items:center;gap:10px"><span style="font-size:1.6rem">🔐</span> Security</h3>
-      <div class="flex-col gap-sm">
-        <div class="tech-pill" style="border-left:3px solid var(--yellow)">JWT (jjwt 0.12.5)<span>HMAC-SHA256, 24h Gültigkeit</span></div>
-        <div class="tech-pill" style="border-left:3px solid var(--yellow)">BCrypt<span>Passwort-Hashing</span></div>
-        <div class="tech-pill" style="border-left:3px solid var(--yellow)">OAuth2<span>Google Identity Provider</span></div>
-        <div class="tech-pill" style="border-left:3px solid var(--yellow)">CORS<span>Cross-Origin Konfiguration</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════
-     SLIDE 4 — API OVERVIEW
-     ══════════════════════════════════════════════════ -->
-<section class="slide bg-grain" data-slide="4">
-  <div class="slide-tag">04 — API Endpoints</div>
-  <h2>27 REST <em>Endpoints</em></h2>
-  <p style="margin-bottom:24px;color:var(--text2);font-size:1.1rem">Gruppiert nach Controller — alle unter <code style="font-size:1rem">/api/</code></p>
-  <div class="stat-grid" style="grid-template-columns:repeat(5,1fr);gap:24px">
-    <div class="stat-card" style="border-top:3px solid var(--accent);padding:38px 22px">
-      <div class="stat-num" style="font-size:3.4rem">11</div>
-      <div class="stat-label" style="font-size:.95rem;margin-top:10px">Recipes</div>
-      <div style="font-size:.72rem;color:var(--text3);margin-top:6px;font-family:var(--font-mono)">CRUD · Suche · Favoriten</div>
-    </div>
-    <div class="stat-card" style="border-top:3px solid var(--yellow);padding:38px 22px">
-      <div class="stat-num" style="font-size:3.4rem">4</div>
-      <div class="stat-label" style="font-size:.95rem;margin-top:10px">Auth</div>
-      <div style="font-size:.72rem;color:var(--text3);margin-top:6px;font-family:var(--font-mono)">Register · Login · Profil</div>
-    </div>
-    <div class="stat-card" style="border-top:3px solid var(--red);padding:38px 22px">
-      <div class="stat-num" style="font-size:3.4rem">4</div>
-      <div class="stat-label" style="font-size:.95rem;margin-top:10px">Admin</div>
-      <div style="font-size:.72rem;color:var(--text3);margin-top:6px;font-family:var(--font-mono)">User · Rollen · Moderation</div>
-    </div>
-    <div class="stat-card" style="border-top:3px solid var(--accent2);padding:38px 22px">
-      <div class="stat-num" style="font-size:3.4rem">3</div>
-      <div class="stat-label" style="font-size:.95rem;margin-top:10px">Reviews</div>
-      <div style="font-size:.72rem;color:var(--text3);margin-top:6px;font-family:var(--font-mono)">Bewertungen · Upsert</div>
-    </div>
-    <div class="stat-card" style="border-top:3px solid var(--green);padding:38px 22px">
-      <div class="stat-num" style="font-size:3.4rem">5</div>
-      <div class="stat-label" style="font-size:.95rem;margin-top:10px">Sonstige</div>
-      <div style="font-size:.72rem;color:var(--text3);margin-top:6px;font-family:var(--font-mono)">Kategorien · Zutaten · etc.</div>
-    </div>
-  </div>
-  <div style="display:flex;gap:18px;margin-top:32px;flex-wrap:wrap;align-items:center">
-    <span class="pill pill-get" style="font-size:.82rem;padding:8px 20px">GET — Lesen</span>
-    <span class="pill pill-post" style="font-size:.82rem;padding:8px 20px">POST — Erstellen</span>
-    <span class="pill pill-put" style="font-size:.82rem;padding:8px 20px">PUT — Aktualisieren</span>
-    <span class="pill pill-del" style="font-size:.82rem;padding:8px 20px">DELETE — Löschen</span>
-    <span style="margin-left:auto;font-family:var(--font-mono);font-size:.75rem;color:var(--text3);align-self:center;background:var(--surface2);padding:8px 16px;border-radius:8px;border:1px solid var(--border)">Auth: — = öffentlich · JWT = Token · ADMIN = Rolle</span>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════
-     SLIDE 5 — AUTH ENDPOINTS
-     ══════════════════════════════════════════════════ -->
-<section class="slide scrollable bg-grain bg-glow-right" data-slide="5">
-  <div class="slide-tag">05 — Auth Endpoints</div>
-  <h2><em>AuthController</em> — /api/auth</h2>
-
-  <div class="card" style="margin-bottom:20px">
-    <div class="ep-row" style="border:none;padding:0">
-      <span class="pill pill-post">POST</span>
-      <div><span class="ep-url">/api/auth/register</span><br><span class="ep-desc">Neuen Benutzer registrieren</span></div>
-      <span class="ep-auth">PUBLIC</span>
-    </div>
-    <div style="margin-top:14px">
-      <div class="two-col" style="gap:16px">
-        <div>
-          <h3 style="font-size:.85rem">Request Body</h3>
-<pre><code>{
-  "<span class="str">name</span>": "<span class="str">Max Mustermann</span>",
-  "<span class="str">email</span>": "<span class="str">max@example.com</span>",
-  "<span class="str">password</span>": "<span class="str">sicheresPasswort123</span>"
-}</code></pre>
-        </div>
-        <div>
-          <h3 style="font-size:.85rem">Response 201</h3>
-<pre><code>{
-  "<span class="str">token</span>": "<span class="str">eyJhbGciOi...</span>",
-  "<span class="str">user</span>": {
-    "<span class="str">id</span>": <span class="num">1</span>,
-    "<span class="str">name</span>": "<span class="str">Max Mustermann</span>",
-    "<span class="str">role</span>": "<span class="str">USER</span>"
-  }
-}</code></pre>
-        </div>
-      </div>
-      <p style="margin-top:10px;font-size:.8rem"><strong>Status:</strong> <code>201</code> Erstellt · <code>409</code> Email belegt · <code>500</code> Fehler</p>
-    </div>
-  </div>
-
-  <div class="card" style="padding:18px 28px">
-    <div class="ep-row" style="border:none;padding:0">
-      <span class="pill pill-post">POST</span>
-      <div><span class="ep-url">/api/auth/login</span><br><span class="ep-desc">Benutzer anmelden → JWT Token zurück</span></div>
-      <span class="ep-auth">PUBLIC</span>
-    </div>
-  </div>
-
-  <div class="card" style="padding:18px 28px">
-    <div class="ep-row" style="border:none;padding:0">
-      <span class="pill pill-get">GET</span>
-      <div><span class="ep-url">/api/auth/me</span><br><span class="ep-desc">Aktuellen Benutzer abrufen</span></div>
-      <span class="ep-auth">JWT</span>
-    </div>
-  </div>
-
-  <div class="card" style="padding:18px 28px">
-    <div class="ep-row" style="border:none;padding:0">
-      <span class="pill pill-put">PUT</span>
-      <div><span class="ep-url">/api/auth/update</span><br><span class="ep-desc">Profil aktualisieren (Name, Email, Bio, Bild)</span></div>
-      <span class="ep-auth">JWT</span>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════
-     SLIDE 6 — RECIPE ENDPOINTS (Teil 1)
-     ══════════════════════════════════════════════════ -->
-<section class="slide scrollable bg-grain bg-glow-left" data-slide="6">
-  <div class="slide-tag">06 — Recipe Endpoints</div>
-  <h2><em>RecipesController</em> — /api/recipes</h2>
-
-  <div class="card" style="padding:0;overflow:hidden">
-    <div class="ep-row"><span class="pill pill-get">GET</span><span class="ep-url">/api/recipes/getAll</span><span class="ep-auth">PUBLIC</span></div>
-    <div class="ep-row"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/recipes/getSixBestRated</span><br><span class="ep-desc">Top 6 nach Rating absteigend</span></div><span class="ep-auth">PUBLIC</span></div>
-    <div class="ep-row"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/recipes/getByCategorieFilter<span style="color:var(--text3)">?categoryName=</span></span></div><span class="ep-auth">PUBLIC</span></div>
-    <div class="ep-row"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/recipes/getRecipeById<span style="color:var(--text3)">?recipeId=</span></span></div><span class="ep-auth">PUBLIC</span></div>
-    <div class="ep-row"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/recipes/search<span style="color:var(--text3)">?query=</span></span><br><span class="ep-desc">Volltextsuche in Titel & Beschreibung</span></div><span class="ep-auth">PUBLIC</span></div>
-    <div class="ep-row"><span class="pill pill-post">POST</span><div><span class="ep-url">/api/recipes/create</span><br><span class="ep-desc">Neues Rezept mit Zutaten, Schritten, Nährwerten</span></div><span class="ep-auth">JWT</span></div>
-    <div class="ep-row"><span class="pill pill-put">PUT</span><div><span class="ep-url">/api/recipes/update/{id}</span><br><span class="ep-desc">Nur Author darf bearbeiten</span></div><span class="ep-auth">JWT ✦ Author</span></div>
-    <div class="ep-row"><span class="pill pill-del">DEL</span><div><span class="ep-url">/api/recipes/delete/{id}</span></div><span class="ep-auth">JWT ✦ Author</span></div>
-    <div class="ep-row"><span class="pill pill-post">POST</span><div><span class="ep-url">/api/recipes/{id}/toggle-save</span><br><span class="ep-desc">Rezept speichern / unspeichern (Toggle)</span></div><span class="ep-auth">JWT</span></div>
-    <div class="ep-row"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/recipes/saved</span><br><span class="ep-desc">Alle gespeicherten Rezepte des Users</span></div><span class="ep-auth">JWT</span></div>
-    <div class="ep-row" style="border:none"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/recipes/saved-ids</span><br><span class="ep-desc">Nur IDs → effizient für Frontend-Check</span></div><span class="ep-auth">JWT</span></div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════
-     SLIDE 7 — RECIPE CREATE EXAMPLE
-     ══════════════════════════════════════════════════ -->
-<section class="slide scrollable bg-grain" data-slide="7">
-  <div class="slide-tag">07 — Beispiel: Rezept erstellen</div>
-  <h2><em>POST</em> /api/recipes/create</h2>
-
-  <div class="two-col" style="gap:24px;margin-top:8px">
-    <div>
-      <h3 style="font-size:.9rem">Request Body</h3>
-<pre><code>{
-  "<span class="str">title</span>": "<span class="str">Spaghetti Carbonara</span>",
-  "<span class="str">description</span>": "<span class="str">Klassisch italienisch...</span>",
-  "<span class="str">image</span>": "<span class="str">https://res.cloudinary.com/.../img.jpg</span>",
-  "<span class="str">categoryName</span>": "<span class="str">Pasta</span>",
-  "<span class="str">difficulty</span>": "<span class="str">MITTEL</span>",
-  "<span class="str">prepTime</span>": <span class="num">15</span>,
-  "<span class="str">cookTime</span>": <span class="num">20</span>,
-  "<span class="str">servings</span>": <span class="num">4</span>,
-  "<span class="str">tags</span>": ["<span class="str">italienisch</span>", "<span class="str">schnell</span>"],
-  "<span class="str">ingredients</span>": [
-    { "<span class="str">name</span>": "<span class="str">Spaghetti</span>", "<span class="str">amount</span>": <span class="num">400</span>, "<span class="str">unit</span>": "<span class="str">g</span>" },
-    { "<span class="str">name</span>": "<span class="str">Guanciale</span>", "<span class="str">amount</span>": <span class="num">200</span>, "<span class="str">unit</span>": "<span class="str">g</span>" }
-  ],
-  "<span class="str">steps</span>": [
-    { "<span class="str">instruction</span>": "<span class="str">Wasser kochen</span>", "<span class="str">duration</span>": <span class="num">10</span> },
-    { "<span class="str">instruction</span>": "<span class="str">Guanciale braten</span>", "<span class="str">duration</span>": <span class="num">5</span> }
-  ],
-  "<span class="str">nutrition</span>": {
-    "<span class="str">calories</span>": <span class="num">580</span>, "<span class="str">protein</span>": <span class="num">22</span>,
-    "<span class="str">carbs</span>": <span class="num">65</span>, "<span class="str">fat</span>": <span class="num">24</span>
-  }
-}</code></pre>
-    </div>
-    <div>
-      <h3 style="font-size:.9rem">Datenfluss im Backend</h3>
-<pre style="font-size:.78rem"><code><span class="ann">@PostMapping</span>("/create")
-<span class="kw">public</span> RecipeResponseDto create(
-    <span class="ann">@RequestBody</span> CreateRecipeRequestDto req,
-    <span class="ann">@AuthenticationPrincipal</span> Users user
-) {
-    <span class="kw">return</span> recipeService.createRecipe(req, user);
-}
-
-<span class="cm">// RecipeService.createRecipe():</span>
-→ categorieRepo.findByName(name)
-→ recipeRepo.save(recipe)
-→ ingredientsRepo.saveAll(ingredients)
-→ cookingStepsRepo.saveAll(steps)
-→ nutritionInfoRepo.save(nutrition)
-→ RecipeResponseDto.fromEntity(recipe)</code></pre>
-      <div style="margin-top:18px">
-        <h3 style="font-size:.9rem">Response</h3>
-<pre><code>{
-  "<span class="str">id</span>": <span class="num">42</span>,
-  "<span class="str">title</span>": "<span class="str">Spaghetti Carbonara</span>",
-  "<span class="str">rating</span>": <span class="num">0.0</span>,
-  "<span class="str">reviewCount</span>": <span class="num">0</span>,
-  "<span class="str">author</span>": { "<span class="str">id</span>": <span class="num">1</span>, "<span class="str">name</span>": "<span class="str">Max</span>" },
-  "<span class="str">category</span>": { "<span class="str">name</span>": "<span class="str">Pasta</span>" },
-  <span class="cm">// ... alle Felder</span>
-}</code></pre>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════
-     SLIDE 8 — REVIEWS + ADMIN + OTHER ENDPOINTS
-     ══════════════════════════════════════════════════ -->
-<section class="slide scrollable bg-grain bg-glow-right" data-slide="8">
-  <div class="slide-tag">08 — Weitere Endpoints</div>
-  <h2>Reviews · Admin · <em>Sonstige</em></h2>
-
-  <div class="two-col" style="gap:24px">
-    <div>
-      <h3>ReviewController — /api/reviews</h3>
-      <div class="card" style="padding:0;overflow:hidden">
-        <div class="ep-row"><span class="pill pill-post">POST</span><div><span class="ep-url">/api/reviews/recipe/{recipeId}</span><br><span class="ep-desc">Bewertung abgeben (1–5 ⭐, Kommentar)</span></div><span class="ep-auth">JWT</span></div>
-        <div class="ep-row"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/reviews/recipe/{recipeId}</span><br><span class="ep-desc">Alle Bewertungen (neueste zuerst)</span></div><span class="ep-auth">PUBLIC</span></div>
-        <div class="ep-row" style="border:none"><span class="pill pill-del">DEL</span><div><span class="ep-url">/api/reviews/recipe/{recipeId}</span><br><span class="ep-desc">Eigene Bewertung löschen</span></div><span class="ep-auth">JWT</span></div>
-      </div>
-
-      <h3 style="margin-top:20px">Sonstige</h3>
-      <div class="card" style="padding:0;overflow:hidden">
-        <div class="ep-row"><span class="pill pill-get">GET</span><span class="ep-url">/api/categories/getAll</span><span class="ep-auth">PUBLIC</span></div>
-        <div class="ep-row"><span class="pill pill-get">GET</span><span class="ep-url">/api/ingridients/getIngredientsWithRecipeId</span><span class="ep-auth">PUBLIC</span></div>
-        <div class="ep-row"><span class="pill pill-get">GET</span><span class="ep-url">/api/nutritionInfo/getNutritionInfoWithRecipeId</span><span class="ep-auth">PUBLIC</span></div>
-        <div class="ep-row"><span class="pill pill-get">GET</span><span class="ep-url">/api/cooking-steps/getCookingStepsWithRecipeId</span><span class="ep-auth">PUBLIC</span></div>
-        <div class="ep-row" style="border:none"><span class="pill pill-get">GET</span><div><span class="ep-url">/</span><br><span class="ep-desc">Health Check</span></div><span class="ep-auth">PUBLIC</span></div>
-      </div>
-    </div>
-    <div>
-      <h3>AdminController — /api/admin</h3>
-      <p style="font-size:.78rem;color:var(--yellow);margin-bottom:10px">⚠ Alle erfordern ADMIN-Rolle</p>
-      <div class="card" style="padding:0;overflow:hidden">
-        <div class="ep-row"><span class="pill pill-get">GET</span><div><span class="ep-url">/api/admin/users</span><br><span class="ep-desc">Alle Benutzer auflisten</span></div><span class="ep-auth">ADMIN</span></div>
-        <div class="ep-row"><span class="pill pill-put">PUT</span><div><span class="ep-url">/api/admin/users/{id}/role</span><br><span class="ep-desc">Rolle ändern (USER/ADMIN)</span></div><span class="ep-auth">ADMIN</span></div>
-        <div class="ep-row"><span class="pill pill-del">DEL</span><div><span class="ep-url">/api/admin/delete-user/{id}</span></div><span class="ep-auth">ADMIN</span></div>
-        <div class="ep-row" style="border:none"><span class="pill pill-del">DEL</span><div><span class="ep-url">/api/admin/delete-recipe/{id}</span></div><span class="ep-auth">ADMIN</span></div>
-      </div>
-
-      <h3 style="margin-top:20px">Beispiel: Review</h3>
-<pre><code><span class="cm">// POST /api/reviews/recipe/42</span>
-{
-  "<span class="str">stars</span>": <span class="num">5</span>,
-  "<span class="str">comment</span>": "<span class="str">Fantastisch!</span>"
-}
-<span class="cm">// → Upsert (Create or Update)</span>
-<span class="cm">// → updateRecipeAggregate()</span>
-<span class="cm">//   → AVG(stars) + COUNT → recipe</span></code></pre>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════
-     SLIDE 9 — DATENBANK
-     ══════════════════════════════════════════════════ -->
-<section class="slide full-bleed bg-grain bg-glow-left" data-slide="9">
-  <div class="slide-tag">09 — Datenbank</div>
-  <h2>ER-Modell — <em>8 Tabellen</em></h2>
+<section class="slide full-bleed bg-grain bg-glow-left" data-slide="5">
+  <div class="slide-tag">05 — Umsetzung: Datenbank</div>
+  <h2>Relationales Datenbankmodel — <em>8 Tabellen</em></h2>
 
   <div class="er-wrap">
   <svg viewBox="0 0 820 440" xmlns="http://www.w3.org/2000/svg" style="width:100%">
@@ -1340,113 +872,331 @@ pre {
 </section>
 
 <!-- ══════════════════════════════════════════════════
-     SLIDE 10 — PROJEKTSTRUKTUR
+  SLIDE 6 — UMSETZUNG: REST API
+  ══════════════════════════════════════════════════ -->
+<section class="slide bg-grain" data-slide="6">
+  <div class="slide-tag">06 — Umsetzung: REST API</div>
+  <h2>27 REST <em>Endpoints</em></h2>
+  <p style="margin-bottom:24px;color:var(--text2);font-size:1.1rem">Gruppiert nach Controller — alle unter <code style="font-size:1rem">/api/</code></p>
+  <div class="stat-grid" style="grid-template-columns:repeat(5,1fr);gap:24px">
+    <div class="stat-card" style="border-top:3px solid var(--accent);padding:38px 22px">
+      <div class="stat-num" style="font-size:3.4rem">11</div>
+      <div class="stat-label" style="font-size:.95rem;margin-top:10px">Recipes</div>
+      <div style="font-size:.72rem;color:var(--text3);margin-top:6px;font-family:var(--font-mono)">CRUD · Suche · Favoriten</div>
+    </div>
+    <div class="stat-card" style="border-top:3px solid var(--yellow);padding:38px 22px">
+      <div class="stat-num" style="font-size:3.4rem">4</div>
+      <div class="stat-label" style="font-size:.95rem;margin-top:10px">Auth</div>
+      <div style="font-size:.72rem;color:var(--text3);margin-top:6px;font-family:var(--font-mono)">Register · Login · Profil</div>
+    </div>
+    <div class="stat-card" style="border-top:3px solid var(--red);padding:38px 22px">
+      <div class="stat-num" style="font-size:3.4rem">4</div>
+      <div class="stat-label" style="font-size:.95rem;margin-top:10px">Admin</div>
+      <div style="font-size:.72rem;color:var(--text3);margin-top:6px;font-family:var(--font-mono)">User · Rollen · Moderation</div>
+    </div>
+    <div class="stat-card" style="border-top:3px solid var(--accent2);padding:38px 22px">
+      <div class="stat-num" style="font-size:3.4rem">3</div>
+      <div class="stat-label" style="font-size:.95rem;margin-top:10px">Reviews</div>
+      <div style="font-size:.72rem;color:var(--text3);margin-top:6px;font-family:var(--font-mono)">Bewertungen · Upsert</div>
+    </div>
+    <div class="stat-card" style="border-top:3px solid var(--green);padding:38px 22px">
+      <div class="stat-num" style="font-size:3.4rem">5</div>
+      <div class="stat-label" style="font-size:.95rem;margin-top:10px">Sonstige</div>
+      <div style="font-size:.72rem;color:var(--text3);margin-top:6px;font-family:var(--font-mono)">Kategorien · Zutaten · etc.</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:18px;margin-top:32px;flex-wrap:wrap;align-items:center">
+    <span class="pill pill-get" style="font-size:.82rem;padding:8px 20px">GET — Lesen</span>
+    <span class="pill pill-post" style="font-size:.82rem;padding:8px 20px">POST — Erstellen</span>
+    <span class="pill pill-put" style="font-size:.82rem;padding:8px 20px">PUT — Aktualisieren</span>
+    <span class="pill pill-del" style="font-size:.82rem;padding:8px 20px">DELETE — Löschen</span>
+    <span style="margin-left:auto;font-family:var(--font-mono);font-size:.75rem;color:var(--text3);align-self:center;background:var(--surface2);padding:8px 16px;border-radius:8px;border:1px solid var(--border)">Auth: — = öffentlich · JWT = Token · ADMIN = Rolle</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+  SLIDE 7 — CODE-BEISPIEL
      ══════════════════════════════════════════════════ -->
-<section class="slide bg-grain bg-glow-left" data-slide="10">
-  <div class="slide-tag">10 — Projektstruktur</div>
-  <h2>Backend <em>Ordnerstruktur</em></h2>
+<section class="slide scrollable bg-grain" data-slide="7">
+  <div class="slide-tag">07 — Code-Beispiel</div>
+  <h2><em>POST</em> /api/recipes/create</h2>
 
-  <div class="two-col" style="gap:32px">
+  <div class="two-col" style="gap:24px;margin-top:8px">
     <div>
-<pre style="font-size:.82rem;line-height:1.8"><code>src/main/java/de/cookBook/backend/
-├── <span class="fn">controller/</span>      <span class="cm">9 REST Controller</span>
-├── <span class="fn">service/</span>         <span class="cm">4 Services (Business-Logik)</span>
-│   ├── AuthService
-│   ├── RecipeService
-│   ├── ReviewService
-│   └── JwtTokenProvider
-├── <span class="fn">repository/</span>      <span class="cm">8 JPA Repositories</span>
-├── <span class="fn">entities/</span>        <span class="cm">8 Entities + 3 Enums</span>
-│   ├── Users, Recipes, Review
-│   ├── Categories, Ingredients
-│   ├── CookingSteps, NutritionInfo
-│   ├── SavedRecipes
-│   └── Role, Difficulty, AuthProvider
-├── <span class="fn">dto/</span>             <span class="cm">14+ DTOs</span>
-├── <span class="fn">config/</span>          <span class="cm">Security, Web, Jackson</span>
-└── <span class="fn">security/</span>        <span class="cm">JWT Filter, OAuth2 Handler</span>
-
-src/main/resources/
-├── application.properties
-└── db/migration/    <span class="cm">V0.0 – V0.7</span></code></pre>
+      <h3 style="font-size:.9rem">Request Body</h3>
+<pre><code>{
+  "<span class="str">title</span>": "<span class="str">Spaghetti Carbonara</span>",
+  "<span class="str">description</span>": "<span class="str">Klassisch italienisch...</span>",
+  "<span class="str">image</span>": "<span class="str">https://res.cloudinary.com/.../img.jpg</span>",
+  "<span class="str">categoryName</span>": "<span class="str">Pasta</span>",
+  "<span class="str">difficulty</span>": "<span class="str">MITTEL</span>",
+  "<span class="str">prepTime</span>": <span class="num">15</span>,
+  "<span class="str">cookTime</span>": <span class="num">20</span>,
+  "<span class="str">servings</span>": <span class="num">4</span>,
+  "<span class="str">tags</span>": ["<span class="str">italienisch</span>", "<span class="str">schnell</span>"],
+  "<span class="str">ingredients</span>": [
+    { "<span class="str">name</span>": "<span class="str">Spaghetti</span>", "<span class="str">amount</span>": <span class="num">400</span>, "<span class="str">unit</span>": "<span class="str">g</span>" },
+    { "<span class="str">name</span>": "<span class="str">Guanciale</span>", "<span class="str">amount</span>": <span class="num">200</span>, "<span class="str">unit</span>": "<span class="str">g</span>" }
+  ],
+  "<span class="str">steps</span>": [
+    { "<span class="str">instruction</span>": "<span class="str">Wasser kochen</span>", "<span class="str">duration</span>": <span class="num">10</span> },
+    { "<span class="str">instruction</span>": "<span class="str">Guanciale braten</span>", "<span class="str">duration</span>": <span class="num">5</span> }
+  ],
+  "<span class="str">nutrition</span>": {
+    "<span class="str">calories</span>": <span class="num">580</span>, "<span class="str">protein</span>": <span class="num">22</span>,
+    "<span class="str">carbs</span>": <span class="num">65</span>, "<span class="str">fat</span>": <span class="num">24</span>
+  }
+}</code></pre>
     </div>
     <div>
-      <h3>Build & Start</h3>
-      <div class="card-sm" style="margin-bottom:12px">
-        <p style="font-size:.82rem;color:var(--text3);margin-bottom:4px">Development</p>
-        <code style="color:var(--green);font-size:.85rem">./gradlew bootRun</code>
-        <p style="font-size:.78rem;color:var(--text3);margin-top:4px">→ Spring Boot auf Port 8080</p>
-      </div>
-      <div class="card-sm" style="margin-bottom:12px">
-        <p style="font-size:.82rem;color:var(--text3);margin-bottom:4px">Production Build</p>
-        <code style="color:var(--green);font-size:.85rem">./gradlew bootJar</code>
-        <p style="font-size:.78rem;color:var(--text3);margin-top:4px">→ build/libs/*.jar</p>
-      </div>
+      <h3 style="font-size:.9rem">Datenfluss im Backend</h3>
+<pre style="font-size:.78rem"><code><span class="ann">@PostMapping</span>("/create")
+<span class="kw">public</span> RecipeResponseDto create(
+    <span class="ann">@RequestBody</span> CreateRecipeRequestDto req,
+    <span class="ann">@AuthenticationPrincipal</span> Users user
+) {
+    <span class="kw">return</span> recipeService.createRecipe(req, user);
+}
 
-      <h3 style="margin-top:24px">Dependencies (build.gradle)</h3>
-      <div class="flex-col gap-xs" style="font-size:.82rem;color:var(--text2)">
-        <div>• Spring Data JPA</div>
-        <div>• Spring Security + OAuth2 Client</div>
-        <div>• PostgreSQL Driver 42.7.7</div>
-        <div>• Flyway Core</div>
-        <div>• jjwt 0.12.5</div>
-        <div>• Jackson Databind</div>
+<span class="cm">// RecipeService.createRecipe():</span>
+→ categorieRepo.findByName(name)
+→ recipeRepo.save(recipe)
+→ ingredientsRepo.saveAll(ingredients)
+→ cookingStepsRepo.saveAll(steps)
+→ nutritionInfoRepo.save(nutrition)
+→ RecipeResponseDto.fromEntity(recipe)</code></pre>
+      <div style="margin-top:18px">
+        <h3 style="font-size:.9rem">Response</h3>
+<pre><code>{
+  "<span class="str">id</span>": <span class="num">42</span>,
+  "<span class="str">title</span>": "<span class="str">Spaghetti Carbonara</span>",
+  "<span class="str">rating</span>": <span class="num">0.0</span>,
+  "<span class="str">reviewCount</span>": <span class="num">0</span>,
+  "<span class="str">author</span>": { "<span class="str">id</span>": <span class="num">1</span>, "<span class="str">name</span>": "<span class="str">Max</span>" },
+  "<span class="str">category</span>": { "<span class="str">name</span>": "<span class="str">Pasta</span>" },
+  <span class="cm">// ... alle Felder</span>
+}</code></pre>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ══════════════════════════════════════════════════
-     SLIDE 11 — FRONTEND (KURZ)
+     SLIDE 8 — UMSETZUNG: SECURITY
      ══════════════════════════════════════════════════ -->
-<section class="slide bg-grain bg-glow-right" data-slide="11">
-  <div class="slide-tag">11 — Frontend</div>
-  <h2>Frontend — <em>Kurzübersicht</em></h2>
+<section class="slide bg-grain bg-glow-right" data-slide="8">
+  <div class="slide-tag">08 — Umsetzung: Security</div>
+  <h2><em>JWT</em> + OAuth2 Authentifizierung</h2>
 
-  <div class="two-col" style="gap:32px">
+  <div class="two-col" style="gap:32px;margin-top:8px">
     <div>
-      <p class="big-p" style="margin-bottom:24px">Das Frontend wurde <strong>größtenteils mit KI-Unterstützung</strong> erstellt und dient als Single-Page-Application für die Interaktion mit der REST API.</p>
-
-      <div class="card-sm" style="margin-bottom:12px">
-        <strong style="color:var(--accent)">Technologie</strong>
-        <p style="font-size:.85rem">Angular 17 (Standalone Components) · Tailwind CSS · Angular Material</p>
+      <h3 style="margin-bottom:16px">Lokaler Login (JWT)</h3>
+      <div class="card-sm" style="border-left:3px solid var(--accent);margin-bottom:10px;padding:14px 18px">
+        <strong style="font-size:.95rem;color:var(--text)">1. POST /api/auth/login</strong>
+        <p style="font-size:.85rem;margin-top:2px">Email + Passwort an Backend</p>
       </div>
-      <div class="card-sm" style="margin-bottom:12px">
-        <strong style="color:var(--accent)">Komponenten</strong>
-        <p style="font-size:.85rem">25+ Komponenten — Rezepte, Auth, Profil, Admin, Suche, UI-Elemente</p>
+      <div class="card-sm" style="border-left:3px solid var(--yellow);margin-bottom:10px;padding:14px 18px">
+        <strong style="font-size:.95rem;color:var(--text)">2. BCrypt.matches()</strong>
+        <p style="font-size:.85rem;margin-top:2px">Passwort gegen Hash vergleichen</p>
       </div>
-      <div class="card-sm" style="margin-bottom:12px">
-        <strong style="color:var(--accent)">API-Kommunikation</strong>
-        <p style="font-size:.85rem">12 Services nutzen HttpClient · Auth-Interceptor fügt JWT hinzu · Error-Interceptor handhabt 401</p>
+      <div class="card-sm" style="border-left:3px solid var(--accent2);margin-bottom:10px;padding:14px 18px">
+        <strong style="font-size:.95rem;color:var(--text)">3. JWT signieren</strong>
+        <p style="font-size:.85rem;margin-top:2px">HMAC-SHA256 · 24h Gültigkeit · enthält userId + role</p>
+      </div>
+      <div class="card-sm" style="border-left:3px solid var(--green);margin-bottom:10px;padding:14px 18px">
+        <strong style="font-size:.95rem;color:var(--text)">4. Token an Client</strong>
+        <p style="font-size:.85rem;margin-top:2px">Frontend speichert Token im LocalStorage</p>
+      </div>
+      <div class="card-sm" style="border-left:3px solid var(--accent);padding:14px 18px">
+        <strong style="font-size:.95rem;color:var(--text)">5. Folgende Requests</strong>
+        <p style="font-size:.85rem;margin-top:2px"><code>Authorization: Bearer ...</code> → JwtAuthFilter → SecurityContext</p>
       </div>
     </div>
     <div>
-      <div class="card-sm" style="margin-bottom:12px">
-        <strong style="color:var(--accent)">Routing</strong>
-        <p style="font-size:.85rem">Öffentliche Routen (Home, Rezeptdetail, Suche), geschützte Routen mit Guards (Profil, Create, Saved, Admin)</p>
-      </div>
-      <div class="card-sm" style="margin-bottom:12px">
-        <strong style="color:var(--accent)">Guards</strong>
-        <p style="font-size:.85rem">authGuard · adminGuard · guestGuard · pendingChangesGuard</p>
-      </div>
-      <div class="card-sm">
-        <strong style="color:var(--accent)">Bild-Upload</strong>
-        <p style="font-size:.85rem">Direkt zu Cloudinary — 5MB Limit, Frontend-seitige Validierung</p>
-      </div>
+      <h3 style="margin-bottom:16px">Google OAuth2</h3>
+      <ol style="font-size:.95rem;line-height:1.85;padding-left:18px">
+        <li>User klickt <strong>"Mit Google anmelden"</strong> → <code>/oauth2/authorization/google</code></li>
+        <li>Weiterleitung zum <strong>Google Consent Screen</strong></li>
+        <li>Callback an Backend mit Access Token</li>
+        <li><strong>CustomOAuth2SuccessHandler</strong> liest User-Info aus</li>
+        <li><strong>Upsert</strong> in DB (auth_provider = GOOGLE)</li>
+        <li>Eigener <strong>JWT</strong> wird generiert</li>
+        <li>Redirect zu Frontend mit Token im Query-Param</li>
+      </ol>
 
-      <div style="margin-top:28px;padding:18px 22px;background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.15);border-radius:10px">
-        <p style="font-size:.85rem;color:var(--accent)"><strong>Hinweis:</strong> Der Fokus dieser Präsentation liegt auf dem Backend. Das Frontend wurde überwiegend mit KI-Tools generiert und wird hier nur der Vollständigkeit halber erwähnt.</p>
+      <h3 style="margin-top:24px;margin-bottom:14px">Security-Schichten</h3>
+      <div class="flex-col gap-xs">
+        <div class="card-sm" style="padding:10px 16px;font-size:.92rem"><strong style="color:var(--accent)">BCrypt</strong> — Passwort-Hashing mit Salt</div>
+        <div class="card-sm" style="padding:10px 16px;font-size:.92rem"><strong style="color:var(--yellow)">JWT</strong> — Stateless · 24h · HMAC-SHA256</div>
+        <div class="card-sm" style="padding:10px 16px;font-size:.92rem"><strong style="color:var(--accent2)">@PreAuthorize</strong> — Method-Level Security</div>
+        <div class="card-sm" style="padding:10px 16px;font-size:.92rem"><strong style="color:var(--green)">Rollen</strong> — USER · ADMIN (in JWT enthalten)</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ══════════════════════════════════════════════════
-     SLIDE 12 — FAZIT
+     SLIDE 9 — AUFGETRETENE PROBLEME
+     ══════════════════════════════════════════════════ -->
+<section class="slide scrollable bg-grain bg-glow-left" data-slide="9">
+  <div class="slide-tag">09 — Aufgetretene Probleme</div>
+  <h2><em>Herausforderungen</em> & Lösungen</h2>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px">
+    <div class="card-sm" style="border-left:4px solid var(--red);padding:20px 24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:1.6rem">🔑</span>
+        <strong style="color:var(--red);font-size:1.05rem">Spring Boot Projekt aufsetzen</strong>
+      </div>
+      <p style="font-size:.88rem"><strong>Problem:</strong> Erstmal verstehen, wie man ein Spring Boot Projekt mit Gradle, PostgreSQL und den richtigen Dependencies sauber erstellt.</p>
+      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Offizielle Dokumentationen gelesen, viele kleine Konfigurationen ausprobiert und das Projekt Schritt für Schritt lauffähig gemacht.</p>
+    </div>
+
+    <div class="card-sm" style="border-left:4px solid var(--yellow);padding:20px 24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:1.6rem">🌐</span>
+        <strong style="color:var(--yellow);font-size:1.05rem">Datenbank verbinden</strong>
+      </div>
+      <p style="font-size:.88rem"><strong>Problem:</strong> Datenbank-URL, Benutzer, Passwort und Treiber mussten exakt stimmen, sonst startete das Backend nicht.</p>
+      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Einstellungen in <code>application.properties</code> Schritt für Schritt geprüft und die Fehlermeldungen beim Start gezielt ausgewertet.</p>
+    </div>
+
+    <div class="card-sm" style="border-left:4px solid var(--accent);padding:20px 24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:1.6rem">⚡</span>
+        <strong style="color:var(--accent);font-size:1.05rem">Tabellen richtig verknüpfen</strong>
+      </div>
+      <p style="font-size:.88rem"><strong>Problem:</strong> Beziehungen zwischen Rezepten, Zutaten, Schritten und Kategorien mussten in JPA zuerst korrekt verstanden werden.</p>
+      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Mit kleinen Tests und einzelnen Entities gearbeitet, bis die Verknüpfungen in Datenbank und Backend sauber funktioniert haben.</p>
+    </div>
+
+    <div class="card-sm" style="border-left:4px solid var(--accent2);padding:20px 24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:1.6rem">⭐</span>
+        <strong style="color:var(--accent2);font-size:1.05rem">REST-API testen</strong>
+      </div>
+      <p style="font-size:.88rem"><strong>Problem:</strong> Request- und Response-Daten mussten genau zum Frontend passen, sonst gab es sofort Fehler bei Formularen und Anzeige.</p>
+      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Endpoints mit Postman getestet, DTOs angepasst und die JSON-Struktur mehrfach nachgebessert.</p>
+    </div>
+
+    <div class="card-sm" style="border-left:4px solid var(--green);padding:20px 24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:1.6rem">🗄</span>
+        <strong style="color:var(--green);font-size:1.05rem">Validierung von Eingaben</strong>
+      </div>
+      <p style="font-size:.88rem"><strong>Problem:</strong> Nutzer konnten leere oder unvollständige Daten senden, was schnell zu Fehlern im Backend geführt hat.</p>
+      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Pflichtfelder klar definiert, Eingaben geprüft und verständliche Fehlermeldungen für falsche Daten ergänzt.</p>
+    </div>
+
+    <div class="card-sm" style="border-left:4px solid #b97aff;padding:20px 24px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:1.6rem">🖼</span>
+        <strong style="color:#b97aff;font-size:1.05rem">Bilder-Upload</strong>
+      </div>
+      <p style="font-size:.88rem"><strong>Problem:</strong> Bilder-Speicherung auf eigenem Server hätte Skalierung & Backups verkompliziert.</p>
+      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Cloudinary als externen CDN — Backend speichert nur die URL.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     SLIDE 10 — LESSONS LEARNED
+     ══════════════════════════════════════════════════ -->
+<section class="slide bg-grain bg-glow-right" data-slide="10">
+  <div class="slide-tag">10 — Lessons Learned</div>
+  <h2>Was ich <em>gelernt</em> habe</h2>
+
+  <div class="three-col" style="gap:22px;margin-top:8px">
+    <div class="card" style="border-top:3px solid var(--accent);padding:22px 24px">
+      <h3 style="font-size:1.1rem;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px">🏗 Architektur</h3>
+      <ul style="font-size:.95rem;line-height:1.75">
+        <li><strong>DTO-Pattern lohnt sich</strong> — Entities nicht direkt nach außen geben</li>
+        <li><strong>Constructor Injection</strong> klarer als <code>@Autowired</code></li>
+        <li><strong>Schichten trennen</strong> spart später viel Refactoring</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--accent2);padding:22px 24px">
+      <h3 style="font-size:1.1rem;color:var(--accent2);margin-bottom:14px;display:flex;align-items:center;gap:8px">🔧 Praxis</h3>
+      <ul style="font-size:.95rem;line-height:1.75">
+        <li><strong>Flyway von Anfang an</strong> — kein manuelles Schema-Management</li>
+        <li><strong>Security früh konzipieren</strong> — nachträglich ist es schmerzhaft</li>
+        <li><strong>Konsistente API-Pfade</strong> sparen Doku</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--green);padding:22px 24px">
+      <h3 style="font-size:1.1rem;color:var(--green);margin-bottom:14px;display:flex;align-items:center;gap:8px">💡 Mindset</h3>
+      <ul style="font-size:.95rem;line-height:1.75">
+        <li><strong>Funktional first</strong> — Performance kommt später</li>
+        <li><strong>Aussagekräftige Commits</strong> = nachträgliche Doku</li>
+        <li><strong>Iterativ statt perfekt</strong> — kleine, testbare Schritte</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top:30px;padding:24px 32px;background:linear-gradient(135deg,rgba(255,107,53,.08),rgba(53,199,255,.05));border:1px solid rgba(255,107,53,.2);border-radius:14px">
+    <h3 style="margin-bottom:10px;color:var(--text);font-size:1.15rem">Wichtigste Erkenntnis</h3>
+    <p style="font-size:1.05rem;color:var(--text2);line-height:1.7">
+      Eine <strong>solide Backend-Basis</strong> — sauberes Datenmodell, klare REST-Konventionen, früh integrierte Security —
+      macht alle nachfolgenden Arbeiten (Frontend, neue Features, Bugfixes) deutlich einfacher.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     SLIDE 11 — KI IM PROJEKT
+     ══════════════════════════════════════════════════ -->
+<section class="slide bg-grain bg-glow-left" data-slide="11">
+  <div class="slide-tag">11 — KI im Projekt</div>
+  <h2>Wo half <em>KI</em> — wo nicht?</h2>
+
+  <div class="two-col" style="gap:32px;margin-top:8px">
+    <div style="background:rgba(61,220,132,.04);border:1px solid rgba(61,220,132,.2);border-radius:14px;padding:26px 28px">
+      <h3 style="color:var(--green);font-size:1.3rem;margin-bottom:18px;display:flex;align-items:center;gap:10px">
+        <span style="font-size:1.8rem">✅</span> KI war stark bei…
+      </h3>
+      <ul style="font-size:1rem;line-height:1.8">
+        <li><strong>Frontend (Angular)</strong> — Großteil der UI-Komponenten generiert</li>
+        <li><strong>Boilerplate-Code</strong> — DTOs, Repository-Interfaces, Mappers</li>
+        <li><strong>Tailwind CSS</strong> — Klassennamen & Layouts</li>
+        <li><strong>Testfall-Skelette</strong> — Setup für JUnit-Tests</li>
+        <li><strong>Refactoring-Vorschläge</strong> — Code-Smells finden</li>
+        <li><strong>Dokumentation</strong> — README, Kommentare</li>
+        <li><strong>Schnelle Recherche</strong> — Spring-API-Methoden finden</li>
+        <li><strong>Stacktrace-Debugging</strong> — Fehler schnell deuten</li>
+      </ul>
+    </div>
+
+    <div style="background:rgba(255,71,87,.04);border:1px solid rgba(255,71,87,.2);border-radius:14px;padding:26px 28px">
+      <h3 style="color:var(--red);font-size:1.3rem;margin-bottom:18px;display:flex;align-items:center;gap:10px">
+        <span style="font-size:1.8rem">❌</span> KI war schwach bei…
+      </h3>
+      <ul style="font-size:1rem;line-height:1.8">
+        <li><strong>Architekturentscheidungen</strong> — Schichten, Verantwortlichkeiten</li>
+        <li><strong>Datenmodell-Design</strong> — Beziehungen, Normalisierung</li>
+        <li><strong>Security-Konzept</strong> — JWT vs. Session, Token-Lifetimes</li>
+        <li><strong>OAuth2-Integration</strong> — komplexe Spring-Config, oft falsche Vorschläge</li>
+        <li><strong>Domain-spezifische Bugs</strong> — kennt den Kontext nicht</li>
+        <li><strong>DB-Migrations-Strategie</strong> — produktionsreife Disziplin</li>
+        <li><strong>Performance-Tuning</strong> — N+1 Erkennung braucht Verständnis</li>
+        <li><strong>"Big Picture"</strong> — sieht oft nicht den größeren Plan</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;padding:20px 28px;background:rgba(255,194,51,.06);border-left:4px solid var(--yellow);border-radius:10px">
+    <p style="font-size:1.02rem;color:var(--text2);line-height:1.7">
+      <strong style="color:var(--yellow)">Mein Fazit:</strong> KI ist ein hervorragender <em>Beschleuniger</em> für bekannte Patterns,
+      aber <strong>kein Ersatz</strong> für eigene Architektur-Verantwortung. <strong>Ich</strong> habe die Entscheidungen getroffen — KI hat sie umgesetzt.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     SLIDE 12 — FAZIT + LIVE DEMO
      ══════════════════════════════════════════════════ -->
 <section class="slide title-slide bg-grain bg-glow-left bg-glow-right" data-slide="12">
-  <div class="slide-tag">Fazit & Ausblick</div>
-  <h1 style="font-size:3.8rem;margin-bottom:12px">Zusammen<wbr>fassung</h1>
+  <div class="slide-tag">12 — Fazit & Live Demo</div>
+  <h1 style="font-size:3.8rem;margin-bottom:12px">Vielen <em>Dank</em></h1>
   <p class="subtitle" style="max-width:680px;margin:0 auto 36px;font-size:1.15rem;color:var(--text2)">Ein vollständiges Backend mit modernem Tech Stack</p>
 
   <div style="max-width:800px;margin:0 auto;text-align:left">
@@ -1470,26 +1220,18 @@ src/main/resources/
     </div>
 
     <!-- Live Demo CTA -->
-    <div style="text-align:center;margin-top:8px;position:relative">
+    <div style="text-align:center;margin-top:8px">
       <a class="demo-btn" id="demoBtn" href="http://localhost:4200" target="_blank" rel="noopener">
-        <!-- Holographic shimmer layer -->
-        <div class="demo-shimmer"></div>
-        <!-- Ambient orbs -->
-        <div class="demo-orb" style="width:6px;height:6px;background:var(--accent);top:-8px;left:15%;--dx:8px;--dy:-12px;--dur:4s;--s2:1.5"></div>
-        <div class="demo-orb" style="width:4px;height:4px;background:var(--accent2);top:20%;right:-6px;--dx:-6px;--dy:10px;--dur:5s;--s2:0.7"></div>
-        <div class="demo-orb" style="width:5px;height:5px;background:var(--green);bottom:-6px;right:25%;--dx:12px;--dy:8px;--dur:6s;--s2:1.2"></div>
-        <div class="demo-orb" style="width:3px;height:3px;background:var(--yellow);bottom:30%;left:-5px;--dx:5px;--dy:-8px;--dur:3.5s;--s2:1.8"></div>
-        <!-- Content -->
-        <span class="demo-icon" style="position:relative;z-index:1">🚀</span>
-        <div style="text-align:left;position:relative;z-index:1">
-          <div class="demo-title" style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--text);letter-spacing:-.5px;transition:text-shadow .4s ease">Live Demo starten</div>
+        <span class="demo-icon">🚀</span>
+        <div style="text-align:left">
+          <div style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--text);letter-spacing:-.5px">Live Demo starten</div>
           <div style="font-size:.88rem;color:var(--text2);margin-top:2px">localhost:4200 — Anwendung öffnen</div>
         </div>
-        <span class="demo-arrow" style="font-size:1.2rem;color:var(--text3);margin-left:8px;opacity:.6;position:relative;z-index:1">↗</span>
+        <span style="font-size:1.1rem;color:var(--text3);margin-left:8px">↗</span>
       </a>
     </div>
   </div>
-  <p class="meta" style="margin-top:44px">CookBook Backend — Juni 2026</p>
+  <p class="meta" style="margin-top:44px">CookBook — Abschlussprojekt Juni 2026</p>
 </section>
 
 </div><!-- /deck -->
@@ -1525,8 +1267,8 @@ function next() { goTo(current + 1); }
 function prev() { goTo(current - 1); }
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
-  if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); next(); }
+  if (e.key === 'ArrowLeft' || e.key === 'Backspace') { e.preventDefault(); prev(); }
   if (e.key === 'Home') { e.preventDefault(); goTo(0); }
   if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
 });
@@ -1542,181 +1284,81 @@ document.addEventListener('touchend', e => {
 // Init
 goTo(0);
 
-// Live Demo button — PRO MAX cinematic launch sequence
+// Live Demo button — cinematic launch
 document.getElementById('demoBtn').addEventListener('click', function(e) {
   e.preventDefault();
   const btn = this;
   if (btn.classList.contains('launching')) return;
-
   const rect = btn.getBoundingClientRect();
-  const cx = e.clientX || rect.left + rect.width/2;
-  const cy = e.clientY || rect.top + rect.height/2;
-  const lx = cx - rect.left;
-  const ly = cy - rect.top;
+  const cx = e.clientX, cy = e.clientY;
+  const lx = cx - rect.left, ly = cy - rect.top;
 
   btn.classList.add('launching');
 
-  const colors = ['#ff6b35','#35c7ff','#3ddc84','#ffc233','#ff4757','#fff','#d2a8ff'];
+  // 1) Shockwave ring from click point
+  const shock = document.createElement('div');
+  shock.className = 'demo-shockwave';
+  const shockSize = 60;
+  Object.assign(shock.style, {
+    width: shockSize+'px', height: shockSize+'px',
+    left: (lx - shockSize/2)+'px', top: (ly - shockSize/2)+'px'
+  });
+  btn.appendChild(shock);
 
-  // Helper: create element inside btn
-  function spawn(cls, styles, parent) {
-    const el = document.createElement('div');
-    el.className = cls;
-    Object.assign(el.style, styles || {});
-    (parent || btn).appendChild(el);
-    return el;
+  // 2) Particle explosion (20 particles)
+  const colors = ['#ff6b35','#35c7ff','#3ddc84','#ffc233','#ff4757','#fff'];
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'demo-particle';
+    const angle = (Math.PI * 2 / 20) * i + (Math.random() - .5) * .4;
+    const dist = 60 + Math.random() * 100;
+    Object.assign(p.style, {
+      left: lx+'px', top: ly+'px',
+      width: (3 + Math.random()*4)+'px', height: (3 + Math.random()*4)+'px',
+      background: colors[Math.floor(Math.random()*colors.length)],
+      boxShadow: '0 0 6px '+colors[Math.floor(Math.random()*colors.length)],
+      '--tx': Math.cos(angle)*dist+'px',
+      '--ty': Math.sin(angle)*dist+'px',
+      '--dur': (.5 + Math.random()*.5)+'s'
+    });
+    btn.appendChild(p);
   }
 
-  // ━━━ PHASE 1: CHARGE-UP (0–400ms) ━━━
-  // Countdown ring + charge animation
-  btn.classList.add('charging');
-  spawn('demo-countdown-ring', {});
-  const statusText = spawn('demo-status-text', {}, btn.parentElement);
-  statusText.textContent = '▶ INITIATING...';
-
-  // ━━━ PHASE 2: RUMBLE + PARTICLES CHARGE (400–650ms) ━━━
-  setTimeout(() => {
-    btn.classList.remove('charging');
-    btn.classList.add('rumbling');
-
-    // Inward-sucking particles (converge to center)
-    for (let i = 0; i < 12; i++) {
-      const angle = (Math.PI * 2 / 12) * i;
-      const startDist = 80 + Math.random() * 60;
-      const startX = lx + Math.cos(angle) * startDist;
-      const startY = ly + Math.sin(angle) * startDist;
-      spawn('demo-particle', {
-        left: startX + 'px',
-        top: startY + 'px',
-        width: '3px', height: '3px',
-        background: colors[Math.floor(Math.random() * colors.length)],
-        boxShadow: '0 0 8px ' + colors[Math.floor(Math.random() * colors.length)],
-        '--tx': (lx - startX) + 'px',
-        '--ty': (ly - startY) + 'px',
-        '--dur': '.35s'
-      });
-    }
-  }, 400);
-
-  // ━━━ PHASE 3: BLAST (650–1000ms) ━━━
-  setTimeout(() => {
-    btn.classList.remove('rumbling');
-    btn.classList.add('blasting');
-
-    // Triple shockwave rings
-    const shockSize = 70;
-    ['primary', 'secondary', 'tertiary'].forEach(tier => {
-      spawn('demo-shockwave demo-shockwave--' + tier, {
-        width: shockSize + 'px', height: shockSize + 'px',
-        left: (lx - shockSize/2) + 'px', top: (ly - shockSize/2) + 'px'
-      });
+  // 3) Speed / warp lines
+  for (let i = 0; i < 8; i++) {
+    const line = document.createElement('div');
+    line.className = 'demo-warp-line';
+    const y = 10 + Math.random() * (rect.height - 20);
+    Object.assign(line.style, {
+      left: (lx + 20)+'px', top: y+'px',
+      width: (40 + Math.random()*80)+'px',
+      '--tx': (80 + Math.random()*120)+'px',
+      '--dur': (.3 + Math.random()*.3)+'s',
+      animationDelay: (Math.random()*.2)+'s',
+      opacity: (.4 + Math.random()*.6)
     });
+    btn.appendChild(line);
+  }
 
-    // Energy beams (12 radial)
-    for (let i = 0; i < 12; i++) {
-      const angle = (360 / 12) * i;
-      spawn('demo-beam', {
-        left: lx + 'px', top: ly + 'px',
-        width: (60 + Math.random() * 80) + 'px',
-        '--angle': angle + 'deg',
-        '--dist': (40 + Math.random() * 60) + 'px',
-        '--beam-color': colors[i % colors.length],
-        '--dur': (.3 + Math.random() * .3) + 's',
-        animationDelay: (Math.random() * .1) + 's',
-        opacity: (.4 + Math.random() * .6).toString()
-      });
-    }
-
-    // Massive particle explosion (35 particles)
-    for (let i = 0; i < 35; i++) {
-      const angle = (Math.PI * 2 / 35) * i + (Math.random() - .5) * .5;
-      const dist = 70 + Math.random() * 140;
-      const isTrail = Math.random() > .5;
-      const size = 2 + Math.random() * 5;
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      spawn(isTrail ? 'demo-particle demo-particle--trail' : 'demo-particle', {
-        left: lx + 'px', top: ly + 'px',
-        width: size + 'px', height: (isTrail ? size * .5 : size) + 'px',
-        background: color,
-        boxShadow: '0 0 ' + (6 + Math.random() * 10) + 'px ' + color,
-        '--tx': Math.cos(angle) * dist + 'px',
-        '--ty': Math.sin(angle) * dist + 'px',
-        '--dur': (.5 + Math.random() * .7) + 's',
-        '--angle': (angle * 180 / Math.PI) + 'deg',
-        '--w': size + 'px'
-      });
-    }
-
-    // Plasma trail blobs (behind rocket path)
-    for (let i = 0; i < 6; i++) {
-      const progress = i / 6;
-      const trailX = lx + progress * 120;
-      const trailY = ly - progress * 100;
-      setTimeout(() => {
-        spawn('demo-plasma-trail', {
-          left: (trailX - 15) + 'px', top: (trailY - 15) + 'px',
-          width: '30px', height: '30px',
-          '--dur': (.4 + Math.random() * .3) + 's'
-        });
-      }, i * 60);
-    }
-
-    // Speed / warp lines
-    for (let i = 0; i < 12; i++) {
-      const y = 5 + Math.random() * (rect.height - 10);
-      spawn('demo-warp-line', {
-        left: (lx + 10) + 'px', top: y + 'px',
-        width: (30 + Math.random() * 90) + 'px',
-        '--tx': (60 + Math.random() * 150) + 'px',
-        '--dur': (.25 + Math.random() * .35) + 's',
-        animationDelay: (Math.random() * .15) + 's',
-        opacity: (.3 + Math.random() * .7).toString()
-      });
-    }
-  }, 650);
-
-  // ━━━ PHASE 4: SCREEN EFFECTS (850ms) ━━━
+  // 4) Full-screen flash at 500ms
   setTimeout(() => {
-    // Multi-layered screen flash
     const flash = document.createElement('div');
     flash.className = 'demo-flash';
-    flash.style.setProperty('--cx', cx + 'px');
-    flash.style.setProperty('--cy', cy + 'px');
+    flash.style.setProperty('--cx', cx+'px');
+    flash.style.setProperty('--cy', cy+'px');
     document.body.appendChild(flash);
-    setTimeout(() => flash.remove(), 900);
+    setTimeout(() => flash.remove(), 700);
+  }, 500);
 
-    // Gravitational ripple rings (3 expanding)
-    for (let i = 0; i < 3; i++) {
-      const ripple = document.createElement('div');
-      ripple.className = 'demo-ripple';
-      const rippleSize = 200 + i * 150;
-      Object.assign(ripple.style, {
-        width: rippleSize + 'px', height: rippleSize + 'px',
-        left: (cx - rippleSize/2) + 'px', top: (cy - rippleSize/2) + 'px',
-        animationDelay: (i * .12) + 's'
-      });
-      document.body.appendChild(ripple);
-      setTimeout(() => ripple.remove(), 1400);
-    }
-
-    // Aurora afterglow
-    const aurora = document.createElement('div');
-    aurora.className = 'demo-aurora';
-    document.body.appendChild(aurora);
-    setTimeout(() => aurora.remove(), 1600);
-  }, 850);
-
-  // ━━━ PHASE 5: OPEN + RESET (1100ms) ━━━
+  // 5) Open tab after full animation
   setTimeout(() => {
     window.open('http://localhost:4200', '_blank');
-
-    // Graceful reset
+    // Reset
     setTimeout(() => {
-      btn.classList.remove('launching', 'blasting');
-      btn.querySelectorAll('.demo-shockwave,.demo-particle,.demo-warp-line,.demo-beam,.demo-plasma-trail,.demo-countdown-ring').forEach(el => el.remove());
-      if (statusText.parentElement) statusText.remove();
-    }, 500);
-  }, 1100);
+      btn.classList.remove('launching');
+      btn.querySelectorAll('.demo-shockwave,.demo-particle,.demo-warp-line').forEach(el => el.remove());
+    }, 300);
+  }, 900);
 });
 </script>
 </body>
