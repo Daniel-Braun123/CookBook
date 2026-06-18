@@ -653,10 +653,6 @@ pre {
         <li><strong>KI-Unterstützung</strong> — vor allem beim ersten Frontend-Entwurf und später bei Security/Auth</li>
         <li><strong>Postman</strong> — Manuelle API-Tests pro Endpoint</li>
       </ul>
-      <div style="margin-top:22px;padding:18px 22px;background:rgba(255,107,53,.06);border-left:4px solid var(--accent);border-radius:10px">
-        <strong style="color:var(--accent);font-size:.95rem">Leitprinzip</strong>
-        <p style="font-size:.95rem;margin-top:6px">Erst Idee und Datenmodell klären, dann einen UI-Entwurf aufbauen und die Anwendung danach iterativ über Backend-Endpoints und Frontend-Erweiterungen vervollständigen. Security kam bewusst zum Schluss.</p>
-      </div>
     </div>
   </div>
 </section>
@@ -981,10 +977,56 @@ pre {
 </section>
 
 <!-- ══════════════════════════════════════════════════
-     SLIDE 8 — UMSETZUNG: SECURITY
+     SLIDE 8 — CODE: EINFACHER GET-ENDPOINT
      ══════════════════════════════════════════════════ -->
 <section class="slide bg-grain bg-glow-right" data-slide="8">
-  <div class="slide-tag">08 — Umsetzung: Security</div>
+  <div class="slide-tag">08 — Code-Beispiel: GET</div>
+  <h2><em>GET</em> /api/recipes/getRecipeById</h2>
+
+  <div class="two-col" style="gap:32px;margin-top:8px">
+    <div>
+      <h3 style="font-size:.9rem">Controller</h3>
+<pre><code><span class="ann">@GetMapping</span>("/getRecipeById")
+<span class="kw">public</span> RecipeResponseDto getRecipeById(
+    <span class="ann">@RequestParam</span> String recipeId
+) {
+    <span class="kw">return</span> recipeService.toResponse(
+        recipeRepository.getRecipeById(recipeId)
+    );
+}</code></pre>
+
+      <h3 style="font-size:.9rem;margin-top:18px">Aufruf vom Frontend</h3>
+<pre style="font-size:.82rem"><code><span class="cm">// Beispiel-URL:</span>
+GET /api/recipes/getRecipeById?recipeId=<span class="num">42</span></code></pre>
+    </div>
+
+    <div>
+      <h3 style="margin-bottom:14px">Was passiert hier?</h3>
+      <div class="card-sm" style="border-left:3px solid var(--accent);margin-bottom:10px;padding:14px 18px">
+        <strong style="font-size:.95rem;color:var(--text)"><code>@GetMapping</code></strong>
+        <p style="font-size:.85rem;margin-top:2px">Spring sagt: „Dieser Endpoint reagiert auf HTTP-GET unter <code>/getRecipeById</code>."</p>
+      </div>
+      <div class="card-sm" style="border-left:3px solid var(--accent2);margin-bottom:10px;padding:14px 18px">
+        <strong style="font-size:.95rem;color:var(--text)"><code>@RequestParam</code></strong>
+        <p style="font-size:.85rem;margin-top:2px">Liest den Wert <code>recipeId</code> aus der URL und gibt ihn als String in die Methode.</p>
+      </div>
+      <div class="card-sm" style="border-left:3px solid var(--green);margin-bottom:10px;padding:14px 18px">
+        <strong style="font-size:.95rem;color:var(--text)">Repository</strong>
+        <p style="font-size:.85rem;margin-top:2px">Holt das Rezept aus der Datenbank — die SQL erzeugt Spring automatisch.</p>
+      </div>
+      <div class="card-sm" style="border-left:3px solid var(--yellow);padding:14px 18px">
+        <strong style="font-size:.95rem;color:var(--text)">DTO als Response</strong>
+        <p style="font-size:.85rem;margin-top:2px">Die Entity wird in ein <code>RecipeResponseDto</code> gemappt und als JSON zurück an den Client gesendet.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     SLIDE 9 — UMSETZUNG: SECURITY
+     ══════════════════════════════════════════════════ -->
+<section class="slide bg-grain bg-glow-right" data-slide="9">
+  <div class="slide-tag">09 — Umsetzung: Security</div>
   <h2><em>JWT</em> + OAuth2 Authentifizierung</h2>
 
   <div class="two-col" style="gap:32px;margin-top:8px">
@@ -1012,18 +1054,7 @@ pre {
       </div>
     </div>
     <div>
-      <h3 style="margin-bottom:16px">Google OAuth2</h3>
-      <ol style="font-size:.95rem;line-height:1.85;padding-left:18px">
-        <li>User klickt <strong>"Mit Google anmelden"</strong> → <code>/oauth2/authorization/google</code></li>
-        <li>Weiterleitung zum <strong>Google Consent Screen</strong></li>
-        <li>Callback an Backend mit Access Token</li>
-        <li><strong>CustomOAuth2SuccessHandler</strong> liest User-Info aus</li>
-        <li><strong>Upsert</strong> in DB (auth_provider = GOOGLE)</li>
-        <li>Eigener <strong>JWT</strong> wird generiert</li>
-        <li>Redirect zu Frontend mit Token im Query-Param</li>
-      </ol>
-
-      <h3 style="margin-top:24px;margin-bottom:14px">Security-Schichten</h3>
+      <h3 style="margin-bottom:14px">Security-Schichten</h3>
       <div class="flex-col gap-xs">
         <div class="card-sm" style="padding:10px 16px;font-size:.92rem"><strong style="color:var(--accent)">BCrypt</strong> — Passwort-Hashing mit Salt</div>
         <div class="card-sm" style="padding:10px 16px;font-size:.92rem"><strong style="color:var(--yellow)">JWT</strong> — Stateless · 24h · HMAC-SHA256</div>
@@ -1035,10 +1066,10 @@ pre {
 </section>
 
 <!-- ══════════════════════════════════════════════════
-     SLIDE 9 — AUFGETRETENE PROBLEME
+     SLIDE 10 — AUFGETRETENE PROBLEME
      ══════════════════════════════════════════════════ -->
-<section class="slide scrollable bg-grain bg-glow-left" data-slide="9">
-  <div class="slide-tag">09 — Aufgetretene Probleme</div>
+<section class="slide scrollable bg-grain bg-glow-left" data-slide="10">
+  <div class="slide-tag">10 — Aufgetretene Probleme</div>
   <h2><em>Herausforderungen</em> & Lösungen</h2>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px">
@@ -1047,8 +1078,8 @@ pre {
         <span style="font-size:1.6rem">🔑</span>
         <strong style="color:var(--red);font-size:1.05rem">Spring Boot Projekt aufsetzen</strong>
       </div>
-      <p style="font-size:.88rem"><strong>Problem:</strong> Erstmal verstehen, wie man ein Spring Boot Projekt mit Gradle, PostgreSQL und den richtigen Dependencies sauber erstellt.</p>
-      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Offizielle Dokumentationen gelesen, viele kleine Konfigurationen ausprobiert und das Projekt Schritt für Schritt lauffähig gemacht.</p>
+      <p style="font-size:.88rem"><strong>Problem:</strong> Setup mit Gradle, PostgreSQL & Dependencies.</p>
+      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Doku gelesen, Schritt für Schritt lauffähig gemacht.</p>
     </div>
 
     <div class="card-sm" style="border-left:4px solid var(--yellow);padding:20px 24px">
@@ -1056,8 +1087,8 @@ pre {
         <span style="font-size:1.6rem">🌐</span>
         <strong style="color:var(--yellow);font-size:1.05rem">Datenbank verbinden</strong>
       </div>
-      <p style="font-size:.88rem"><strong>Problem:</strong> Datenbank-URL, Benutzer, Passwort und Treiber mussten exakt stimmen, sonst startete das Backend nicht.</p>
-      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Einstellungen in <code>application.properties</code> Schritt für Schritt geprüft und die Fehlermeldungen beim Start gezielt ausgewertet.</p>
+      <p style="font-size:.88rem"><strong>Problem:</strong> URL, User, Passwort & Treiber mussten stimmen.</p>
+      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> <code>application.properties</code> geprüft, Fehler ausgewertet.</p>
     </div>
 
     <div class="card-sm" style="border-left:4px solid var(--accent);padding:20px 24px">
@@ -1065,8 +1096,8 @@ pre {
         <span style="font-size:1.6rem">⚡</span>
         <strong style="color:var(--accent);font-size:1.05rem">Tabellen richtig verknüpfen</strong>
       </div>
-      <p style="font-size:.88rem"><strong>Problem:</strong> Beziehungen zwischen Rezepten, Zutaten, Schritten und Kategorien mussten in JPA zuerst korrekt verstanden werden.</p>
-      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Mit kleinen Tests und einzelnen Entities gearbeitet, bis die Verknüpfungen in Datenbank und Backend sauber funktioniert haben.</p>
+      <p style="font-size:.88rem"><strong>Problem:</strong> JPA-Beziehungen erstmal verstehen.</p>
+      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Mit kleinen Test-Entities geübt.</p>
     </div>
 
     <div class="card-sm" style="border-left:4px solid var(--accent2);padding:20px 24px">
@@ -1074,8 +1105,8 @@ pre {
         <span style="font-size:1.6rem">⭐</span>
         <strong style="color:var(--accent2);font-size:1.05rem">REST-API testen</strong>
       </div>
-      <p style="font-size:.88rem"><strong>Problem:</strong> Request- und Response-Daten mussten genau zum Frontend passen, sonst gab es sofort Fehler bei Formularen und Anzeige.</p>
-      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Endpoints mit Postman getestet, DTOs angepasst und die JSON-Struktur mehrfach nachgebessert.</p>
+      <p style="font-size:.88rem"><strong>Problem:</strong> Requests & Responses mussten zum Frontend passen.</p>
+      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Mit Postman getestet, DTOs angepasst.</p>
     </div>
 
     <div class="card-sm" style="border-left:4px solid var(--green);padding:20px 24px">
@@ -1083,8 +1114,8 @@ pre {
         <span style="font-size:1.6rem">🗄</span>
         <strong style="color:var(--green);font-size:1.05rem">Validierung von Eingaben</strong>
       </div>
-      <p style="font-size:.88rem"><strong>Problem:</strong> Nutzer konnten leere oder unvollständige Daten senden, was schnell zu Fehlern im Backend geführt hat.</p>
-      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Pflichtfelder klar definiert, Eingaben geprüft und verständliche Fehlermeldungen für falsche Daten ergänzt.</p>
+      <p style="font-size:.88rem"><strong>Problem:</strong> Leere oder fehlerhafte Daten führten zu Fehlern.</p>
+      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Pflichtfelder definiert, Eingaben geprüft.</p>
     </div>
 
     <div class="card-sm" style="border-left:4px solid #b97aff;padding:20px 24px">
@@ -1092,26 +1123,26 @@ pre {
         <span style="font-size:1.6rem">🖼</span>
         <strong style="color:#b97aff;font-size:1.05rem">Bilder-Upload</strong>
       </div>
-      <p style="font-size:.88rem"><strong>Problem:</strong> Bilder-Speicherung auf eigenem Server hätte Skalierung & Backups verkompliziert.</p>
-      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Cloudinary als externen CDN — Backend speichert nur die URL.</p>
+      <p style="font-size:.88rem"><strong>Problem:</strong> Eigene Speicherung wäre zu aufwendig.</p>
+      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Cloudinary als externer CDN, nur URL speichern.</p>
     </div>
   </div>
 </section>
 
 <!-- ══════════════════════════════════════════════════
-     SLIDE 10 — LESSONS LEARNED
+     SLIDE 11 — LESSONS LEARNED
      ══════════════════════════════════════════════════ -->
-<section class="slide bg-grain bg-glow-right" data-slide="10">
-  <div class="slide-tag">10 — Lessons Learned</div>
+<section class="slide bg-grain bg-glow-right" data-slide="11">
+  <div class="slide-tag">11 — Lessons Learned</div>
   <h2>Was ich <em>gelernt</em> habe</h2>
 
   <div class="three-col" style="gap:22px;margin-top:8px">
     <div class="card" style="border-top:3px solid var(--accent);padding:22px 24px">
       <h3 style="font-size:1.1rem;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px">🏗 Architektur</h3>
       <ul style="font-size:.95rem;line-height:1.75">
-        <li><strong>DTO-Pattern lohnt sich</strong> — Entities nicht direkt nach außen geben</li>
-        <li><strong>Constructor Injection</strong> klarer als <code>@Autowired</code></li>
-        <li><strong>Schichten trennen</strong> spart später viel Refactoring</li>
+        <li><strong>Erst planen, dann coden</strong> — spart später viel Refactoring</li>
+        <li><strong>Datenmodell zuerst entwerfen</strong> — das Fundament der ganzen App</li>
+        <li><strong>Klare Ordnerstruktur hilft</strong> — Dateien schneller wiederfinden</li>
       </ul>
     </div>
     <div class="card" style="border-top:3px solid var(--accent2);padding:22px 24px">
@@ -1131,21 +1162,13 @@ pre {
       </ul>
     </div>
   </div>
-
-  <div style="margin-top:30px;padding:24px 32px;background:linear-gradient(135deg,rgba(255,107,53,.08),rgba(53,199,255,.05));border:1px solid rgba(255,107,53,.2);border-radius:14px">
-    <h3 style="margin-bottom:10px;color:var(--text);font-size:1.15rem">Wichtigste Erkenntnis</h3>
-    <p style="font-size:1.05rem;color:var(--text2);line-height:1.7">
-      Eine <strong>solide Backend-Basis</strong> — sauberes Datenmodell, klare REST-Konventionen, früh integrierte Security —
-      macht alle nachfolgenden Arbeiten (Frontend, neue Features, Bugfixes) deutlich einfacher.
-    </p>
-  </div>
 </section>
 
 <!-- ══════════════════════════════════════════════════
-     SLIDE 11 — KI IM PROJEKT
+     SLIDE 12 — KI IM PROJEKT
      ══════════════════════════════════════════════════ -->
-<section class="slide bg-grain bg-glow-left" data-slide="11">
-  <div class="slide-tag">11 — KI im Projekt</div>
+<section class="slide bg-grain bg-glow-left" data-slide="12">
+  <div class="slide-tag">12 — KI im Projekt</div>
   <h2>Wo half <em>KI</em> — wo nicht?</h2>
 
   <div class="two-col" style="gap:32px;margin-top:8px">
@@ -1155,7 +1178,6 @@ pre {
       </h3>
       <ul style="font-size:1rem;line-height:1.8">
         <li><strong>Frontend (Angular)</strong> — Großteil der UI-Komponenten generiert</li>
-        <li><strong>Boilerplate-Code</strong> — DTOs, Repository-Interfaces, Mappers</li>
         <li><strong>Tailwind CSS</strong> — Klassennamen & Layouts</li>
         <li><strong>Testfall-Skelette</strong> — Setup für JUnit-Tests</li>
         <li><strong>Refactoring-Vorschläge</strong> — Code-Smells finden</li>
@@ -1173,28 +1195,16 @@ pre {
         <li><strong>Architekturentscheidungen</strong> — Schichten, Verantwortlichkeiten</li>
         <li><strong>Datenmodell-Design</strong> — Beziehungen, Normalisierung</li>
         <li><strong>Security-Konzept</strong> — JWT vs. Session, Token-Lifetimes</li>
-        <li><strong>OAuth2-Integration</strong> — komplexe Spring-Config, oft falsche Vorschläge</li>
-        <li><strong>Domain-spezifische Bugs</strong> — kennt den Kontext nicht</li>
-        <li><strong>DB-Migrations-Strategie</strong> — produktionsreife Disziplin</li>
-        <li><strong>Performance-Tuning</strong> — N+1 Erkennung braucht Verständnis</li>
-        <li><strong>"Big Picture"</strong> — sieht oft nicht den größeren Plan</li>
       </ul>
     </div>
-  </div>
-
-  <div style="margin-top:24px;padding:20px 28px;background:rgba(255,194,51,.06);border-left:4px solid var(--yellow);border-radius:10px">
-    <p style="font-size:1.02rem;color:var(--text2);line-height:1.7">
-      <strong style="color:var(--yellow)">Mein Fazit:</strong> KI ist ein hervorragender <em>Beschleuniger</em> für bekannte Patterns,
-      aber <strong>kein Ersatz</strong> für eigene Architektur-Verantwortung. <strong>Ich</strong> habe die Entscheidungen getroffen — KI hat sie umgesetzt.
-    </p>
   </div>
 </section>
 
 <!-- ══════════════════════════════════════════════════
-     SLIDE 12 — FAZIT + LIVE DEMO
+     SLIDE 13 — FAZIT + LIVE DEMO
      ══════════════════════════════════════════════════ -->
-<section class="slide title-slide bg-grain bg-glow-left bg-glow-right" data-slide="12">
-  <div class="slide-tag">12 — Fazit & Live Demo</div>
+<section class="slide title-slide bg-grain bg-glow-left bg-glow-right" data-slide="13">
+  <div class="slide-tag">13 — Fazit & Live Demo</div>
   <h1 style="font-size:3.8rem;margin-bottom:12px">Vielen <em>Dank</em></h1>
   <p class="subtitle" style="max-width:680px;margin:0 auto 36px;font-size:1.15rem;color:var(--text2)">Ein vollständiges Backend mit modernem Tech Stack</p>
 
@@ -1238,7 +1248,7 @@ pre {
 <!-- ═══ CONTROLS ═══ -->
 <div class="controls">
   <button onclick="prev()" title="Zurück (←)" id="btnPrev">&#8592;</button>
-  <span class="slide-counter" id="counter">1 / 13</span>
+  <span class="slide-counter" id="counter">1 / 14</span>
   <button onclick="next()" title="Weiter (→)" id="btnNext">&#8594;</button>
 </div>
 
