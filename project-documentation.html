@@ -597,8 +597,8 @@ pre {
         <li><strong>Bewertungssystem</strong> — 1–5 Sterne mit aggregiertem Rating</li>
         <li><strong>Volltextsuche</strong> — Titel & Beschreibung</li>
         <li><strong>Kategoriefilter</strong> — Rezepte nach Kategorie</li>
-        <li><strong>Favoriten</strong> — Rezepte speichern / unspeichern</li>
-        <li><strong>Admin-Panel</strong> — Benutzerverwaltung & Moderation</li>
+        <li><strong>Favoriten</strong> — Rezepte speichern</li>
+        <li><strong>Admin-Panel</strong> — Benutzerverwaltung & Rezeptverwaltung</li>
       </ul>
     </div>
     <div>
@@ -647,10 +647,10 @@ pre {
       <h3 style="margin-bottom:18px">Arbeitsweise & Tools</h3>
       <ul style="font-size:1rem;line-height:1.95">
         <li><strong>Iterativ feature-basiert</strong> — Idee, Datenmodell und Umsetzung schrittweise verfeinert</li>
-        <li><strong>Git</strong> — Branch-basiert, sprechende Commits</li>
-        <li><strong>Flyway</strong> — DB-Schema versioniert im Repo</li>
-        <li><strong>VS Code</strong> — Entwicklung, Frontend und Projektarbeit</li>
-        <li><strong>KI-Unterstützung</strong> — vor allem beim ersten Frontend-Entwurf und später bei Security/Auth</li>
+        <li><strong>Git</strong> — nach jedem Feature oder Fix Commit</li>
+        <li><strong>Flyway</strong> — DB-Schema versioniert</li>
+        <li><strong>VS Code</strong> — IDE</li>
+        <li><strong>KI-Unterstützung</strong> — GitHub Copilot / Claude / ChatGpt</li>
         <li><strong>Postman</strong> — Manuelle API-Tests pro Endpoint</li>
       </ul>
     </div>
@@ -669,7 +669,7 @@ pre {
       <div class="flex-col gap-sm">
         <div class="tech-pill" style="border-left:3px solid var(--accent)">Spring Boot 4.0.1<span>REST API Framework</span></div>
         <div class="tech-pill" style="border-left:3px solid var(--accent)">Java 17<span>Programmiersprache</span></div>
-        <div class="tech-pill" style="border-left:3px solid var(--accent)">Hibernate / JPA<span>ORM & Datenbankabstraktion</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--accent)">Hibernate / JPA<span>Datenbankabstraktion</span></div>
         <div class="tech-pill" style="border-left:3px solid var(--accent)">Spring Security<span>Auth-Framework</span></div>
         <div class="tech-pill" style="border-left:3px solid var(--accent)">Spring OAuth2 Client<span>Google Login</span></div>
       </div>
@@ -680,7 +680,6 @@ pre {
         <div class="tech-pill" style="border-left:3px solid var(--green)">PostgreSQL<span>Relationale Datenbank</span></div>
         <div class="tech-pill" style="border-left:3px solid var(--green)">Flyway<span>DB Migrations (V0.0–V0.7)</span></div>
         <div class="tech-pill" style="border-left:3px solid var(--green)">Gradle<span>Build-Tool & Dependencies</span></div>
-        <div class="tech-pill" style="border-left:3px solid var(--green)">JSONB<span>Tags als JSON in PostgreSQL</span></div>
       </div>
     </div>
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:28px 24px;border-top:3px solid var(--yellow)">
