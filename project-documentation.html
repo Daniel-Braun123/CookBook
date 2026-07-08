@@ -604,7 +604,6 @@ pre {
 .slide[data-slide="10"] div[style*="grid-template-columns:1fr 1fr"] { gap: 22px !important; margin-top: 4px !important; }
 
 /* ── Slide 11 — Lessons Learned ── */
-.slide[data-slide="11"]                { justify-content: flex-start !important; padding-top: 60px !important; }
 .slide[data-slide="11"] h2             { margin-bottom: 28px; }
 .slide[data-slide="11"] .two-col       { align-items: stretch !important; }
 .slide[data-slide="11"] .card          { padding: 26px 28px !important; }
@@ -1163,7 +1162,7 @@ GET /api/recipes/getRecipeById?recipeId=<span class="num">42</span></code></pre>
         <span style="font-size:1.6rem">🌐</span>
         <strong style="color:var(--yellow);font-size:1.05rem">Datenbank verbinden</strong>
       </div>
-      <p style="font-size:.88rem"><strong>Problem:</strong> URL, User, Passwort & Treiber mussten stimmen.</p>
+      <p style="font-size:.88rem"><strong>Problem:</strong> URL, User, Passwort mussten stimmen.</p>
       <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> <code>application.properties</code> geprüft, Fehler ausgewertet.</p>
     </div>
 
@@ -1182,7 +1181,7 @@ GET /api/recipes/getRecipeById?recipeId=<span class="num">42</span></code></pre>
         <strong style="color:#b97aff;font-size:1.05rem">Bilder-Upload</strong>
       </div>
       <p style="font-size:.88rem"><strong>Problem:</strong> Eigene Speicherung wäre zu aufwendig.</p>
-      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Cloudinary als externer CDN, nur URL speichern.</p>
+      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Cloudinary als externer Image-Host, nur URL speichern.</p>
     </div>
   </div>
 </section>
