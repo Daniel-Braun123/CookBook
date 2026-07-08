@@ -32,7 +32,7 @@ export class AllRecipesComponent implements OnInit, OnDestroy {
   selectedCategory = '';
   selectedDifficulty = '';
   sortBy = 'rating';
-  showOwnRecipes = false;
+  showOwnRecipes = true;
 
   // Own recipes
   hasOwnRecipes = false;
@@ -157,7 +157,7 @@ export class AllRecipesComponent implements OnInit, OnDestroy {
     this.selectedCategory = '';
     this.selectedDifficulty = '';
     this.sortBy = 'rating';
-    this.showOwnRecipes = false;
+    this.showOwnRecipes = true;
     this.applyFilters();
   }
 

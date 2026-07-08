@@ -62,9 +62,7 @@ body {
   transition: opacity .55s cubic-bezier(.22, 1, .36, 1),
               transform .55s cubic-bezier(.22, 1, .36, 1),
               visibility 0s .55s;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  overflow: hidden; /* Präsentationsmodus: NIE ein Scrollbalken */
 }
 .slide.active {
   opacity: 1;
@@ -546,6 +544,83 @@ pre {
   100% { opacity:0; }
 }
 
+/* ═══════════════════════════════════════════════
+   CLASSROOM PROJECTION MODE
+   Vergrößerte Typografie — aber kompakt genug,
+   dass auf einem Klassenzimmer-Projektor (768–1080p)
+   KEIN Scrollbalken erscheint.
+   Betrifft: Folien 1, 2, 4, 8, 9, 10, 11, 12
+   ═══════════════════════════════════════════════ */
+
+/* ── Slide 1 — Was habe ich gemacht? ── */
+.slide[data-slide="1"] .big-p          { font-size: 1.4rem; line-height: 1.7; margin-bottom: 20px !important; }
+.slide[data-slide="1"] ul li           { font-size: 1.2rem; line-height: 1.75; margin-bottom: 6px; }
+.slide[data-slide="1"] .stat-num       { font-size: 3.6rem; }
+.slide[data-slide="1"] .stat-label     { font-size: 1rem; margin-top: 8px; }
+
+/* ── Slide 2 — Vorgehensweise ── */
+.slide[data-slide="2"] h2              { margin-bottom: 22px; }
+.slide[data-slide="2"] h3              { font-size: 1.55rem; margin-bottom: 16px !important; }
+.slide[data-slide="2"] .card-sm        { padding: 16px 20px !important; margin-bottom: 10px !important; }
+.slide[data-slide="2"] .card-sm strong { font-size: 1.2rem; }
+.slide[data-slide="2"] ul              { font-size: 1.2rem !important; line-height: 1.85 !important; }
+.slide[data-slide="2"] ul li           { font-size: 1.2rem; margin-bottom: 6px; }
+/* Rechte Spalte (Arbeitsweise & Tools) vertikal zentrieren, damit sie neben den 5 Phasen-Karten schön mittig sitzt */
+.slide[data-slide="2"] .two-col        { align-items: center !important; }
+/* Phasen-Karten: kompakt mit farbigem Nummern-Badge */
+.slide[data-slide="2"] .card-sm.phase          { display: flex !important; align-items: center; gap: 16px; padding: 16px 20px !important; margin-bottom: 12px !important; }
+.slide[data-slide="2"] .card-sm.phase strong  { font-size: 1.2rem; line-height: 1.2; }
+.slide[data-slide="2"] .phase-num              { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; color: #0a0c12; font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; flex-shrink: 0; box-shadow: 0 0 20px rgba(0,0,0,.15); }
+
+/* ── Slide 4 — Architektur (SVG darf nicht überlaufen) ── */
+.slide[data-slide="4"] h2              { margin-bottom: 14px; }
+.slide[data-slide="4"] .arch-svg       { max-height: 62vh !important; }
+
+/* ── Slide 8 — Code-Beispiel: GET ── */
+.slide[data-slide="8"] h2              { margin-bottom: 28px; }
+.slide[data-slide="8"] h3              { font-size: 1.4rem !important; margin-bottom: 14px; }
+.slide[data-slide="8"] pre             { font-size: 1.15rem; padding: 24px 28px; line-height: 1.8; }
+.slide[data-slide="8"] pre[style*=".82rem"] { font-size: 1.08rem !important; }
+.slide[data-slide="8"] .card-sm        { padding: 22px 26px !important; margin-bottom: 14px !important; }
+.slide[data-slide="8"] .card-sm strong { font-size: 1.3rem !important; }
+.slide[data-slide="8"] .card-sm p      { font-size: 1.15rem !important; margin-top: 8px !important; line-height: 1.6; }
+
+/* ── Slide 9 — Security ── */
+.slide[data-slide="9"] h2              { margin-bottom: 22px; }
+.slide[data-slide="9"] h3              { font-size: 1.5rem; margin-bottom: 16px !important; }
+.slide[data-slide="9"] .card-sm        { padding: 15px 20px !important; margin-bottom: 10px !important; }
+.slide[data-slide="9"] .card-sm strong { font-size: 1.2rem !important; }
+.slide[data-slide="9"] .card-sm p      { font-size: 1.08rem !important; margin-top: 5px !important; line-height: 1.5; }
+.slide[data-slide="9"] .card-sm[style*=".92rem"] { font-size: 1.15rem !important; padding: 12px 18px !important; }
+
+/* ── Slide 10 — Aufgetretene Probleme (füllt den ganzen Bildschirm) ── */
+.slide[data-slide="10"]                 { justify-content: center; padding-top: 44px !important; padding-bottom: 44px !important; }
+.slide[data-slide="10"] h2              { margin-bottom: 34px; }
+.slide[data-slide="10"] .card-sm        { padding: 28px 32px !important; }
+.slide[data-slide="10"] .card-sm span[style*="font-size:1.6rem"] { font-size: 2.2rem !important; }
+.slide[data-slide="10"] .card-sm strong { font-size: 1.5rem !important; }
+.slide[data-slide="10"] .card-sm p      { font-size: 1.2rem !important; line-height: 1.65; }
+.slide[data-slide="10"] .card-sm p[style*=".85rem"] { font-size: 1.15rem !important; margin-top: 10px !important; }
+.slide[data-slide="10"] div[style*="grid-template-columns:1fr 1fr"] { gap: 22px !important; margin-top: 4px !important; }
+
+/* ── Slide 11 — Lessons Learned ── */
+.slide[data-slide="11"] h2             { margin-bottom: 28px; }
+.slide[data-slide="11"] .card          { padding: 26px 28px !important; }
+.slide[data-slide="11"] .card h3       { font-size: 1.4rem !important; margin-bottom: 16px !important; }
+.slide[data-slide="11"] .card ul       { font-size: 1.18rem !important; line-height: 1.75 !important; }
+.slide[data-slide="11"] .card ul li    { font-size: 1.18rem; margin-bottom: 8px; }
+
+/* ── Slide 12 — KI im Projekt ── */
+.slide[data-slide="12"] h3             { font-size: 1.55rem !important; margin-bottom: 22px !important; }
+.slide[data-slide="12"] ul             { font-size: 1.2rem !important; line-height: 1.9 !important; }
+.slide[data-slide="12"] ul li          { font-size: 1.2rem; margin-bottom: 8px; }
+
+/* ── Slide 7 — POST-Codebeispiel (viel JSON — muss ohne Scrollen passen) ── */
+.slide[data-slide="7"] h2              { margin-bottom: 12px; }
+.slide[data-slide="7"] h3              { font-size: 1rem !important; margin-bottom: 8px; }
+.slide[data-slide="7"] pre             { font-size: .78rem !important; padding: 14px 16px; line-height: 1.5; }
+.slide[data-slide="7"] pre[style*=".78rem"] { font-size: .76rem !important; }
+
 /* Responsive */
 @media (max-width: 1024px) {
   .slide { padding: 30px 40px; }
@@ -622,31 +697,30 @@ pre {
   <div class="two-col" style="gap:40px;margin-top:8px">
     <div>
       <h3 style="margin-bottom:18px">Phasen</h3>
-      <div class="card-sm" style="border-left:3px solid var(--accent);margin-bottom:12px">
-        <strong style="color:var(--text)">1. Grundidee & Projektziel</strong>
-        <p style="font-size:.88rem;margin-top:4px">Was soll die App können? Orientierung an Chefkoch.de als fachliche Vorlage</p>
+      <div class="card-sm phase" style="border-left:3px solid var(--accent)">
+        <span class="phase-num" style="background:var(--accent)">1</span>
+        <strong style="color:var(--text)">Grundidee & Projektziel</strong>
       </div>
-      <div class="card-sm" style="border-left:3px solid var(--accent2);margin-bottom:12px">
-        <strong style="color:var(--text)">2. Erstes Datenbankmodell</strong>
-        <p style="font-size:.88rem;margin-top:4px">Relationales Datenbankmodel erstellt und verstanden, wie die Entities und Beziehungen aussehen sollen</p>
+      <div class="card-sm phase" style="border-left:3px solid var(--accent2)">
+        <span class="phase-num" style="background:var(--accent2)">2</span>
+        <strong style="color:var(--text)">Erstes Datenbankmodell</strong>
       </div>
-      <div class="card-sm" style="border-left:3px solid var(--green);margin-bottom:12px">
-        <strong style="color:var(--text)">3. Erster Frontend-Entwurf</strong>
-        <p style="font-size:.88rem;margin-top:4px">UI-Grundstruktur mit KI erstellt, um früh ein Bild der Anwendung zu bekommen</p>
+      <div class="card-sm phase" style="border-left:3px solid var(--green)">
+        <span class="phase-num" style="background:var(--green)">3</span>
+        <strong style="color:var(--text)">Erster Frontend-Entwurf</strong>
       </div>
-      <div class="card-sm" style="border-left:3px solid var(--yellow);margin-bottom:12px">
-        <strong style="color:var(--text)">4. Backend + Frontend iterativ erweitert</strong>
-        <p style="font-size:.88rem;margin-top:4px">Nach und nach REST-Endpoints gebaut und das Frontend passend dazu ausgebaut</p>
+      <div class="card-sm phase" style="border-left:3px solid var(--yellow)">
+        <span class="phase-num" style="background:var(--yellow)">4</span>
+        <strong style="color:var(--text)">Backend + Frontend iterativ erweitert</strong>
       </div>
-      <div class="card-sm" style="border-left:3px solid var(--red)">
-        <strong style="color:var(--text)">5. Security & Auth zum Schluss</strong>
-        <p style="font-size:.88rem;margin-top:4px">JWT und Google OAuth2 am Ende ergänzt, mit KI-Unterstützung bei der Umsetzung</p>
+      <div class="card-sm phase" style="border-left:3px solid var(--red)">
+        <span class="phase-num" style="background:var(--red)">5</span>
+        <strong style="color:var(--text)">Security & Auth zum Schluss</strong>
       </div>
     </div>
     <div>
-      <h3 style="margin-bottom:18px">Arbeitsweise & Tools</h3>
+      <h3 style="margin-bottom:18px">Tools</h3>
       <ul style="font-size:1rem;line-height:1.95">
-        <li><strong>Iterativ feature-basiert</strong> — Idee, Datenmodell und Umsetzung schrittweise verfeinert</li>
         <li><strong>Git</strong> — nach jedem Feature oder Fix Commit</li>
         <li><strong>Flyway</strong> — DB-Schema versioniert</li>
         <li><strong>VS Code</strong> — IDE</li>
@@ -689,6 +763,7 @@ pre {
         <div class="tech-pill" style="border-left:3px solid var(--yellow)">BCrypt<span>Passwort-Hashing</span></div>
         <div class="tech-pill" style="border-left:3px solid var(--yellow)">Angular 17<span>SPA Frontend</span></div>
         <div class="tech-pill" style="border-left:3px solid var(--yellow)">Tailwind CSS<span>Utility-First Styling</span></div>
+        <div class="tech-pill" style="border-left:3px solid var(--yellow)">Cloudinary<span>Image-Storage</span></div>
       </div>
     </div>
   </div>
@@ -1026,7 +1101,7 @@ GET /api/recipes/getRecipeById?recipeId=<span class="num">42</span></code></pre>
      ══════════════════════════════════════════════════ -->
 <section class="slide bg-grain bg-glow-right" data-slide="9">
   <div class="slide-tag">09 — Umsetzung: Security</div>
-  <h2><em>JWT</em> + OAuth2 Authentifizierung</h2>
+  <h2><em>JWT</em> + Authentifizierung</h2>
 
   <div class="two-col" style="gap:32px;margin-top:8px">
     <div>
@@ -1090,15 +1165,6 @@ GET /api/recipes/getRecipeById?recipeId=<span class="num">42</span></code></pre>
       <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> <code>application.properties</code> geprüft, Fehler ausgewertet.</p>
     </div>
 
-    <div class="card-sm" style="border-left:4px solid var(--accent);padding:20px 24px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-        <span style="font-size:1.6rem">⚡</span>
-        <strong style="color:var(--accent);font-size:1.05rem">Tabellen richtig verknüpfen</strong>
-      </div>
-      <p style="font-size:.88rem"><strong>Problem:</strong> JPA-Beziehungen erstmal verstehen.</p>
-      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Mit kleinen Test-Entities geübt.</p>
-    </div>
-
     <div class="card-sm" style="border-left:4px solid var(--accent2);padding:20px 24px">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
         <span style="font-size:1.6rem">⭐</span>
@@ -1106,15 +1172,6 @@ GET /api/recipes/getRecipeById?recipeId=<span class="num">42</span></code></pre>
       </div>
       <p style="font-size:.88rem"><strong>Problem:</strong> Requests & Responses mussten zum Frontend passen.</p>
       <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Mit Postman getestet, DTOs angepasst.</p>
-    </div>
-
-    <div class="card-sm" style="border-left:4px solid var(--green);padding:20px 24px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-        <span style="font-size:1.6rem">🗄</span>
-        <strong style="color:var(--green);font-size:1.05rem">Validierung von Eingaben</strong>
-      </div>
-      <p style="font-size:.88rem"><strong>Problem:</strong> Leere oder fehlerhafte Daten führten zu Fehlern.</p>
-      <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Pflichtfelder definiert, Eingaben geprüft.</p>
     </div>
 
     <div class="card-sm" style="border-left:4px solid #b97aff;padding:20px 24px">
@@ -1242,13 +1299,6 @@ GET /api/recipes/getRecipeById?recipeId=<span class="num">42</span></code></pre>
 
 </div><!-- /deck -->
 
-<!-- ═══ CONTROLS ═══ -->
-<div class="controls">
-  <button onclick="prev()" title="Zurück (←)" id="btnPrev">&#8592;</button>
-  <span class="slide-counter" id="counter">1 / 14</span>
-  <button onclick="next()" title="Weiter (→)" id="btnNext">&#8594;</button>
-</div>
-
 <script>
 const slides = document.querySelectorAll('.slide');
 const total = slides.length;
@@ -1263,7 +1313,6 @@ function goTo(n) {
     if (i === current) s.classList.add('active');
     else if (i < current) s.classList.add('prev');
   });
-  document.getElementById('counter').textContent = (current + 1) + ' / ' + total;
   document.getElementById('progress').style.width = ((current + 1) / total * 100) + '%';
   // scroll content slides back to top
   slides[current].scrollTop = 0;
