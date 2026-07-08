@@ -11,21 +11,21 @@
    DESIGN SYSTEM — Cinematic Tech Keynote
    ═══════════════════════════════════════════════ */
 :root {
-  --bg: #08090d;
-  --surface: #0e1016;
-  --surface2: #14161e;
-  --surface3: #1a1d28;
-  --border: #252835;
-  --text: #e8ecf4;
-  --text2: #7c8194;
-  --text3: #4a4f64;
-  --accent: #ff6b35;
-  --accent-glow: rgba(255, 107, 53, .12);
-  --accent2: #35c7ff;
-  --green: #3ddc84;
-  --red: #ff4757;
-  --yellow: #ffc233;
-  --code-bg: #0a0c12;
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --surface2: #f2f4f8;
+  --surface3: #e8ebf2;
+  --border: #d8dce4;
+  --text: #0f131b;
+  --text2: #4a5061;
+  --text3: #8a91a3;
+  --accent: #e2571d;
+  --accent-glow: rgba(226, 87, 29, .12);
+  --accent2: #0a8ec9;
+  --green: #15a262;
+  --red: #d63946;
+  --yellow: #b98700;
+  --code-bg: #f6f8fa;
   --font-display: 'Sora', sans-serif;
   --font-mono: 'JetBrains Mono', 'Space Mono', monospace;
   --font-body: 'Sora', sans-serif;
@@ -87,7 +87,7 @@ body {
 .slide > * { position: relative; z-index: 1; }
 
 .bg-grain::before {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
   background-repeat: repeat;
 }
 .bg-glow-left::after {
@@ -97,7 +97,7 @@ body {
   top: 10%;
   width: 50vw;
   height: 60vh;
-  background: radial-gradient(ellipse, rgba(255,107,53,.06) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(226,87,29,.10) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -108,7 +108,7 @@ body {
   bottom: 5%;
   width: 45vw;
   height: 50vh;
-  background: radial-gradient(ellipse, rgba(53,199,255,.05) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(10,142,201,.10) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -133,7 +133,7 @@ h1 {
 }
 h1 em {
   font-style: normal;
-  background: linear-gradient(135deg, var(--accent), #ff9f6b);
+  background: linear-gradient(135deg, var(--accent), #f0793d);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -184,10 +184,10 @@ li { margin-bottom: 6px; }
   text-transform: uppercase;
   letter-spacing: 1px;
 }
-.pill-get { background: rgba(61,220,132,.12); color: var(--green); border: 1px solid rgba(61,220,132,.2); }
-.pill-post { background: rgba(255,107,53,.12); color: var(--accent); border: 1px solid rgba(255,107,53,.2); }
-.pill-put { background: rgba(53,199,255,.12); color: var(--accent2); border: 1px solid rgba(53,199,255,.2); }
-.pill-del { background: rgba(255,71,87,.12); color: var(--red); border: 1px solid rgba(255,71,87,.2); }
+.pill-get { background: rgba(21,162,98,.14); color: var(--green); border: 1px solid rgba(21,162,98,.35); }
+.pill-post { background: rgba(226,87,29,.14); color: var(--accent); border: 1px solid rgba(226,87,29,.35); }
+.pill-put { background: rgba(10,142,201,.14); color: var(--accent2); border: 1px solid rgba(10,142,201,.35); }
+.pill-del { background: rgba(214,57,70,.14); color: var(--red); border: 1px solid rgba(214,57,70,.35); }
 
 .card {
   background: var(--surface2);
@@ -220,12 +220,12 @@ th {
 }
 td {
   padding: 14px 18px;
-  border-bottom: 1px solid rgba(37,40,53,.6);
+  border-bottom: 1px solid rgba(216,220,228,.7);
   color: var(--text2);
   vertical-align: top;
 }
 td:first-child { color: var(--text); font-weight: 500; }
-tr:hover td { background: rgba(255,107,53,.02); }
+tr:hover td { background: rgba(226,87,29,.05); }
 
 code {
   font-family: var(--font-mono);
@@ -247,7 +247,7 @@ pre {
   font-size: .88rem;
   line-height: 1.7;
 }
-.kw{color:#ff7b72}.str{color:#a5d6ff}.cm{color:#6e7491}.fn{color:#d2a8ff}.num{color:#79c0ff}.ann{color:#ffa657}
+.kw{color:#d73a49}.str{color:#032f62}.cm{color:#6a737d}.fn{color:#6f42c1}.num{color:#005cc5}.ann{color:#e36209}
 
 /* ═══ LAYOUTS ═══ */
 .two-col {
@@ -275,11 +275,11 @@ pre {
   align-items: center;
   gap: 16px;
   padding: 13px 20px;
-  border-bottom: 1px solid rgba(37,40,53,.5);
+  border-bottom: 1px solid rgba(216,220,228,.6);
   font-size: .95rem;
   transition: background .2s;
 }
-.ep-row:hover { background: rgba(255,107,53,.03); }
+.ep-row:hover { background: rgba(226,87,29,.06); }
 .ep-url {
   font-family: var(--font-mono);
   font-size: .9rem;
@@ -601,7 +601,7 @@ pre {
 .slide[data-slide="10"]                 { justify-content: center; padding-top: 44px !important; padding-bottom: 44px !important; }
 .slide[data-slide="10"] h2              { margin-bottom: 34px; }
 .slide[data-slide="10"] .card-sm        { padding: 28px 32px !important; }
-.slide[data-slide="10"] .card-sm span[style*="font-size:1.6rem"] { font-size: 2.2rem !important; }
+.slide[data-slide="10"] .card-sm > div:first-child > span[style*="border-radius:50%"] { width: 18px !important; height: 18px !important; }
 .slide[data-slide="10"] .card-sm strong { font-size: 1.5rem !important; }
 .slide[data-slide="10"] .card-sm p      { font-size: 1.2rem !important; line-height: 1.65; }
 .slide[data-slide="10"] .card-sm p[style*=".85rem"] { font-size: 1.15rem !important; margin-top: 10px !important; }
@@ -781,50 +781,50 @@ pre {
   <h2>3-Schichten <em>Architektur</em></h2>
   <svg class="arch-svg" viewBox="0 0 820 370" xmlns="http://www.w3.org/2000/svg" style="max-height:72vh">
     <defs>
-      <marker id="a1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#ff6b35"/></marker>
-      <marker id="a2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#35c7ff"/></marker>
-      <marker id="a3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#3ddc84"/></marker>
+      <marker id="a1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#e2571d"/></marker>
+      <marker id="a2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#0a8ec9"/></marker>
+      <marker id="a3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#15a262"/></marker>
     </defs>
     <!-- Frontend -->
-    <rect x="10" y="40" width="160" height="90" rx="14" fill="#14161e" stroke="#252835" stroke-width="1.5"/>
-    <text x="90" y="72" text-anchor="middle" fill="#7c8194" font-family="Sora" font-size="11" font-weight="600">Frontend</text>
-    <text x="90" y="94" text-anchor="middle" fill="#ff6b35" font-family="Sora" font-size="14" font-weight="700">Angular 17</text>
-    <text x="90" y="114" text-anchor="middle" fill="#4a4f64" font-family="JetBrains Mono" font-size="9">:4200</text>
+    <rect x="10" y="40" width="160" height="90" rx="14" fill="#ffffff" stroke="#d8dce4" stroke-width="1.5"/>
+    <text x="90" y="72" text-anchor="middle" fill="#4a5061" font-family="Sora" font-size="11" font-weight="600">Frontend</text>
+    <text x="90" y="94" text-anchor="middle" fill="#e2571d" font-family="Sora" font-size="14" font-weight="700">Angular 17</text>
+    <text x="90" y="114" text-anchor="middle" fill="#8a91a3" font-family="JetBrains Mono" font-size="9">:4200</text>
 
     <!-- Backend box -->
-    <rect x="260" y="10" width="300" height="340" rx="16" fill="#0e1016" stroke="#ff6b35" stroke-width="1.5" stroke-opacity=".3"/>
-    <text x="410" y="40" text-anchor="middle" fill="#ff6b35" font-family="Sora" font-size="15" font-weight="700">Spring Boot Backend</text>
-    <text x="410" y="58" text-anchor="middle" fill="#4a4f64" font-family="JetBrains Mono" font-size="9">:8080</text>
+    <rect x="260" y="10" width="300" height="340" rx="16" fill="#f8fafd" stroke="#e2571d" stroke-width="1.5" stroke-opacity=".4"/>
+    <text x="410" y="40" text-anchor="middle" fill="#e2571d" font-family="Sora" font-size="15" font-weight="700">Spring Boot Backend</text>
+    <text x="410" y="58" text-anchor="middle" fill="#8a91a3" font-family="JetBrains Mono" font-size="9">:8080</text>
 
     <!-- Layers -->
-    <rect x="285" y="75" width="250" height="42" rx="8" fill="rgba(255,107,53,.08)" stroke="rgba(255,107,53,.2)" stroke-width="1"/>
-    <text x="410" y="101" text-anchor="middle" fill="#ff6b35" font-family="Sora" font-size="12" font-weight="600">Controller (9)</text>
-    <rect x="285" y="130" width="250" height="42" rx="8" fill="rgba(53,199,255,.08)" stroke="rgba(53,199,255,.2)" stroke-width="1"/>
-    <text x="410" y="156" text-anchor="middle" fill="#35c7ff" font-family="Sora" font-size="12" font-weight="600">Service (4)</text>
-    <rect x="285" y="185" width="250" height="42" rx="8" fill="rgba(61,220,132,.08)" stroke="rgba(61,220,132,.2)" stroke-width="1"/>
-    <text x="410" y="211" text-anchor="middle" fill="#3ddc84" font-family="Sora" font-size="12" font-weight="600">Repository (8)</text>
-    <rect x="285" y="245" width="250" height="36" rx="8" fill="rgba(255,194,51,.06)" stroke="rgba(255,194,51,.15)" stroke-width="1"/>
-    <text x="410" y="268" text-anchor="middle" fill="#ffc233" font-family="Sora" font-size="11" font-weight="600">JWT Security + OAuth2</text>
-    <rect x="285" y="296" width="250" height="34" rx="8" fill="rgba(124,129,148,.06)" stroke="rgba(124,129,148,.12)" stroke-width="1"/>
-    <text x="410" y="318" text-anchor="middle" fill="#4a4f64" font-family="Sora" font-size="10">Config · CORS · Jackson</text>
+    <rect x="285" y="75" width="250" height="42" rx="8" fill="rgba(226,87,29,.14)" stroke="rgba(226,87,29,.35)" stroke-width="1"/>
+    <text x="410" y="101" text-anchor="middle" fill="#e2571d" font-family="Sora" font-size="12" font-weight="600">Controller (9)</text>
+    <rect x="285" y="130" width="250" height="42" rx="8" fill="rgba(10,142,201,.14)" stroke="rgba(10,142,201,.35)" stroke-width="1"/>
+    <text x="410" y="156" text-anchor="middle" fill="#0a8ec9" font-family="Sora" font-size="12" font-weight="600">Service (4)</text>
+    <rect x="285" y="185" width="250" height="42" rx="8" fill="rgba(21,162,98,.14)" stroke="rgba(21,162,98,.35)" stroke-width="1"/>
+    <text x="410" y="211" text-anchor="middle" fill="#15a262" font-family="Sora" font-size="12" font-weight="600">Repository (8)</text>
+    <rect x="285" y="245" width="250" height="36" rx="8" fill="rgba(185,135,0,.12)" stroke="rgba(185,135,0,.3)" stroke-width="1"/>
+    <text x="410" y="268" text-anchor="middle" fill="#b98700" font-family="Sora" font-size="11" font-weight="600">JWT Security + OAuth2</text>
+    <rect x="285" y="296" width="250" height="34" rx="8" fill="rgba(74,80,97,.08)" stroke="rgba(74,80,97,.2)" stroke-width="1"/>
+    <text x="410" y="318" text-anchor="middle" fill="#8a91a3" font-family="Sora" font-size="10">Config · CORS · Jackson</text>
 
     <!-- Database -->
-    <rect x="650" y="100" width="160" height="100" rx="14" fill="#14161e" stroke="#252835" stroke-width="1.5"/>
-    <text x="730" y="132" text-anchor="middle" fill="#7c8194" font-family="Sora" font-size="11" font-weight="600">Datenbank</text>
-    <text x="730" y="156" text-anchor="middle" fill="#3ddc84" font-family="Sora" font-size="14" font-weight="700">PostgreSQL</text>
-    <text x="730" y="176" text-anchor="middle" fill="#4a4f64" font-family="JetBrains Mono" font-size="9">8 Tabellen · Flyway</text>
+    <rect x="650" y="100" width="160" height="100" rx="14" fill="#ffffff" stroke="#d8dce4" stroke-width="1.5"/>
+    <text x="730" y="132" text-anchor="middle" fill="#4a5061" font-family="Sora" font-size="11" font-weight="600">Datenbank</text>
+    <text x="730" y="156" text-anchor="middle" fill="#15a262" font-family="Sora" font-size="14" font-weight="700">PostgreSQL</text>
+    <text x="730" y="176" text-anchor="middle" fill="#8a91a3" font-family="JetBrains Mono" font-size="9">8 Tabellen · Flyway</text>
 
     <!-- Google -->
-    <rect x="650" y="250" width="160" height="60" rx="14" fill="#14161e" stroke="#252835" stroke-width="1.5"/>
-    <text x="730" y="278" text-anchor="middle" fill="#ffc233" font-family="Sora" font-size="12" font-weight="600">Google OAuth2</text>
-    <text x="730" y="296" text-anchor="middle" fill="#4a4f64" font-family="Sora" font-size="9">Identity Provider</text>
+    <rect x="650" y="250" width="160" height="60" rx="14" fill="#ffffff" stroke="#d8dce4" stroke-width="1.5"/>
+    <text x="730" y="278" text-anchor="middle" fill="#b98700" font-family="Sora" font-size="12" font-weight="600">Google OAuth2</text>
+    <text x="730" y="296" text-anchor="middle" fill="#8a91a3" font-family="Sora" font-size="9">Identity Provider</text>
 
     <!-- Arrows -->
-    <line x1="170" y1="85" x2="260" y2="96" stroke="#ff6b35" stroke-width="2" marker-end="url(#a1)"/>
-    <text x="210" y="80" fill="#ff6b35" font-family="JetBrains Mono" font-size="9" font-weight="600">REST</text>
-    <line x1="535" y1="200" x2="650" y2="155" stroke="#3ddc84" stroke-width="2" marker-end="url(#a3)"/>
-    <text x="585" y="168" fill="#3ddc84" font-family="JetBrains Mono" font-size="9" font-weight="600">JPA</text>
-    <line x1="535" y1="264" x2="650" y2="275" stroke="#ffc233" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#a1)"/>
+    <line x1="170" y1="85" x2="260" y2="96" stroke="#e2571d" stroke-width="2" marker-end="url(#a1)"/>
+    <text x="210" y="80" fill="#e2571d" font-family="JetBrains Mono" font-size="9" font-weight="600">REST</text>
+    <line x1="535" y1="200" x2="650" y2="155" stroke="#15a262" stroke-width="2" marker-end="url(#a3)"/>
+    <text x="585" y="168" fill="#15a262" font-family="JetBrains Mono" font-size="9" font-weight="600">JPA</text>
+    <line x1="535" y1="264" x2="650" y2="275" stroke="#b98700" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#a1)"/>
   </svg>
 </section>
 
@@ -837,11 +837,11 @@ pre {
 
   <div class="er-wrap">
   <svg viewBox="0 0 820 440" xmlns="http://www.w3.org/2000/svg" style="width:100%">
-    <style>.t{font-family:'JetBrains Mono',monospace}.th{fill:#ff6b35;font-size:13px;font-weight:700}.tc{fill:#7c8194;font-size:10px}.tp{fill:#ff4757;font-size:10px;font-weight:700}.tf{fill:#35c7ff;font-size:10px}.tu{fill:#ffc233;font-size:10px;font-weight:600}</style>
+    <style>.t{font-family:'JetBrains Mono',monospace}.th{fill:#e2571d;font-size:13px;font-weight:700}.tc{fill:#4a5061;font-size:10px}.tp{fill:#d63946;font-size:10px;font-weight:700}.tf{fill:#0a8ec9;font-size:10px}.tu{fill:#b98700;font-size:10px;font-weight:600}</style>
 
     <!-- users -->
-    <rect x="5" y="5" width="175" height="190" rx="8" fill="#14161e" stroke="#252835"/>
-    <rect x="5" y="5" width="175" height="24" rx="8" fill="#1a1d28"/>
+    <rect x="5" y="5" width="175" height="190" rx="8" fill="#ffffff" stroke="#d8dce4"/>
+    <rect x="5" y="5" width="175" height="24" rx="8" fill="#eaecf1"/>
     <text class="t th" x="92" y="22" text-anchor="middle">users</text>
     <text class="t tp" x="12" y="44">PK id BIGSERIAL</text>
     <text class="t tc" x="12" y="58">   name VARCHAR(100)</text>
@@ -855,8 +855,8 @@ pre {
     <text class="t tc" x="12" y="170">   joined_at TIMESTAMP</text>
 
     <!-- recipes -->
-    <rect x="280" y="5" width="210" height="215" rx="8" fill="#14161e" stroke="#252835"/>
-    <rect x="280" y="5" width="210" height="24" rx="8" fill="#1a1d28"/>
+    <rect x="280" y="5" width="210" height="215" rx="8" fill="#ffffff" stroke="#d8dce4"/>
+    <rect x="280" y="5" width="210" height="24" rx="8" fill="#eaecf1"/>
     <text class="t th" x="385" y="22" text-anchor="middle">recipes</text>
     <text class="t tp" x="287" y="44">PK id BIGSERIAL</text>
     <text class="t tc" x="287" y="58">   title VARCHAR(200)</text>
@@ -872,8 +872,8 @@ pre {
     <text class="t tf" x="287" y="198">FK category_id → categories</text>
 
     <!-- categories -->
-    <rect x="610" y="5" width="195" height="96" rx="8" fill="#14161e" stroke="#252835"/>
-    <rect x="610" y="5" width="195" height="24" rx="8" fill="#1a1d28"/>
+    <rect x="610" y="5" width="195" height="96" rx="8" fill="#ffffff" stroke="#d8dce4"/>
+    <rect x="610" y="5" width="195" height="24" rx="8" fill="#eaecf1"/>
     <text class="t th" x="707" y="22" text-anchor="middle">categories</text>
     <text class="t tp" x="617" y="44">PK id BIGSERIAL</text>
     <text class="t tu" x="617" y="58">UQ name VARCHAR(100)</text>
@@ -881,16 +881,16 @@ pre {
     <text class="t tc" x="617" y="86">   count INT</text>
 
     <!-- ingredients -->
-    <rect x="610" y="130" width="195" height="96" rx="8" fill="#14161e" stroke="#252835"/>
-    <rect x="610" y="130" width="195" height="24" rx="8" fill="#1a1d28"/>
+    <rect x="610" y="130" width="195" height="96" rx="8" fill="#ffffff" stroke="#d8dce4"/>
+    <rect x="610" y="130" width="195" height="24" rx="8" fill="#eaecf1"/>
     <text class="t th" x="707" y="147" text-anchor="middle">ingredients</text>
     <text class="t tp" x="617" y="169">PK id BIGSERIAL</text>
     <text class="t tf" x="617" y="183">FK recipe_id → recipes</text>
     <text class="t tc" x="617" y="197">   name, amount, unit</text>
 
     <!-- cooking_steps -->
-    <rect x="610" y="255" width="195" height="96" rx="8" fill="#14161e" stroke="#252835"/>
-    <rect x="610" y="255" width="195" height="24" rx="8" fill="#1a1d28"/>
+    <rect x="610" y="255" width="195" height="96" rx="8" fill="#ffffff" stroke="#d8dce4"/>
+    <rect x="610" y="255" width="195" height="24" rx="8" fill="#eaecf1"/>
     <text class="t th" x="707" y="272" text-anchor="middle">cooking_steps</text>
     <text class="t tp" x="617" y="294">PK id BIGSERIAL</text>
     <text class="t tf" x="617" y="308">FK recipe_id → recipes</text>
@@ -898,8 +898,8 @@ pre {
     <text class="t tc" x="617" y="336">   image, duration</text>
 
     <!-- nutrition_info -->
-    <rect x="300" y="260" width="190" height="96" rx="8" fill="#14161e" stroke="#252835"/>
-    <rect x="300" y="260" width="190" height="24" rx="8" fill="#1a1d28"/>
+    <rect x="300" y="260" width="190" height="96" rx="8" fill="#ffffff" stroke="#d8dce4"/>
+    <rect x="300" y="260" width="190" height="24" rx="8" fill="#eaecf1"/>
     <text class="t th" x="395" y="277" text-anchor="middle">nutrition_info</text>
     <text class="t tp" x="307" y="299">PK id BIGSERIAL</text>
     <text class="t tf" x="307" y="313">FK recipe_id (UNIQUE)</text>
@@ -907,8 +907,8 @@ pre {
     <text class="t tc" x="307" y="341">   fat, fiber</text>
 
     <!-- reviews -->
-    <rect x="5" y="240" width="200" height="100" rx="8" fill="#14161e" stroke="#252835"/>
-    <rect x="5" y="240" width="200" height="24" rx="8" fill="#1a1d28"/>
+    <rect x="5" y="240" width="200" height="100" rx="8" fill="#ffffff" stroke="#d8dce4"/>
+    <rect x="5" y="240" width="200" height="24" rx="8" fill="#eaecf1"/>
     <text class="t th" x="105" y="257" text-anchor="middle">reviews</text>
     <text class="t tp" x="12" y="279">PK id BIGSERIAL</text>
     <text class="t tf" x="12" y="293">FK recipe_id (CASCADE)</text>
@@ -917,29 +917,29 @@ pre {
     <text class="t tu" x="12" y="335">UQ (user_id, recipe_id)</text>
 
     <!-- saved_recipes -->
-    <rect x="5" y="375" width="200" height="60" rx="8" fill="#14161e" stroke="#252835"/>
-    <rect x="5" y="375" width="200" height="24" rx="8" fill="#1a1d28"/>
+    <rect x="5" y="375" width="200" height="60" rx="8" fill="#ffffff" stroke="#d8dce4"/>
+    <rect x="5" y="375" width="200" height="24" rx="8" fill="#eaecf1"/>
     <text class="t th" x="105" y="392" text-anchor="middle">saved_recipes</text>
     <text class="t tf" x="12" y="414">FK user_id + recipe_id</text>
     <text class="t tu" x="12" y="428">UQ (user_id, recipe_id)</text>
 
     <!-- Relationships -->
-    <line x1="180" y1="90" x2="280" y2="184" stroke="#ff6b35" stroke-width="1.5" stroke-opacity=".6"/>
-    <text x="225" y="130" fill="#ff6b35" font-size="9" font-weight="700" font-family="Sora">1:N</text>
-    <line x1="490" y1="198" x2="610" y2="50" stroke="#35c7ff" stroke-width="1.5" stroke-opacity=".5"/>
-    <text x="545" y="115" fill="#35c7ff" font-size="9" font-weight="700" font-family="Sora">N:1</text>
-    <line x1="490" y1="130" x2="610" y2="175" stroke="#35c7ff" stroke-width="1.5" stroke-opacity=".5"/>
-    <text x="545" y="148" fill="#35c7ff" font-size="9" font-weight="700" font-family="Sora">1:N</text>
-    <line x1="490" y1="170" x2="610" y2="300" stroke="#35c7ff" stroke-width="1.5" stroke-opacity=".5"/>
-    <text x="545" y="240" fill="#35c7ff" font-size="9" font-weight="700" font-family="Sora">1:N</text>
-    <line x1="385" y1="220" x2="385" y2="260" stroke="#3ddc84" stroke-width="1.5" stroke-opacity=".5"/>
-    <text x="395" y="243" fill="#3ddc84" font-size="9" font-weight="700" font-family="Sora">1:1</text>
-    <line x1="280" y1="110" x2="205" y2="280" stroke="#ff6b35" stroke-width="1.5" stroke-opacity=".4"/>
-    <text x="235" y="200" fill="#ff6b35" font-size="9" font-weight="700" font-family="Sora">1:N</text>
-    <line x1="92" y1="195" x2="92" y2="240" stroke="#ffc233" stroke-width="1.5" stroke-opacity=".4"/>
-    <text x="100" y="220" fill="#ffc233" font-size="9" font-weight="700" font-family="Sora">1:N</text>
-    <line x1="92" y1="340" x2="92" y2="375" stroke="#ffc233" stroke-width="1.5" stroke-opacity=".4" stroke-dasharray="4,3"/>
-    <text x="100" y="360" fill="#ffc233" font-size="9" font-weight="700" font-family="Sora">1:N</text>
+    <line x1="180" y1="90" x2="280" y2="184" stroke="#e2571d" stroke-width="1.5" stroke-opacity=".6"/>
+    <text x="225" y="130" fill="#e2571d" font-size="9" font-weight="700" font-family="Sora">1:N</text>
+    <line x1="490" y1="198" x2="610" y2="50" stroke="#0a8ec9" stroke-width="1.5" stroke-opacity=".5"/>
+    <text x="545" y="115" fill="#0a8ec9" font-size="9" font-weight="700" font-family="Sora">N:1</text>
+    <line x1="490" y1="130" x2="610" y2="175" stroke="#0a8ec9" stroke-width="1.5" stroke-opacity=".5"/>
+    <text x="545" y="148" fill="#0a8ec9" font-size="9" font-weight="700" font-family="Sora">1:N</text>
+    <line x1="490" y1="170" x2="610" y2="300" stroke="#0a8ec9" stroke-width="1.5" stroke-opacity=".5"/>
+    <text x="545" y="240" fill="#0a8ec9" font-size="9" font-weight="700" font-family="Sora">1:N</text>
+    <line x1="385" y1="220" x2="385" y2="260" stroke="#15a262" stroke-width="1.5" stroke-opacity=".5"/>
+    <text x="395" y="243" fill="#15a262" font-size="9" font-weight="700" font-family="Sora">1:1</text>
+    <line x1="280" y1="110" x2="205" y2="280" stroke="#e2571d" stroke-width="1.5" stroke-opacity=".4"/>
+    <text x="235" y="200" fill="#e2571d" font-size="9" font-weight="700" font-family="Sora">1:N</text>
+    <line x1="92" y1="195" x2="92" y2="240" stroke="#b98700" stroke-width="1.5" stroke-opacity=".4"/>
+    <text x="100" y="220" fill="#b98700" font-size="9" font-weight="700" font-family="Sora">1:N</text>
+    <line x1="92" y1="340" x2="92" y2="375" stroke="#b98700" stroke-width="1.5" stroke-opacity=".4" stroke-dasharray="4,3"/>
+    <text x="100" y="360" fill="#b98700" font-size="9" font-weight="700" font-family="Sora">1:N</text>
   </svg>
   </div>
 </section>
@@ -1152,8 +1152,8 @@ GET /api/recipes/getRecipeById?recipeId=<span class="num">42</span></code></pre>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px">
     <div class="card-sm" style="border-left:4px solid var(--red);padding:20px 24px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-        <span style="font-size:1.6rem">🔑</span>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+        <span style="width:14px;height:14px;border-radius:50%;background:var(--red);flex-shrink:0"></span>
         <strong style="color:var(--red);font-size:1.05rem">Spring Boot Projekt aufsetzen</strong>
       </div>
       <p style="font-size:.88rem"><strong>Problem:</strong> Setup mit Gradle, PostgreSQL & Dependencies.</p>
@@ -1161,8 +1161,8 @@ GET /api/recipes/getRecipeById?recipeId=<span class="num">42</span></code></pre>
     </div>
 
     <div class="card-sm" style="border-left:4px solid var(--yellow);padding:20px 24px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-        <span style="font-size:1.6rem">🌐</span>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+        <span style="width:14px;height:14px;border-radius:50%;background:var(--yellow);flex-shrink:0"></span>
         <strong style="color:var(--yellow);font-size:1.05rem">Datenbank verbinden</strong>
       </div>
       <p style="font-size:.88rem"><strong>Problem:</strong> URL, User, Passwort mussten stimmen.</p>
@@ -1170,18 +1170,18 @@ GET /api/recipes/getRecipeById?recipeId=<span class="num">42</span></code></pre>
     </div>
 
     <div class="card-sm" style="border-left:4px solid var(--accent2);padding:20px 24px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-        <span style="font-size:1.6rem">⭐</span>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+        <span style="width:14px;height:14px;border-radius:50%;background:var(--accent2);flex-shrink:0"></span>
         <strong style="color:var(--accent2);font-size:1.05rem">REST-API testen</strong>
       </div>
       <p style="font-size:.88rem"><strong>Problem:</strong> Requests & Responses mussten zum Frontend passen.</p>
       <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Mit Postman getestet, DTOs angepasst.</p>
     </div>
 
-    <div class="card-sm" style="border-left:4px solid #b97aff;padding:20px 24px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-        <span style="font-size:1.6rem">🖼</span>
-        <strong style="color:#b97aff;font-size:1.05rem">Bilder-Upload</strong>
+    <div class="card-sm" style="border-left:4px solid #7c4dff;padding:20px 24px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+        <span style="width:14px;height:14px;border-radius:50%;background:#7c4dff;flex-shrink:0"></span>
+        <strong style="color:#7c4dff;font-size:1.05rem">Bilder-Upload</strong>
       </div>
       <p style="font-size:.88rem"><strong>Problem:</strong> Eigene Speicherung wäre zu aufwendig.</p>
       <p style="font-size:.85rem;margin-top:6px;color:var(--green)"><strong>→ Lösung:</strong> Cloudinary als externer Image-Host, nur URL speichern.</p>
@@ -1224,7 +1224,7 @@ GET /api/recipes/getRecipeById?recipeId=<span class="num">42</span></code></pre>
   <h2>Wo half <em>KI</em> — wo nicht?</h2>
 
   <div class="two-col" style="gap:32px;margin-top:8px">
-    <div style="background:rgba(61,220,132,.04);border:1px solid rgba(61,220,132,.2);border-radius:14px;padding:26px 28px">
+    <div style="background:rgba(21,162,98,.08);border:1px solid rgba(21,162,98,.3);border-radius:14px;padding:26px 28px">
       <h3 style="color:var(--green);font-size:1.3rem;margin-bottom:18px;display:flex;align-items:center;gap:10px">
         <span style="font-size:1.8rem">✅</span> KI war stark bei…
       </h3>
@@ -1238,7 +1238,7 @@ GET /api/recipes/getRecipeById?recipeId=<span class="num">42</span></code></pre>
       </ul>
     </div>
 
-    <div style="background:rgba(255,71,87,.04);border:1px solid rgba(255,71,87,.2);border-radius:14px;padding:26px 28px">
+    <div style="background:rgba(214,57,70,.08);border:1px solid rgba(214,57,70,.3);border-radius:14px;padding:26px 28px">
       <h3 style="color:var(--red);font-size:1.3rem;margin-bottom:18px;display:flex;align-items:center;gap:10px">
         <span style="font-size:1.8rem">❌</span> KI war schwach bei…
       </h3>
@@ -1261,19 +1261,15 @@ GET /api/recipes/getRecipeById?recipeId=<span class="num">42</span></code></pre>
   <div style="max-width:800px;margin:0 auto;text-align:left">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:40px">
       <div class="card-sm" style="border-left:3px solid var(--accent);display:flex;align-items:center;gap:14px">
-        <span style="font-size:1.8rem">🚀</span>
         <div><strong style="color:var(--text);font-size:1rem">Spring Boot REST API</strong><p style="font-size:.82rem;margin-top:2px">27 Endpoints · 9 Controller · 4 Services</p></div>
       </div>
       <div class="card-sm" style="border-left:3px solid var(--green);display:flex;align-items:center;gap:14px">
-        <span style="font-size:1.8rem">🗄</span>
         <div><strong style="color:var(--text);font-size:1rem">PostgreSQL + Flyway</strong><p style="font-size:.82rem;margin-top:2px">8 Tabellen · 7 versionierte Migrationen</p></div>
       </div>
       <div class="card-sm" style="border-left:3px solid var(--yellow);display:flex;align-items:center;gap:14px">
-        <span style="font-size:1.8rem">🔐</span>
         <div><strong style="color:var(--text);font-size:1rem">JWT + OAuth2 Security</strong><p style="font-size:.82rem;margin-top:2px">Lokaler Login & Google · Rollenbasiert</p></div>
       </div>
       <div class="card-sm" style="border-left:3px solid var(--accent2);display:flex;align-items:center;gap:14px">
-        <span style="font-size:1.8rem">✨</span>
         <div><strong style="color:var(--text);font-size:1rem">Vollständiges Feature-Set</strong><p style="font-size:.82rem;margin-top:2px">CRUD · Bewertungen · Suche · Favoriten · Admin</p></div>
       </div>
     </div>
@@ -1357,7 +1353,7 @@ document.getElementById('demoBtn').addEventListener('click', function(e) {
   btn.appendChild(shock);
 
   // 2) Particle explosion (20 particles)
-  const colors = ['#ff6b35','#35c7ff','#3ddc84','#ffc233','#ff4757','#fff'];
+  const colors = ['#e2571d','#0a8ec9','#15a262','#b98700','#d63946','#0f131b'];
   for (let i = 0; i < 20; i++) {
     const p = document.createElement('div');
     p.className = 'demo-particle';
