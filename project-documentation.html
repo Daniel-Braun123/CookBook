@@ -604,7 +604,9 @@ pre {
 .slide[data-slide="10"] div[style*="grid-template-columns:1fr 1fr"] { gap: 22px !important; margin-top: 4px !important; }
 
 /* ── Slide 11 — Lessons Learned ── */
+.slide[data-slide="11"]                { justify-content: flex-start !important; padding-top: 60px !important; }
 .slide[data-slide="11"] h2             { margin-bottom: 28px; }
+.slide[data-slide="11"] .two-col       { align-items: stretch !important; }
 .slide[data-slide="11"] .card          { padding: 26px 28px !important; }
 .slide[data-slide="11"] .card h3       { font-size: 1.4rem !important; margin-bottom: 16px !important; }
 .slide[data-slide="11"] .card ul       { font-size: 1.18rem !important; line-height: 1.75 !important; }
@@ -1192,29 +1194,21 @@ GET /api/recipes/getRecipeById?recipeId=<span class="num">42</span></code></pre>
   <div class="slide-tag">11 — Lessons Learned</div>
   <h2>Was ich <em>gelernt</em> habe</h2>
 
-  <div class="three-col" style="gap:22px;margin-top:8px">
+  <div class="two-col" style="gap:22px;margin-top:8px">
     <div class="card" style="border-top:3px solid var(--accent);padding:22px 24px">
       <h3 style="font-size:1.1rem;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px">🏗 Architektur</h3>
       <ul style="font-size:.95rem;line-height:1.75">
-        <li><strong>Erst planen, dann coden</strong> — spart später viel Refactoring</li>
-        <li><strong>Datenmodell zuerst entwerfen</strong> — das Fundament der ganzen App</li>
-        <li><strong>Klare Ordnerstruktur hilft</strong> — Dateien schneller wiederfinden</li>
+        <li><strong>Erst planen, dann coden</strong></li>
+        <li><strong>Datenmodell zuerst entwerfen</strong></li>
+        <li><strong>Wie man ein eigenes Projekt aufsetzt</strong></li>
       </ul>
     </div>
     <div class="card" style="border-top:3px solid var(--accent2);padding:22px 24px">
       <h3 style="font-size:1.1rem;color:var(--accent2);margin-bottom:14px;display:flex;align-items:center;gap:8px">🔧 Praxis</h3>
       <ul style="font-size:.95rem;line-height:1.75">
+        <li><strong>Ki ist ein sehr guter Helfer</strong> — Code muss trotzdem überprüft werden</li>
         <li><strong>Flyway von Anfang an</strong> — kein manuelles Schema-Management</li>
-        <li><strong>Security früh konzipieren</strong> — nachträglich ist es schmerzhaft</li>
-        <li><strong>Konsistente API-Pfade</strong> sparen Doku</li>
-      </ul>
-    </div>
-    <div class="card" style="border-top:3px solid var(--green);padding:22px 24px">
-      <h3 style="font-size:1.1rem;color:var(--green);margin-bottom:14px;display:flex;align-items:center;gap:8px">💡 Mindset</h3>
-      <ul style="font-size:.95rem;line-height:1.75">
-        <li><strong>Funktional first</strong> — Performance kommt später</li>
-        <li><strong>Aussagekräftige Commits</strong> = nachträgliche Doku</li>
-        <li><strong>Iterativ statt perfekt</strong> — kleine, testbare Schritte</li>
+        <li><strong>Generell Java/Spring Boot Kenntnisse verbessert</strong></li>
       </ul>
     </div>
   </div>
